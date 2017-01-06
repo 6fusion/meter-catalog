@@ -1,0 +1,171 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: vmware-collector
+  annotations:
+    displayName: "VMware Collector"
+    description: "VMware Collector for vSphere 5.0+"
+objects:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: 6fusion-vmware-collector
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: vmwarecollector-master
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: vmwarecollector-master
+  spec:
+    ports:
+    - port: 27017
+      protocol: TCP
+      name: vmwarecollector-master-mongodb
+    selector:
+      6fusion-app: vmwarecollector-master
+    type: NodePort
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: 6fusion-vmwarecollector-master
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: vmwarecollector-master
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: vmwarecollector-master
+    template:
+      metadata:
+        name: 6fusion-vmwarecollector-master
+        labels:
+          6fusion-app: vmwarecollector-master
+      spec:
+        containers:
+        - name: vmware-collector-inventory
+          image: 6fusion/vmware-collector # Docker image of the 6fusion VmWare Inventory Collector
+          volumeMounts:
+          - name: vsphere-secret
+            mountPath: /var/run/secrets/vmwarecollector/vsphere
+          - name: on-prem-secret
+            mountPath: /var/run/secrets/vmwarecollector/on-prem
+        - name: vmware-collector-mongodb
+          image: mongo:3.2
+        volumes:
+        - name: vsphere-secret
+          secret:
+            secretName: vsphere-secret
+        - name: on-prem-secret
+          secret:
+            secretName: on-prem-secret
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: 6fusion-vmwarecollector-metrics
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: vmwarecollector-metrics
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: vmwarecollector-metrics
+    template:
+      metadata:
+        name: 6fusion-vmwarecollector-metrics
+        labels:
+          6fusion-app: vmwarecollector-metrics
+      spec:
+        containers:
+        - name: vmware-collector-metrics
+          image: 6fusion/vmware-collector-metrics # Docker image of the 6fusion VmWare Metrics Collector
+          volumeMounts:
+          - name: vsphere-secret
+            mountPath: /var/run/secrets/vmwarecollector/vsphere
+          - name: on-prem-secret
+            mountPath: /var/run/secrets/vmwarecollector/on-prem
+        volumes:
+        - name: vsphere-secret
+          secret:
+            secretName: vsphere-secret
+        - name: on-prem-secret
+          secret:
+            secretName: on-prem-secret
+parameters:
+#vSphere questions
+- description: "Host address of vSphere"
+  name: HOST
+  section: vSphere
+  displayName: "vSphere Host"
+  required: true
+  type: string
+- name: USER
+  section: vSphere
+  displayName: "vSphere User"
+  required: true
+  type: string
+  description: "Account used for vSphere access"
+- name: PASSWORD
+  section: vSphere
+  displayName: "vSphere Password"
+  required: true
+  type: password
+  description: "vSphere account password"
+- name: ignore-ssl-errors
+  section: vSphere
+  displayName: "Ignore SSL validation errors?"
+  required: true
+  type: boolean
+  value: "false"
+  description: "Perform strict SSL validation. Do not enable if using self-signed SSL certificates"
+# on prem questions
+- name: api-host
+  section: On-Prem
+  type: string
+  displayName: "Meter API Host"
+  description: "Host address of 6fusion Meter"
+  required: true
+  expandExpression: ${METER_API_HOST}
+- name: organization-id
+  section: On-Prem
+  type: string
+  displayName: "Organization ID"
+  description: "ID of organization object in the 6fusion Meter API"
+  required: true
+  expandExpression: ${ORGANIZATION_ID}
+- name: log-level
+  section: vSphere
+  displayName: "Log Level"
+  required: false
+  value: info
+  type: enum
+  options:
+    - debug
+    - info
+    - warn
+    - error
+    - fatal
+- name: registration-date
+  section: On-Prem
+  type: string
+  displayName: "Registration Date"
+  description: "Time to start collection from."
+  hidden: true
+  required: true
+  expandExpression: "`Time.now`"
+- name: machines-by-inv-timestamp
+  section: On-Prem
+  type: int
+  displayName: "Machines per request"
+  description: "Define the total of machines that are included on each request to obtain metrics from vsphere"
+  required: true
+  advanced: true
+  value: "500"  # TODO confirm this default
+- name: inventoried-limit
+  section: On-Prem
+  type: int
+  displayName: "Inventory Limit"
+  description: "The number of inventoried timestamps that each replica controller will take each round"
+  required: false
+  value: "5"  # TODO confirm this default
+  advanced: true
