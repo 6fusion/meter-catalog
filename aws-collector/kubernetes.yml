@@ -137,12 +137,12 @@ parameters:
   displayName: "AWS Access Key"
   section: "AWS Collector"
   description: "Access Key ID associated with the AWS account to be metered"
-  value: AKIAIWU2V7LBSJJ2VU2Q
+  value: 
 - name: aws_secret_key
   displayName: "AWS Secret Key"
   description: "AWS Access Secret associated with the AWS account to be metered"
   section: "AWS Collector"
-  value: "rD3eQxMu/Ql6/EzSswlAkvsI8ZJVHhHunCOGImy7"
+  value: 
 - name: detailed_report_bucket
   displayName: "Detailed Report Bucket"
   description: "Amazon S3 bucket name where detailed billing reports are stored"
