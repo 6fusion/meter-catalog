@@ -71,11 +71,6 @@ objects:
               secretKeyRef:
                 name: aws-collector-secret
                 key: aws_access_key
-          - name: AWS_REGION
-            valueFrom:
-              secretKeyRef:
-                name: aws-collector-secret
-                key: aws_region
           - name: AWS_SECRET_KEY
             valueFrom:
               secretKeyRef:
@@ -128,11 +123,6 @@ objects:
 
 parameters:
 # aws config
-- name: aws_region
-  displayName: "AWS Region"
-  section: "AWS Collector"
-  description: "Region collector will run in"
-  value: "us-east-2"
 - name: aws_access_key
   displayName: "AWS Access Key"
   section: "AWS Collector"
@@ -182,7 +172,7 @@ parameters:
   displayName: "Verify SSL?"
   type: boolean
   section: "6fusion Meter"
-  value: "true"
+  value: "false"
   description: "Validate SSL certificate. Do not enable if using self-signed certificates"
 - name: 6fusion.openssl
   displayName: "SSL Key"
