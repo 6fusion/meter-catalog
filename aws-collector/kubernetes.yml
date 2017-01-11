@@ -71,6 +71,11 @@ objects:
               secretKeyRef:
                 name: aws-collector-secret
                 key: aws_access_key
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: aws-collector-secret
+                key: aws_region
           - name: AWS_SECRET_KEY
             valueFrom:
               secretKeyRef:
@@ -123,16 +128,18 @@ objects:
 
 parameters:
 # aws config
+- name: aws_region
+  displayName: "AWS Region"
+  section: "AWS Collector"
+  description: "Region collector will run in. The region is only needed to construct an SSL endpoint; metering is not limited to this region."
 - name: aws_access_key
   displayName: "AWS Access Key"
   section: "AWS Collector"
   description: "Access Key ID associated with the AWS account to be metered"
-  value: 
 - name: aws_secret_key
   displayName: "AWS Secret Key"
   description: "AWS Access Secret associated with the AWS account to be metered"
   section: "AWS Collector"
-  value: 
 - name: detailed_report_bucket
   displayName: "Detailed Report Bucket"
   description: "Amazon S3 bucket name where detailed billing reports are stored"
@@ -166,7 +173,7 @@ parameters:
 - name: use-ssl
   displayName: "Use SSL?"
   type: boolean
-  value: "true"
+  value: "false"
   section: "6fusion Meter"
 - name: verify-ssl
   displayName: "Verify SSL?"
