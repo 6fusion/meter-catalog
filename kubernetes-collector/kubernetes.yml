@@ -52,11 +52,15 @@ objects:
         - name: k8scollector-onpremise
           image: 6fusion/k8collector-onpremise # Docker image of the 6fusion Kubernetes On-Premise Connector
           volumeMounts:
+          - name: kube-secret
+            mountPath: /var/run/secrets/k8scollector/kube
           - name: on-prem-secret
             mountPath: /var/run/secrets/k8scollector/on-premise
         - name: k8scollector-cleancache
           image: 6fusion/k8collector-cleancache # Docker image of the 6fusion Kubernetes Clean Cache db
           volumeMounts:
+          - name: kube-secret
+            mountPath: /var/run/secrets/k8scollector/kube
           - name: on-prem-secret
             mountPath: /var/run/secrets/k8scollector/on-premise
         - name: k8scollector-mongodb
@@ -97,10 +101,15 @@ objects:
           volumeMounts:
           - name: kube-secret
             mountPath: /var/run/secrets/k8scollector/kube
+          - name: on-prem-secret
+            mountPath: /var/run/secrets/k8scollector/on-premise
         volumes:
         - name: kube-secret
           secret:
             secretName: kube-secret
+        - name: on-prem-secret
+          secret:
+            secretName: on-premise-secret
         imagePullSecrets:
         - name: registry-pull-secret
 parameters:
