@@ -126,6 +126,13 @@ parameters:
   description: "Host address of 6fusion Meter"
   required: true
   expandExpression: ${METER_API_HOST}
+- name: api-endpont
+  section: On-Prem
+  type: string
+  displayName: "Meter API Version"
+  description: "Versioend endpoint to use for Meter API"
+  required: true
+  value: "api/v1"
 - name: organization-id
   section: On-Prem
   type: string
