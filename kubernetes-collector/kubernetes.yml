@@ -43,21 +43,24 @@ objects:
       spec:
         containers:
         - name: k8scollector-inventory
-          image: 6fusion/k8collector-inventory # Docker image of the 6fusion Kubernetes Inventory Collector
+          image: 6fusion/k8collector-inventory:alpha
+          imagePullPolicy: Always
           volumeMounts:
           - name: kube-secret
             mountPath: /var/run/secrets/k8scollector/kube
           - name: on-prem-secret
             mountPath: /var/run/secrets/k8scollector/on-premise
         - name: k8scollector-onpremise
-          image: 6fusion/k8collector-onpremise # Docker image of the 6fusion Kubernetes On-Premise Connector
+          image: 6fusion/k8collector-onpremise:alpha
+          imagePullPolicy: Always
           volumeMounts:
           - name: kube-secret
             mountPath: /var/run/secrets/k8scollector/kube
           - name: on-prem-secret
             mountPath: /var/run/secrets/k8scollector/on-premise
         - name: k8scollector-cleancache
-          image: 6fusion/k8collector-cleancache # Docker image of the 6fusion Kubernetes Clean Cache db
+          image: 6fusion/k8collector-cleancache:alpha
+          imagePullPolicy: Always
           volumeMounts:
           - name: kube-secret
             mountPath: /var/run/secrets/k8scollector/kube
@@ -97,7 +100,8 @@ objects:
       spec:
         containers:
         - name: k8scollector-metrics
-          image: 6fusion/k8collector-metrics # Docker image of the 6fusion Kubernetes Metrics Collector
+          image: 6fusion/k8collector-metrics:alpha
+          imagePullPolicy: Always
           volumeMounts:
           - name: kube-secret
             mountPath: /var/run/secrets/k8scollector/kube

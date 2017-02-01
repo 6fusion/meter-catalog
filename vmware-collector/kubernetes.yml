@@ -44,7 +44,8 @@ objects:
       spec:
         containers:
         - name: vmware-collector-inventory
-          image: 6fusion/vmware-collector # Docker image of the 6fusion VmWare Inventory Collector
+          image: 6fusion/vmware-collector:alpha
+          imagePullPolicy: Always
           volumeMounts:
           - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
@@ -78,7 +79,8 @@ objects:
       spec:
         containers:
         - name: vmware-collector-metrics
-          image: 6fusion/vmware-collector-metrics # Docker image of the 6fusion VmWare Metrics Collector
+          image: 6fusion/vmware-collector-metrics:alpha
+          imagePullPolicy: Always
           volumeMounts:
           - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
