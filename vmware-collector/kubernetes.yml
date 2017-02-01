@@ -95,18 +95,18 @@ objects:
 parameters:
 #vSphere questions
 - description: "Host address of vSphere"
-  name: host
+  name: vsphere_host
   section: vSphere
   displayName: "vSphere Host"
   required: true
   type: string
-- name: user
+- name: vsphere_user
   section: vSphere
   displayName: "vSphere User"
   required: true
   type: string
   description: "Account used for vSphere access"
-- name: password
+- name: vsphere_password
   section: vSphere
   displayName: "vSphere Password"
   required: true
