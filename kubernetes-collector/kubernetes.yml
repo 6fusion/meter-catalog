@@ -144,7 +144,7 @@ parameters:
   description: "Verify SSL certificate. Do not enable if using self-signed certificates"
   displayName: "Verify SSL certificate?"
   type: boolean
-  value: "true"
+  value: "false"
 - name: cadvisor-host
   section: Kube
   description: "Address of the cluster master cAdvisor host"
@@ -165,7 +165,7 @@ parameters:
   displayName: Port
   section: On-Premise 
   description: "Port of the 6fusion Meter. Typically 80 for unecrypted access; 443 for SSL"
-  value: "443"
+  value: ${METER_API_SSL_PORT}
 - name: token
   displayName: "6fusion Meter API token"
   section: On-Premise
@@ -179,11 +179,12 @@ parameters:
   displayName: "Verify SSL?"
   section: On-Premise
   description: "Verify 6fusion Meter SSL certificate. Do not enable if using self-signed certificates."
-  value: "true"
+  value: "false"
 - name: data-age-period
   displayName: "Data Age Period"
   section: On-Premise
   description: "Age period of data for clean cache. Must be in minutes."
+  value: 60
 - name: organization-id
   displayName: "Organization ID"
   section: On-Premise
