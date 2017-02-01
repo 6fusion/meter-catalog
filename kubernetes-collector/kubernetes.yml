@@ -165,7 +165,7 @@ parameters:
   displayName: Port
   section: On-Premise 
   description: "Port of the 6fusion Meter. Typically 80 for unecrypted access; 443 for SSL"
-  value: ${METER_API_SSL_PORT}
+  expandExpression: ${METER_API_SSL_PORT}
 - name: token
   displayName: "6fusion Meter API token"
   section: On-Premise
