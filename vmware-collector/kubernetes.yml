@@ -24,7 +24,6 @@ objects:
       name: vmwarecollector-master-mongodb
     selector:
       6fusion-app: vmwarecollector-master
-    type: NodePort
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -128,7 +127,7 @@ parameters:
   description: "Host address of 6fusion Meter"
   required: true
   expandExpression: ${METER_API_HOST}
-- name: api-endpont
+- name: api-endpoint
   section: On-Prem
   type: string
   displayName: "Meter API Version"
