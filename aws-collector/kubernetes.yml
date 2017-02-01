@@ -164,7 +164,7 @@ parameters:
   displayName: Port
   section: "6fusion Meter"
   type: int
-  expandExpression: ${METER_API_PORT}
+  expandExpression: ${METER_API_SSL_PORT}
   description: "TCP port of the 6fusion Meter"
 - name: token
   displayName: "Meter API Token"
@@ -174,13 +174,13 @@ parameters:
 - name: use-ssl
   displayName: "Use SSL?"
   type: boolean
-  value: "false"
+  value: "1"
   section: "6fusion Meter"
 - name: verify-ssl
   displayName: "Verify SSL?"
   type: boolean
   section: "6fusion Meter"
-  value: "false"
+  value: "0"
   description: "Validate SSL certificate. Do not enable if using self-signed certificates"
 - name: 6fusion.openssl
   displayName: "SSL Key"

@@ -122,13 +122,13 @@ parameters:
   section: Kube
   name: kube-host
   displayName: "Kubernetes Host"
-  expandExpression: ${MASTER_HOST}
+  expandExpression: ${KUBERNETES_PRIVATE_HOST}
 - name: kube-port
   section: Kube
   displayName: "Kubernetes Port"
   type: int
   description: "Port of Kubernetes API server"
-  value: "443"
+  expandExpression: ${KUBERNETES_PRIVATE_PORT}
 - name: kube-token
   description: "Token of the Kubernetes API server (specify only for a remote Kube API Server)"
   section: Kube
@@ -149,6 +149,7 @@ parameters:
   section: Kube
   description: "Address of the cluster master cAdvisor host"
   displayName: "cAdvisor Host"
+  expandExpression: ${MASTER_HOST}
 - name: cadvisor-port
   section: Kube
   type: int
