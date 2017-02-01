@@ -175,11 +175,13 @@ parameters:
   section: On-Premise
   description: "Use SSL for all interaction with the 6fusion Meter"
   value: "true"
+  type: boolean
 - name: verify-ssl
   displayName: "Verify SSL?"
   section: On-Premise
   description: "Verify 6fusion Meter SSL certificate. Do not enable if using self-signed certificates."
   value: "false"
+  type: boolean
 - name: data-age-period
   displayName: "Data Age Period"
   section: On-Premise
