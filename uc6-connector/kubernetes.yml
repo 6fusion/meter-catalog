@@ -145,7 +145,7 @@ parameters:
 - name: on-prem-port
   type: int
   section: "6fusion Meter"
-  expandExpression: ${METER_API_PORT}
+  expandExpression: ${METER_API_SSL_PORT}
   displayName: "Port"
   description: "TCP Port of the 6fusion Meter."
   value: "443"
