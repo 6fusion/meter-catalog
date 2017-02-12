@@ -97,6 +97,11 @@ objects:
               secretKeyRef:
                 key: on-prem-protocol
                 name: "6fusion-meter"
+          - name: ON_PREM_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: on-prem-token
+                name: "6fusion-meter"
           - name: UC6_TOKEN
             valueFrom:
               secretKeyRef:
@@ -158,3 +163,8 @@ parameters:
   - https
   value: https
   description: "Access protocol for 6fusion Meter"
+- name: on-prem-token
+  displayName: "6fusion Meter API Token"
+  section: "6fusiom Meter"
+  description: "OAuth Token to use for accessing the 6fusion Meter API"
+  
