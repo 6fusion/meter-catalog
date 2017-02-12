@@ -165,6 +165,6 @@ parameters:
   description: "Access protocol for 6fusion Meter"
 - name: on-prem-token
   displayName: "6fusion Meter API Token"
-  section: "6fusiom Meter"
+  section: "6fusion Meter"
   description: "OAuth Token to use for accessing the 6fusion Meter API"
   
