@@ -45,6 +45,22 @@ objects:
         - name: vmware-collector-inventory
           image: 6fusion/vmware-collector:alpha
           imagePullPolicy: Always
+          env:
+          - name: DEFAULT_DISK_IO
+            valueFrom:
+              secretKeyRef:
+                key: default-disk-io
+                name: on-prem
+          - name: DEFAULT_WAN_IO
+            valueFrom:
+              secretKeyRef:
+                key: default-wan-io
+                name: on-prem
+          - name: DEFAULT_LAN_IO
+            valueFrom:
+              secretKeyRef:
+                key: default-lan-io
+                name: on-prem
           volumeMounts:
           - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
@@ -176,4 +192,28 @@ parameters:
   description: "The number of inventoried timestamps that each replica controller will take each round"
   required: false
   value: "5"  # TODO confirm this default
+  advanced: true
+- name: default-disk-io
+  section: On-Prem
+  type: int
+  displayName: "Default Disk I/O"
+  description: "The value to use for Disk I/O if the collector cannot determine the actual disk I/O speed"
+  required: false
+  value: "1000000"
+  advanced: true
+- name: default-lan-io
+  section: On-Prem
+  type: int
+  displayName: "Default LAN I/O"
+  description: "The value to use for LAN I/O if the collector cannot determine the actual LAN I/O speed"
+  required: false
+  value: "1000000"
+  advanced: true
+- name: default-wan-io
+  section: On-Prem
+  type: int
+  displayName: "Default WAN I/O"
+  description: "The value to use for WAN I/O if the collector cannot determine the actual WAN I/O speed"
+  required: false
+  value: "1000000"
   advanced: true
