@@ -50,17 +50,17 @@ objects:
             valueFrom:
               secretKeyRef:
                 key: default-disk-io
-                name: on-prem
+                name: on-prem-secret
           - name: DEFAULT_WAN_IO
             valueFrom:
               secretKeyRef:
                 key: default-wan-io
-                name: on-prem
+                name: on-prem-secret
           - name: DEFAULT_LAN_IO
             valueFrom:
               secretKeyRef:
                 key: default-lan-io
-                name: on-prem
+                name: on-prem-secret
           volumeMounts:
           - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
