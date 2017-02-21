@@ -150,10 +150,10 @@ parameters:
 - name: on-prem-port
   type: int
   section: "6fusion Meter"
-  expandExpression: ${METER_API_SSL_PORT}
+  expandExpression: ${METER_API_PORT}
   displayName: "Port"
   description: "TCP Port of the 6fusion Meter."
-  value: "443"
+  value: "80"
 - name: on-prem-protocol
   displayName: Protocol
   section: "6fusion Meter"
@@ -161,7 +161,7 @@ parameters:
   options:
   - http
   - https
-  value: https
+  value: http
   description: "Access protocol for 6fusion Meter"
 - name: on-prem-token
   displayName: "API Oauth Token"
