@@ -107,6 +107,11 @@ objects:
               secretKeyRef:
                 name: 6fusion-meter-secret
                 key: meter_port
+          - name: INFRASTRUCTURE_NAME
+            valueFrom:
+              secretKeyRef:
+                name: 6fusion-meter-secret
+                key: infrastructure_name
           - name: TOKEN
             valueFrom:
               secretKeyRef:
@@ -155,6 +160,11 @@ parameters:
   description: "ID of an organization, in the 6fusion Meter, to submit under"
   expandExpression: ${ORGANIZATION_ID}
   section: "6fusion Meter"
+- name: infrastructure_name
+  displayName: "Infrastructure Name"
+  description: "A unique name to be applied to the AWS account infrastructure."
+  section: "6fusion Meter"
+  required: true
 - name: meter_host
   displayName: Host
   section: "6fusion Meter"
