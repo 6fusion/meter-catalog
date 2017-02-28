@@ -104,13 +104,26 @@ parameters:
 - name: receiver.host
   displayName: "6fusion Online API Host"
   section: Connector
+  type: enum
   value: "receiver.dev.aws.6fusion.com"
+  options:
+    - receiver.dev.aws.6fusion.com
+    - receiver.staging.aws.6fusion.com
+    - receiver.demo.aws.6fusion.com
+    - receiver.prod.aws.6fusion.com
   advanced: "true"
 - name: log.level
   displayName: "Log Level"
-  value: debug
   section: Connector
-  advanced: "true"
+  type: enum
+  value: debug
+  options:
+    - debug
+    - info
+    - warn
+    - error
+    - fatal
+    - panic
 - name: meter.read-batch-size
   displayName: "Request Batch Size"
   description: "Number of items to retrieve per request"
@@ -122,6 +135,7 @@ parameters:
   displayName: "Host"
   description: "Address of the 6fusion Meter"
   expandExpression: ${METER_API_HOST}
+  advanced: "true"
 - name: auth.ca
   section: "6fusion Meter"
   displayName: "Meter License CA"
