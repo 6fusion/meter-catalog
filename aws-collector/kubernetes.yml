@@ -82,6 +82,16 @@ objects:
               secretKeyRef:
                 name: aws-collector-secret
                 key: aws_secret_key
+          - name: COLLECTION_ARN
+            valueFrom:
+              secretKeyRef:
+                name: aws-collector-secret
+                key: collection_arn
+          - name: BILLING_ARN
+            valueFrom:
+              secretKeyRef:
+                name: aws-collector-secret
+                key: billing_arn
           - name: DETAILED_REPORT_BUCKET
             valueFrom:
               secretKeyRef:
@@ -141,11 +151,19 @@ parameters:
 - name: aws_access_key
   displayName: "AWS Access Key"
   section: "AWS Collector"
-  description: "Access Key ID associated with the AWS account to be metered"
+  description: "Access Key ID associated with the AWS account roles used for metering"
 - name: aws_secret_key
   displayName: "AWS Secret Key"
-  description: "AWS Access Secret associated with the AWS account to be metered"
+  description: "AWS Access Secret associated with the AWS account roles used for metering"
   section: "AWS Collector"
+- name: collection_arn
+  displayName: "Collection Role ARN"
+  section: "AWS Collector"
+  description: "The ARN of the role to use when collecting EC2 and CloudWatch data"
+- name: billing_arn
+  display_name: "Billing Role ARN"
+  section: "AWS Collector"
+  description: "The ARN of the role to use when accessing the billing S3 bucket"
 - name: detailed_report_bucket
   displayName: "Detailed Report Bucket"
   description: "Amazon S3 bucket name where detailed billing reports are stored"
