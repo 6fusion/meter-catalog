@@ -339,8 +339,6 @@ spec:
       - name: meter-sql-database
         image: docker.io/postgres:9.5.5-alpine
         resources:
-          limits:
-            memory: "200Mi"
           requests:
             cpu: "0.25"
             memory: "100Mi"
