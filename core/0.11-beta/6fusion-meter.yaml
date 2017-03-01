@@ -339,8 +339,6 @@ spec:
       - name: meter-sql-database
         image: docker.io/postgres:9.5.5-alpine
         resources:
-          limits:
-            memory: "200Mi"
           requests:
             cpu: "0.25"
             memory: "100Mi"
@@ -591,7 +589,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 5bdabfd7d64d56421963a225abde98bb6fe6523390e79f5d507e3aa07284abdb186773c7460c965da43fafa7bdf9c3afab3a6aa8ca3a81d96fbcdb208a190407
+          value: b850963fe176a0b5d126e2f67ad56224a04a4cdbe615fe0cceb92ef1ad46883cd950bb408954e66b7881ec97661fa094b52caa987a3c33d93581c83d5a8b1271
         - name: METER_VERSION
           value: 0.11-beta
         resources:
