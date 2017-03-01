@@ -149,7 +149,6 @@ parameters:
   section: Kube
   description: "Address of the cluster master cAdvisor host"
   displayName: "cAdvisor Host"
-  expandExpression: ${MASTER_HOST}
 - name: cadvisor-port
   section: Kube
   type: int
