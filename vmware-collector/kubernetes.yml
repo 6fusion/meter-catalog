@@ -13,17 +13,17 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    name: vmwarecollector-master
+    name: mongodb
     namespace: 6fusion-vmware-collector
     labels:
-      6fusion-app: vmwarecollector-master
+      6fusion-app: mongodb
   spec:
     ports:
     - port: 27017
       protocol: TCP
-      name: vmwarecollector-master-mongodb
+      name: mongodb-port
     selector:
-      6fusion-app: vmwarecollector-master
+      6fusion-app: mongodb
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -66,8 +66,6 @@ objects:
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
-        - name: vmware-collector-mongodb
-          image: mongo:3.2
         volumes:
         - name: vsphere-secret
           secret:
@@ -75,6 +73,27 @@ objects:
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: mongodb
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: mongodb
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: mongodb
+    template:
+      metadata:
+        name: mongodb
+        labels:
+          6fusion-app: mongodb
+      spec:
+        containers:
+        - name: mongodb
+          image: mongo:3.2
+          imagePullPolicy: IfNotPresent
 - apiVersion: v1
   kind: ReplicationController
   metadata:
