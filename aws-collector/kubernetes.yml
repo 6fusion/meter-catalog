@@ -92,6 +92,11 @@ objects:
               secretKeyRef:
                 name: aws-collector-secret
                 key: billing_arn
+          - name: EXTERNAL_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-collector-secret
+                key: external_arn
           - name: DETAILED_REPORT_BUCKET
             valueFrom:
               secretKeyRef:
@@ -164,6 +169,10 @@ parameters:
   display_name: "Billing Role ARN"
   section: "AWS Collector"
   description: "The ARN of the role to use when accessing the billing S3 bucket"
+- name: external_id
+  display_name: "External ID"
+  section: "AWS Collector"
+  description: "An optional identifier used in an IAM role trust policy to designate who can assume a role"
 - name: detailed_report_bucket
   displayName: "Detailed Report Bucket"
   description: "Amazon S3 bucket name where detailed billing reports are stored"
