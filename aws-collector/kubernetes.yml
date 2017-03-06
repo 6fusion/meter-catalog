@@ -96,7 +96,7 @@ objects:
             valueFrom:
               secretKeyRef:
                 name: aws-collector-secret
-                key: external_arn
+                key: external_id
           - name: DETAILED_REPORT_BUCKET
             valueFrom:
               secretKeyRef:
