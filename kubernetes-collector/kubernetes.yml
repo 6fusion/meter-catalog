@@ -44,7 +44,7 @@ objects:
         containers:
         - name: k8scollector-inventory
           image: 6fusion/k8collector-inventory:alpha
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: kube-secret
             mountPath: /var/run/secrets/k8scollector/kube
@@ -52,7 +52,7 @@ objects:
             mountPath: /var/run/secrets/k8scollector/on-premise
         - name: k8scollector-onpremise
           image: 6fusion/k8collector-onpremise:alpha
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: kube-secret
             mountPath: /var/run/secrets/k8scollector/kube
@@ -60,7 +60,7 @@ objects:
             mountPath: /var/run/secrets/k8scollector/on-premise
         - name: k8scollector-cleancache
           image: 6fusion/k8collector-cleancache:alpha
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: kube-secret
             mountPath: /var/run/secrets/k8scollector/kube
@@ -101,7 +101,7 @@ objects:
         containers:
         - name: k8scollector-metrics
           image: 6fusion/k8collector-metrics:alpha
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: kube-secret
             mountPath: /var/run/secrets/k8scollector/kube

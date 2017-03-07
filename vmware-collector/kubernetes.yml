@@ -44,7 +44,7 @@ objects:
         containers:
         - name: vmware-collector-inventory
           image: 6fusion/vmware-collector:alpha
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
           - name: DEFAULT_DISK_IO
             valueFrom:
@@ -114,7 +114,7 @@ objects:
         containers:
         - name: vmware-collector-metrics
           image: 6fusion/vmware-collector-metrics:alpha
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere

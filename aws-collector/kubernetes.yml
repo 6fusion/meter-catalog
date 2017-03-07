@@ -61,7 +61,7 @@ objects:
         containers:
         - name: aws-collector
           image: 6fusion/aws-collector:alpha
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: ssl
             mountPath: /usr/src/app/.ssl
