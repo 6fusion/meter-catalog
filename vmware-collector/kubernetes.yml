@@ -27,6 +27,27 @@ objects:
 - apiVersion: v1
   kind: ReplicationController
   metadata:
+    name: mongodb
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: mongodb
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: mongodb
+    template:
+      metadata:
+        name: mongodb
+        labels:
+          6fusion-app: mongodb
+      spec:
+        containers:
+        - name: mongodb
+          image: mongo:3.2
+          imagePullPolicy: IfNotPresent
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
     name: 6fusion-vmwarecollector-master
     namespace: 6fusion-vmware-collector
     labels:
@@ -44,7 +65,7 @@ objects:
         containers:
         - name: vmware-collector-inventory
           image: 6fusion/vmware-collector:alpha
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
           - name: DEFAULT_DISK_IO
             valueFrom:
@@ -76,27 +97,6 @@ objects:
 - apiVersion: v1
   kind: ReplicationController
   metadata:
-    name: mongodb
-    namespace: 6fusion-vmware-collector
-    labels:
-      6fusion-app: mongodb
-  spec:
-    replicas: 1
-    selector:
-      6fusion-app: mongodb
-    template:
-      metadata:
-        name: mongodb
-        labels:
-          6fusion-app: mongodb
-      spec:
-        containers:
-        - name: mongodb
-          image: mongo:3.2
-          imagePullPolicy: IfNotPresent
-- apiVersion: v1
-  kind: ReplicationController
-  metadata:
     name: 6fusion-vmwarecollector-metrics
     namespace: 6fusion-vmware-collector
     labels:
@@ -114,7 +114,7 @@ objects:
         containers:
         - name: vmware-collector-metrics
           image: 6fusion/vmware-collector-metrics:alpha
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
