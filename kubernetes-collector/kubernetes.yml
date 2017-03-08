@@ -191,3 +191,27 @@ parameters:
   section: On-Premise
   description: "ID of Organization object in the 6fusion Meter"
   expandExpression: ${ORGANIZATION_ID}
+- name: default-disk-io
+  section: On-Prem
+  type: int
+  displayName: "Default Disk I/O"
+  description: "The value to use for Disk I/O if the collector cannot determine the actual disk I/O speed"
+  required: false
+  value: "10000000000"
+  advanced: true
+- name: default-lan-io
+  section: On-Prem
+  type: int
+  displayName: "Default LAN I/O"
+  description: "The value to use for LAN I/O if the collector cannot determine the actual LAN I/O speed"
+  required: false
+  value: "10000000000"
+  advanced: true
+- name: default-wan-io
+  section: On-Prem
+  type: int
+  displayName: "Default WAN I/O"
+  description: "The value to use for WAN I/O if the collector cannot determine the actual WAN I/O speed"
+  required: false
+  advanced: true
+  value: "100000000"
