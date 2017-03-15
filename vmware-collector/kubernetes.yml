@@ -154,6 +154,14 @@ parameters:
   type: boolean
   value: "false"
   description: "Perform strict SSL validation. Do not enable if using self-signed SSL certificates"
+- name: readings-batch-size
+  section: vSphere
+  displayName: "Max Query Metrics"
+  required: true
+  type: boolean
+  value: "false"
+  description: "Limit the number of entities that are included in a database query"
+  advanced: true
 # on prem questions
 - name: api-host
   section: On-Prem
