@@ -27,6 +27,27 @@ objects:
 - apiVersion: v1
   kind: ReplicationController
   metadata:
+    name: mongodb
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: mongodb
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: mongodb
+    template:
+      metadata:
+        name: mongodb
+        labels:
+          6fusion-app: mongodb
+      spec:
+        containers:
+        - name: mongodb
+          image: mongo:3.2
+          imagePullPolicy: IfNotPresent
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
     name: 6fusion-vmwarecollector-master
     namespace: 6fusion-vmware-collector
     labels:
@@ -73,27 +94,6 @@ objects:
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
-- apiVersion: v1
-  kind: ReplicationController
-  metadata:
-    name: mongodb
-    namespace: 6fusion-vmware-collector
-    labels:
-      6fusion-app: mongodb
-  spec:
-    replicas: 1
-    selector:
-      6fusion-app: mongodb
-    template:
-      metadata:
-        name: mongodb
-        labels:
-          6fusion-app: mongodb
-      spec:
-        containers:
-        - name: mongodb
-          image: mongo:3.2
-          imagePullPolicy: IfNotPresent
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -154,6 +154,14 @@ parameters:
   type: boolean
   value: "false"
   description: "Perform strict SSL validation. Do not enable if using self-signed SSL certificates"
+- name: readings-batch-size
+  section: vSphere
+  displayName: "Max Query Metrics"
+  required: true
+  type: boolean
+  value: "false"
+  description: "Limit the number of entities that are included in a database query"
+  advanced: true
 # on prem questions
 - name: api-host
   section: On-Prem
