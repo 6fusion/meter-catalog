@@ -157,10 +157,9 @@ parameters:
 - name: readings-batch-size
   section: vSphere
   displayName: "Max Query Metrics"
-  required: true
-  type: boolean
-  value: "false"
-  description: "Limit the number of entities that are included in a database query"
+  type: int
+  value: "64"
+  description: "Limit the number of entities that are included in a database query."
   advanced: true
 # on prem questions
 - name: api-host
