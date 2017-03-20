@@ -239,7 +239,7 @@ parameters:
   required: true
   advanced: true
   type: multiline
- value: |
+  value: |
     -----BEGIN RSA PRIVATE KEY-----
     MIIJKAIBAAKCAgEAqy1/gPYFM2QynJyBWoSs6c6j467UTC9815Q4hu7azdVYQxk0
     a174jL16seatBX98Sn0xab0ZzBLYbXsugVGpzFgXYcmGG0PEvNoDTqOoyD+AtvjH
