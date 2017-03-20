@@ -153,7 +153,7 @@ parameters:
   displayName: "AWS Region"
   section: "AWS Collector"
   description: "Region collector will run in. The region is only needed to construct an SSL endpoint; metering is not limited to this region."
-  require: true
+  required: true
 - name: aws_access_key
   displayName: "AWS Access Key"
   section: "AWS Collector"
@@ -163,7 +163,7 @@ parameters:
   displayName: "AWS Secret Key"
   description: "AWS Access Secret associated with the AWS account roles used for metering"
   section: "AWS Collector"
-  require: true
+  required: true
 - name: collection_arn
   displayName: "Collection Role ARN"
   section: "AWS Collector"
