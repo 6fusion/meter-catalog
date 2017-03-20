@@ -153,26 +153,32 @@ parameters:
   displayName: "AWS Region"
   section: "AWS Collector"
   description: "Region collector will run in. The region is only needed to construct an SSL endpoint; metering is not limited to this region."
+  require: true
 - name: aws_access_key
   displayName: "AWS Access Key"
   section: "AWS Collector"
   description: "Access Key ID associated with the AWS account roles used for metering"
+  required: true
 - name: aws_secret_key
   displayName: "AWS Secret Key"
   description: "AWS Access Secret associated with the AWS account roles used for metering"
   section: "AWS Collector"
+  require: true
 - name: collection_arn
   displayName: "Collection Role ARN"
   section: "AWS Collector"
   description: "The ARN of the role to use when collecting EC2 and CloudWatch data"
+  advanced: true
 - name: billing_arn
   display_name: "Billing Role ARN"
   section: "AWS Collector"
   description: "The ARN of the role to use when accessing the billing S3 bucket"
+  advanced: true
 - name: external_id
   display_name: "External ID"
   section: "AWS Collector"
   description: "An optional identifier used in an IAM role trust policy to designate who can assume a role"
+  advanced: true
 - name: detailed_report_bucket
   displayName: "Detailed Report Bucket"
   description: "Amazon S3 bucket name where detailed billing reports are stored"
@@ -187,6 +193,7 @@ parameters:
   description: "ID of an organization, in the 6fusion Meter, to submit under"
   expandExpression: ${ORGANIZATION_ID}
   section: "6fusion Meter"
+  required: true
 - name: infrastructure_name
   displayName: "Infrastructure Name"
   description: "A unique name to be applied to the AWS account infrastructure."
@@ -197,12 +204,14 @@ parameters:
   section: "6fusion Meter"
   expandExpression: ${METER_API_HOST}
   description: "Address of the 6fusion Meter"
+  required: true
 - name: meter_port
   displayName: Port
   section: "6fusion Meter"
   type: int
   expandExpression: ${METER_API_SSL_PORT}
   description: "TCP port of the 6fusion Meter"
+  required: true
 - name: token
   displayName: "Meter API Token"
   section: "6fusion Meter"
