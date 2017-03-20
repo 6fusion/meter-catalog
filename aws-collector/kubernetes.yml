@@ -205,6 +205,7 @@ parameters:
   expandExpression: ${METER_API_HOST}
   description: "Address of the 6fusion Meter"
   required: true
+  advanced: true
 - name: meter_port
   displayName: Port
   section: "6fusion Meter"
@@ -212,6 +213,7 @@ parameters:
   expandExpression: ${METER_API_SSL_PORT}
   description: "TCP port of the 6fusion Meter"
   required: true
+  advanced: true
 - name: token
   displayName: "Meter API Token"
   section: "6fusion Meter"
@@ -222,19 +224,22 @@ parameters:
   type: boolean
   value: "1"
   section: "6fusion Meter"
+  advanced: true
 - name: verify-ssl
   displayName: "Verify SSL?"
   type: boolean
   section: "6fusion Meter"
   value: "0"
   description: "Validate SSL certificate. Do not enable if using self-signed certificates"
+  advanced: true
 - name: 6fusion.openssl
   displayName: "SSL Key"
   section: "Collector SSL"
   description: "The SSL key to be used by the collector's Kubernetes health-check endpoint"
   required: true
+  advanced: true
   type: multiline
-  value: |
+ value: |
     -----BEGIN RSA PRIVATE KEY-----
     MIIJKAIBAAKCAgEAqy1/gPYFM2QynJyBWoSs6c6j467UTC9815Q4hu7azdVYQxk0
     a174jL16seatBX98Sn0xab0ZzBLYbXsugVGpzFgXYcmGG0PEvNoDTqOoyD+AtvjH
@@ -292,6 +297,7 @@ parameters:
   description: "The SSL certificate to be used by the collector's Kubernetes health-check endpoint"
   required: true
   type: multiline
+  advanced: true
   value: |
     -----BEGIN CERTIFICATE-----
     MIIFIDCCAwigAwIBAgIJAJCmpPM2XpdDMA0GCSqGSIb3DQEBBQUAMBQxEjAQBgNV
