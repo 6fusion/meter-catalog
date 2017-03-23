@@ -147,6 +147,11 @@ parameters:
   required: true
   type: password
   description: "vSphere account password"
+- name: vcenter-label
+  displayName: "vCenter Label"
+  section: vSphere
+  type: string
+  description: "A short, descriptive label to distinguish different vCenters in your organization\nThis field is required if you have multiple datacenters with the same name"
 - name: ignore-ssl-errors
   section: vSphere
   displayName: "Ignore SSL validation errors?"
