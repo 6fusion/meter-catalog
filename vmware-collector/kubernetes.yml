@@ -67,6 +67,11 @@ objects:
           image: 6fusion/vmware-collector:alpha
           imagePullPolicy: IfNotPresent
           env:
+          - name: VCENTER_LABEL
+            valueFrom:
+              secretKeyRef:
+                key: vcenter-label
+                name: vsphere-secret
           - name: DEFAULT_DISK_IO
             valueFrom:
               secretKeyRef:
