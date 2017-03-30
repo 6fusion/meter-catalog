@@ -168,7 +168,8 @@ parameters:
 - name: token
   displayName: "6fusion Meter API token"
   section: On-Premise
-  description: "OAuth token to use to access the 6fusion Meter. Not required if OAuth is not enabled on the meter."
+  validations:
+    description: "OAuth token to use to access the 6fusion Meter. Not required if OAuth is not enabled on the meter."
 - name: use-ssl
   displayName: "Use SSL?"
   section: On-Premise
@@ -196,7 +197,8 @@ parameters:
   type: int
   displayName: "Default Disk I/O"
   description: "The value to use for Disk I/O if the collector cannot determine the actual disk I/O speed"
-  required: false
+  validations:
+    required: false
   value: "10000000000"
   advanced: true
 - name: default-lan-io
@@ -204,7 +206,8 @@ parameters:
   type: int
   displayName: "Default LAN I/O"
   description: "The value to use for LAN I/O if the collector cannot determine the actual LAN I/O speed"
-  required: false
+  validations:
+    required: false
   value: "10000000000"
   advanced: true
 - name: default-wan-io
@@ -212,6 +215,7 @@ parameters:
   type: int
   displayName: "Default WAN I/O"
   description: "The value to use for WAN I/O if the collector cannot determine the actual WAN I/O speed"
-  required: false
+  validations:
+    required: false
   advanced: true
   value: "100000000"
