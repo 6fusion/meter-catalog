@@ -37,6 +37,9 @@ objects:
         containers:
         - name: 6fusion-online-connector
           image: 6fusion/online-connector:latest
+          volumeMounts:
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
           env:
             - name: CONNECTOR_INTERVAL
               valueFrom:
@@ -87,6 +90,10 @@ objects:
                 configMapKeyRef:
                   name: 6fusion-online-connector-config
                   key: log.level
+        volumes:
+        - name: host-ca-certificates
+          hostPath:
+            path: /etc/ssl/certs
         imagePullSecrets:
           - name: docker-credentials
 parameters:

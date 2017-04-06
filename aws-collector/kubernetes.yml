@@ -66,6 +66,8 @@ objects:
           - name: ssl
             mountPath: /usr/src/app/.ssl
             readOnly: true
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
           env:
           - name: AWS_ACCESS_KEY
             valueFrom:
@@ -146,7 +148,9 @@ objects:
         - name: ssl
           secret:
             secretName: collector-ssl-secret
-
+        - name: host-ca-certificates
+          hostPath:
+            path: /etc/ssl/certs
 parameters:
 # aws config
 - name: aws_region

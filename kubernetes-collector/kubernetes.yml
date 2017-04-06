@@ -50,6 +50,8 @@ objects:
             mountPath: /var/run/secrets/k8scollector/kube
           - name: on-prem-secret
             mountPath: /var/run/secrets/k8scollector/on-premise
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
         - name: k8scollector-onpremise
           image: 6fusion/k8collector-onpremise:alpha
           imagePullPolicy: IfNotPresent
@@ -58,6 +60,8 @@ objects:
             mountPath: /var/run/secrets/k8scollector/kube
           - name: on-prem-secret
             mountPath: /var/run/secrets/k8scollector/on-premise
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
         - name: k8scollector-cleancache
           image: 6fusion/k8collector-cleancache:alpha
           imagePullPolicy: IfNotPresent
@@ -66,11 +70,15 @@ objects:
             mountPath: /var/run/secrets/k8scollector/kube
           - name: on-prem-secret
             mountPath: /var/run/secrets/k8scollector/on-premise
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
         - name: k8scollector-mongodb
           image: mongo:3.2
           volumeMounts:
           - mountPath: /data/db
             name: "k8scollector-mongodb"
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
         volumes:
         - name: kube-secret
           secret:
@@ -81,6 +89,9 @@ objects:
         - name: "k8scollector-mongodb"
           hostPath:
             path: "/var/lib/k8scollector/data/db"
+        - name: host-ca-certificates
+          hostPath:
+            path: /etc/ssl/certs
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -107,6 +118,8 @@ objects:
             mountPath: /var/run/secrets/k8scollector/kube
           - name: on-prem-secret
             mountPath: /var/run/secrets/k8scollector/on-premise
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
         volumes:
         - name: kube-secret
           secret:
@@ -114,6 +127,9 @@ objects:
         - name: on-prem-secret
           secret:
             secretName: on-premise-secret
+        - name: host-ca-certificates
+          hostPath:
+            path: /etc/ssl/certs
         imagePullSecrets:
         - name: registry-pull-secret
 parameters:

@@ -87,6 +87,8 @@ objects:
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
         volumes:
         - name: vsphere-secret
           secret:
@@ -94,6 +96,9 @@ objects:
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
+        - name: host-ca-certificates
+          hostPath:
+            path: /etc/ssl/certs
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -120,6 +125,8 @@ objects:
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
         volumes:
         - name: vsphere-secret
           secret:
@@ -127,6 +134,9 @@ objects:
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
+        - name: host-ca-certificates
+          hostPath:
+            path: /etc/ssl/certs
 parameters:
 #vSphere questions
 - description: "Host address of vSphere"

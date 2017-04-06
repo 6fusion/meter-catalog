@@ -110,6 +110,13 @@ objects:
           image: docker.io/6fusion/uc6-connector:alpha
           imagePullPolicy: IfNotPresent
           name: uc6-connector
+          volumeMounts:
+          - name: host-ca-certificates
+            mountPath: /etc/ssl/certs
+        volumes:
+        - name: host-ca-certificates
+          hostPath:
+            path: /etc/ssl/certs
         imagePullSecrets:
         - name: meter-registry
 parameters:
