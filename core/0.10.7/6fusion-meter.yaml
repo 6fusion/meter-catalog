@@ -4,15 +4,6 @@ metadata:
   name: 6fusion-meter
 ---
 apiVersion: v1
-data:
-  .dockercfg: eyAiaHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEvIjogeyAiYXV0aCI6ICJiV1YwWlhJNk9EMHVXazV6TDJzcFdqWlpUSEJoWmc9PSIsICJlbWFpbCI6ICJtZXRlckA2ZnVzaW9uLmNvbSIgfSB9
-kind: Secret
-metadata:
-  name: meter-registry
-  namespace: 6fusion-meter
-type: kubernetes.io/dockercfg
----
-apiVersion: v1
 kind: Service
 metadata:
   name: meter-api
