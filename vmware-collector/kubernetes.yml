@@ -45,6 +45,15 @@ objects:
         - name: mongodb
           image: mongo:3.2
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: host-ca-certificate
+            mountPath: /etc/ssl/certs/ca-certificates.crt
+        volumes:
+        - name: host-ca-certificate
+          configMap:
+            name: internet-proxy
+            items:
+            - key: ca-certificates.crt
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -87,8 +96,8 @@ objects:
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
-          - name: host-ca-certificates
-            mountPath: /etc/ssl/certs
+          - name: host-ca-certificate
+            mountPath: /etc/ssl/certs/ca-certificate.crt
         volumes:
         - name: vsphere-secret
           secret:
@@ -96,9 +105,11 @@ objects:
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
-        - name: host-ca-certificates
-          hostPath:
-            path: /etc/ssl/certs
+        - name: host-ca-certificate
+          configMap:
+            name: internet-proxy
+            items:
+            - key: ca-certificates.crt
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -125,7 +136,7 @@ objects:
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
-          - name: internet-proxy
+          - name: host-ca-certificate
             mountPath: /etc/ssl/certs/ca-certificates.crt
         volumes:
         - name: vsphere-secret
@@ -137,6 +148,8 @@ objects:
         - name: host-ca-certificate
           configMap:
             name: internet-proxy
+            items:
+            - key: ca-certificates.crt
 parameters:
 #vSphere questions
 - description: "Host address of vSphere"
