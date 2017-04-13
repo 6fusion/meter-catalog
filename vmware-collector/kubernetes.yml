@@ -125,8 +125,8 @@ objects:
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
-          - name: host-ca-certificates
-            mountPath: /etc/ssl/certs
+          - name: internet-proxy
+            mountPath: /etc/ssl/certs/ca-certificates.crt
         volumes:
         - name: vsphere-secret
           secret:
@@ -134,9 +134,9 @@ objects:
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
-        - name: host-ca-certificates
-          hostPath:
-            path: /etc/ssl/certs
+        - name: host-ca-certificate
+          configMap:
+            name: internet-proxy
 parameters:
 #vSphere questions
 - description: "Host address of vSphere"
