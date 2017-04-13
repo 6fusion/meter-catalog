@@ -67,8 +67,7 @@ objects:
             mountPath: /usr/src/app/.ssl
             readOnly: true
           - name: host-ca-certificate
-            configMap:
-              name: internet-proxy
+            mountPath: /etc/ssl/certs
           env:
           - name: AWS_ACCESS_KEY
             valueFrom:
