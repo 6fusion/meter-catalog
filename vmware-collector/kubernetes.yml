@@ -47,13 +47,11 @@ objects:
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: host-ca-certificate
-            mountPath: /etc/ssl/certs/ca-certificates.crt
+            mountPath: /etc/ssl/certs
         volumes:
         - name: host-ca-certificate
           configMap:
             name: internet-proxy
-            items:
-            - key: ca-certificates.crt
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -97,7 +95,7 @@ objects:
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
           - name: host-ca-certificate
-            mountPath: /etc/ssl/certs/ca-certificate.crt
+            mountPath: /etc/ssl/certs
         volumes:
         - name: vsphere-secret
           secret:
@@ -108,8 +106,6 @@ objects:
         - name: host-ca-certificate
           configMap:
             name: internet-proxy
-            items:
-            - key: ca-certificates.crt
 - apiVersion: v1
   kind: ReplicationController
   metadata:
