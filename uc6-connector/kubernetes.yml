@@ -111,12 +111,12 @@ objects:
           imagePullPolicy: IfNotPresent
           name: uc6-connector
           volumeMounts:
-          - name: host-ca-certificates
+          - name: host-ca-certificate
             mountPath: /etc/ssl/certs
         volumes:
-        - name: host-ca-certificates
-          hostPath:
-            path: /etc/ssl/certs
+        - name: host-ca-certificate
+          configMap:
+            name: internet-proxy
         imagePullSecrets:
         - name: meter-registry
 parameters:
