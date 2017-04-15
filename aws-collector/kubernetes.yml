@@ -153,10 +153,6 @@ objects:
             name: internet-proxy
 parameters:
 # aws config
-- name: aws_region
-  displayName: "AWS Region"
-  section: "AWS Collector"
-  description: "Region collector will run in. The region is only needed to construct an SSL endpoint; metering is not limited to this region."
 - name: aws_access_key
   displayName: "AWS Access Key"
   section: "AWS Collector"
@@ -173,6 +169,10 @@ parameters:
   display_name: "Billing Role ARN"
   section: "AWS Collector"
   description: "The ARN of the role to use when accessing the billing S3 bucket"
+- name: aws_region
+  displayName: "Billing S3 Region"
+  section: "AWS Collector"
+  description: "S3 Region where your detailed billing bucket resides"
 - name: external_id
   display_name: "External ID"
   section: "AWS Collector"
