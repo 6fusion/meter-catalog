@@ -368,7 +368,7 @@ spec:
       containers:
       - image: docker.io/6fusion/utilization-tracker:0.8
         name: utilization-tracker
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: RAILS_ENV
           value: production
@@ -454,7 +454,7 @@ spec:
       containers:
       - image: docker.io/6fusion/cost-calculator:0.6
         name: cost-calculator
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: METER_ENV
           value: production
@@ -494,7 +494,7 @@ spec:
       containers:
       - image: docker.io/6fusion/meter-api:0.10.3
         name: meter-api
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: RAILS_ENV
           value: production
@@ -577,12 +577,12 @@ spec:
       containers:
       - image: docker.io/6fusion/meter-dashboard:0.10.6
         name: meter-dashboard
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 6b43f6d7338abd376483f2e28e5a939c9ace1d7d449ef62f4d221fb8722375c1a6abff4efde86ff86613cc23cea85d412baef1785d8eb8562807e230c1776d68
+          value: 0658e0ba76ef35c1d81153af6730eb1bf63eedcd3f6c3abf0534b604e41ec3bdd2ff3a178632e15f116d5e03526d3671209d1d089c580c5bb2ad605ce3073746
         - name: METER_VERSION
           value: 0.10.9
         - name: SSL_CERT_FILE
@@ -674,7 +674,7 @@ spec:
     spec:
       containers:
       - image: docker.io/6fusion/data-retention-manager:0.5
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: retention-manager
         env:
         - name: METER_ENV
