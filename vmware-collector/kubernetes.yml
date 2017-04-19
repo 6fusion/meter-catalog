@@ -140,7 +140,7 @@ parameters:
   displayName: "vSphere User"
   required: true
   type: string
-  description: "Account used for vSphere access"
+  description: "Account used for vSphere access. Please provide in user@domain format."
 - name: password
   section: vSphere
   displayName: "vSphere Password"
@@ -152,8 +152,8 @@ parameters:
   displayName: "Ignore SSL validation errors?"
   required: true
   type: boolean
-  value: "false"
-  description: "Perform strict SSL validation. Do not enable if using self-signed SSL certificates"
+  value: "true"
+  description: "Perform strict SSL validation. Do not enable if using self-signed SSL certificates."
 - name: readings-batch-size
   section: vSphere
   displayName: "Max Query Metrics"
