@@ -93,18 +93,20 @@ objects:
 parameters:
 - name: interval
   displayName: Interval
-  section: Connector
   description: "6fusion Meter polling interval"
+  section: 6fusion-online-connector-config
+  sectionDisplayName: Connector
   value: "30"
   advanced: "true"
 - name: meter.read-timeout
   displayName: "Read Timeout"
-  section: Connector
+  section: 6fusion-online-connector-config
+  sectionDisplayName: Connector
   value: "45"
   advanced: "true"
 - name: receiver.host
   displayName: "6fusion Online API Host"
-  section: Connector
+  section: 6fusion-online-connector-config
   type: enum
   value: "receiver.dev.aws.6fusion.com"
   options:
@@ -115,7 +117,7 @@ parameters:
   advanced: "true"
 - name: log.level
   displayName: "Log Level"
-  section: Connector
+  section: 6fusion-online-connector-config
   type: enum
   value: debug
   options:
@@ -129,29 +131,39 @@ parameters:
   displayName: "Request Batch Size"
   description: "Number of items to retrieve per request"
   value: "1000"
-  section: Connector
+  section: 6fusion-online-connector-config
   advanced: "true"
 - name: meter.host
-  section: "6fusion Meter"
+  section: 6fusion-online-connector-config
+  sectionDisplayName: "6fusion Meter"
   displayName: "Host"
   description: "Address of the 6fusion Meter"
   expandExpression: ${METER_API_HOST}
   advanced: "true"
 - name: auth.ca
-  section: "6fusion Meter"
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-online-connector-config
   displayName: "Meter License CA"
   expandExpression: ${METER_LICENSE_CA}
   type: multiline
   advanced: "true"
+  validations:
+    required: true
 - name: auth.cert
-  section: "6fusion Meter"
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-online-connector-config
   displayName: "Meter License Certificate"
   expandExpression: ${METER_LICENSE_CERTIFICATE}
   type: multiline
   advanced: "true"
+  validations:
+    required: true
 - name: auth.key
-  section: "6fusion Meter"
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-online-connector-config
   displayName: "Meter License Key"
   expandExpression: ${METER_LICENSE_KEY}
   type: multiline
-  advanced: "true"  
+  advanced: "true"
+  validations:
+    required: true
