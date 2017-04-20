@@ -152,62 +152,73 @@ parameters:
 # aws config
 - name: aws_region
   displayName: "AWS Region"
-  section: "AWS Collector"
+  sectionDisplayName: "AWS Collector"
+  section: aws-collector-secret
   description: "Region collector will run in. The region is only needed to construct an SSL endpoint; metering is not limited to this region."
   validations:
     required: true
 - name: aws_access_key
   displayName: "AWS Access Key"
-  section: "AWS Collector"
+  sectionDisplayName: "AWS Collector"
+  section: aws-collector-secret
   description: "Access Key ID associated with the AWS account roles used for metering"
   validations:
     required: true
 - name: aws_secret_key
   displayName: "AWS Secret Key"
   description: "AWS Access Secret associated with the AWS account roles used for metering"
-  section: "AWS Collector"
+  sectionDisplayName: "AWS Collector"
+  section: aws-collector-secret
   validations:
     required: true
 - name: collection_arn
   displayName: "Collection Role ARN"
-  section: "AWS Collector"
+  sectionDisplayName: "AWS Collector"
+  section: aws-collector-secret
   description: "The ARN of the role to use when collecting EC2 and CloudWatch data"
   advanced: true
 - name: billing_arn
   display_name: "Billing Role ARN"
-  section: "AWS Collector"
+  sectionDisplayName: "AWS Collector"
+  section: aws-collector-secret
   description: "The ARN of the role to use when accessing the billing S3 bucket"
   advanced: true
 - name: external_id
   display_name: "External ID"
-  section: "AWS Collector"
+  sectionDisplayName: "AWS Collector"
+  section: aws-collector-secret
   description: "An optional identifier used in an IAM role trust policy to designate who can assume a role"
   advanced: true
 - name: detailed_report_bucket
   displayName: "Detailed Report Bucket"
   description: "Amazon S3 bucket name where detailed billing reports are stored"
-  section: "AWS Collector"
+  section: aws-collector-secret
+  sectionDisplayName: "AWS Collector"
 - name: detailed_report_prefix
   displayName: "Detailed Report Prefix"
-  section: "AWS Collector"
+  section: aws-collector-secret
+  sectionDisplayName: "AWS Collector"
   description: "Amazon detailed report name (report path)"
 # meter config
 - name: organization_id
   displayName: "Organization ID"
   description: "ID of an organization, in the 6fusion Meter, to submit under"
   expandExpression: ${ORGANIZATION_ID}
-  section: "6fusion Meter"
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-meter-secret
   validations:
     required: true
 - name: infrastructure_name
   displayName: "Infrastructure Name"
   description: "A unique name to be applied to the AWS account infrastructure."
-  section: "6fusion Meter"
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-meter-secret
   validations:
     required: true
 - name: meter_host
   displayName: Host
-  section: "6fusion Meter"
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-meter-secret
   expandExpression: ${METER_API_HOST}
   description: "Address of the 6fusion Meter"
   validations:
@@ -215,7 +226,8 @@ parameters:
   advanced: true
 - name: meter_port
   displayName: Port
-  section: "6fusion Meter"
+  section: 6fusion-meter-secret
+  sectionDisplayName: "6fusion Meter"
   type: int
   expandExpression: ${METER_API_SSL_PORT}
   description: "TCP port of the 6fusion Meter"
@@ -224,25 +236,29 @@ parameters:
   advanced: true
 - name: token
   displayName: "Meter API Token"
-  section: "6fusion Meter"
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-meter-secret
   expandExpression: ${METER_API_TOKEN}
   description: "OAuth access token for 6fusion Meter (if enabled)"
 - name: use-ssl
   displayName: "Use SSL?"
   type: boolean
   value: "1"
-  section: "6fusion Meter"
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-meter-secret
   advanced: true
 - name: verify-ssl
   displayName: "Verify SSL?"
   type: boolean
-  section: "6fusion Meter"
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-meter-secret
   value: "0"
   description: "Validate SSL certificate. Do not enable if using self-signed certificates"
   advanced: true
 - name: 6fusion.openssl
   displayName: "SSL Key"
-  section: "Collector SSL"
+  sectionDisplayName: "Collector SSL"
+  section: collector-ssl-secret
   description: "The SSL key to be used by the collector's Kubernetes health-check endpoint"
   validations:
     required: true
@@ -302,7 +318,8 @@ parameters:
     -----END RSA PRIVATE KEY-----
 - name: 6fusion.cer
   displayName: "SSL Certificate"
-  section: "Collector SSL"
+  sectionDisplayName: "Collector SSL"
+  section: collector-ssl-secret
   description: "The SSL certificate to be used by the collector's Kubernetes health-check endpoint"
   validations:
     required: true
