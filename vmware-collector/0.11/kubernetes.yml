@@ -1,1 +1,262 @@
-YXBpVmVyc2lvbjogdjEKa2luZDogVGVtcGxhdGUKbWV0YWRhdGE6CiAgbmFtZTogdm13YXJlLWNvbGxlY3RvcgogIGFubm90YXRpb25zOgogICAgdmVyc2lvbjogMC4xMQogICAgZGlzcGxheU5hbWU6ICJWTXdhcmUgQ29sbGVjdG9yIgogICAgZGVzY3JpcHRpb246ICJWTXdhcmUgQ29sbGVjdG9yIGZvciB2U3BoZXJlIDUuMCsiCm9iamVjdHM6Ci0gYXBpVmVyc2lvbjogdjEKICBraW5kOiBOYW1lc3BhY2UKICBtZXRhZGF0YToKICAgIG5hbWU6IDZmdXNpb24tdm13YXJlLWNvbGxlY3RvcgotIGFwaVZlcnNpb246IHYxCiAga2luZDogU2VydmljZQogIG1ldGFkYXRhOgogICAgbmFtZTogbW9uZ29kYgogICAgbmFtZXNwYWNlOiA2ZnVzaW9uLXZtd2FyZS1jb2xsZWN0b3IKICAgIGxhYmVsczoKICAgICAgNmZ1c2lvbi1hcHA6IG1vbmdvZGIKICBzcGVjOgogICAgcG9ydHM6CiAgICAtIHBvcnQ6IDI3MDE3CiAgICAgIHByb3RvY29sOiBUQ1AKICAgICAgbmFtZTogbW9uZ29kYi1wb3J0CiAgICBzZWxlY3RvcjoKICAgICAgNmZ1c2lvbi1hcHA6IG1vbmdvZGIKLSBhcGlWZXJzaW9uOiB2MQogIGtpbmQ6IFJlcGxpY2F0aW9uQ29udHJvbGxlcgogIG1ldGFkYXRhOgogICAgbmFtZTogbW9uZ29kYgogICAgbmFtZXNwYWNlOiA2ZnVzaW9uLXZtd2FyZS1jb2xsZWN0b3IKICAgIGxhYmVsczoKICAgICAgNmZ1c2lvbi1hcHA6IG1vbmdvZGIKICBzcGVjOgogICAgcmVwbGljYXM6IDEKICAgIHNlbGVjdG9yOgogICAgICA2ZnVzaW9uLWFwcDogbW9uZ29kYgogICAgdGVtcGxhdGU6CiAgICAgIG1ldGFkYXRhOgogICAgICAgIG5hbWU6IG1vbmdvZGIKICAgICAgICBsYWJlbHM6CiAgICAgICAgICA2ZnVzaW9uLWFwcDogbW9uZ29kYgogICAgICBzcGVjOgogICAgICAgIGNvbnRhaW5lcnM6CiAgICAgICAgLSBuYW1lOiBtb25nb2RiCiAgICAgICAgICBpbWFnZTogbW9uZ286My4yCiAgICAgICAgICBpbWFnZVB1bGxQb2xpY3k6IElmTm90UHJlc2VudAotIGFwaVZlcnNpb246IHYxCiAga2luZDogUmVwbGljYXRpb25Db250cm9sbGVyCiAgbWV0YWRhdGE6CiAgICBuYW1lOiA2ZnVzaW9uLXZtd2FyZWNvbGxlY3Rvci1tYXN0ZXIKICAgIG5hbWVzcGFjZTogNmZ1c2lvbi12bXdhcmUtY29sbGVjdG9yCiAgICBsYWJlbHM6CiAgICAgIDZmdXNpb24tYXBwOiB2bXdhcmVjb2xsZWN0b3ItbWFzdGVyCiAgc3BlYzoKICAgIHJlcGxpY2FzOiAxCiAgICBzZWxlY3RvcjoKICAgICAgNmZ1c2lvbi1hcHA6IHZtd2FyZWNvbGxlY3Rvci1tYXN0ZXIKICAgIHRlbXBsYXRlOgogICAgICBtZXRhZGF0YToKICAgICAgICBuYW1lOiA2ZnVzaW9uLXZtd2FyZWNvbGxlY3Rvci1tYXN0ZXIKICAgICAgICBsYWJlbHM6CiAgICAgICAgICA2ZnVzaW9uLWFwcDogdm13YXJlY29sbGVjdG9yLW1hc3RlcgogICAgICBzcGVjOgogICAgICAgIGNvbnRhaW5lcnM6CiAgICAgICAgLSBuYW1lOiB2bXdhcmUtY29sbGVjdG9yLWludmVudG9yeQogICAgICAgICAgaW1hZ2U6IDZmdXNpb24vdm13YXJlLWNvbGxlY3RvcjphbHBoYQogICAgICAgICAgaW1hZ2VQdWxsUG9saWN5OiBJZk5vdFByZXNlbnQKICAgICAgICAgIGVudjoKICAgICAgICAgIC0gbmFtZTogREVGQVVMVF9ESVNLX0lPCiAgICAgICAgICAgIHZhbHVlRnJvbToKICAgICAgICAgICAgICBzZWNyZXRLZXlSZWY6CiAgICAgICAgICAgICAgICBrZXk6IGRlZmF1bHQtZGlzay1pbwogICAgICAgICAgICAgICAgbmFtZTogb24tcHJlbS1zZWNyZXQKICAgICAgICAgIC0gbmFtZTogREVGQVVMVF9XQU5fSU8KICAgICAgICAgICAgdmFsdWVGcm9tOgogICAgICAgICAgICAgIHNlY3JldEtleVJlZjoKICAgICAgICAgICAgICAgIGtleTogZGVmYXVsdC13YW4taW8KICAgICAgICAgICAgICAgIG5hbWU6IG9uLXByZW0tc2VjcmV0CiAgICAgICAgICAtIG5hbWU6IERFRkFVTFRfTEFOX0lPCiAgICAgICAgICAgIHZhbHVlRnJvbToKICAgICAgICAgICAgICBzZWNyZXRLZXlSZWY6CiAgICAgICAgICAgICAgICBrZXk6IGRlZmF1bHQtbGFuLWlvCiAgICAgICAgICAgICAgICBuYW1lOiBvbi1wcmVtLXNlY3JldAogICAgICAgICAgdm9sdW1lTW91bnRzOgogICAgICAgICAgLSBuYW1lOiB2c3BoZXJlLXNlY3JldAogICAgICAgICAgICBtb3VudFBhdGg6IC92YXIvcnVuL3NlY3JldHMvdm13YXJlY29sbGVjdG9yL3ZzcGhlcmUKICAgICAgICAgIC0gbmFtZTogb24tcHJlbS1zZWNyZXQKICAgICAgICAgICAgbW91bnRQYXRoOiAvdmFyL3J1bi9zZWNyZXRzL3Ztd2FyZWNvbGxlY3Rvci9vbi1wcmVtCiAgICAgICAgdm9sdW1lczoKICAgICAgICAtIG5hbWU6IHZzcGhlcmUtc2VjcmV0CiAgICAgICAgICBzZWNyZXQ6CiAgICAgICAgICAgIHNlY3JldE5hbWU6IHZzcGhlcmUtc2VjcmV0CiAgICAgICAgLSBuYW1lOiBvbi1wcmVtLXNlY3JldAogICAgICAgICAgc2VjcmV0OgogICAgICAgICAgICBzZWNyZXROYW1lOiBvbi1wcmVtLXNlY3JldAotIGFwaVZlcnNpb246IHYxCiAga2luZDogUmVwbGljYXRpb25Db250cm9sbGVyCiAgbWV0YWRhdGE6CiAgICBuYW1lOiA2ZnVzaW9uLXZtd2FyZWNvbGxlY3Rvci1tZXRyaWNzCiAgICBuYW1lc3BhY2U6IDZmdXNpb24tdm13YXJlLWNvbGxlY3RvcgogICAgbGFiZWxzOgogICAgICA2ZnVzaW9uLWFwcDogdm13YXJlY29sbGVjdG9yLW1ldHJpY3MKICBzcGVjOgogICAgcmVwbGljYXM6IDEKICAgIHNlbGVjdG9yOgogICAgICA2ZnVzaW9uLWFwcDogdm13YXJlY29sbGVjdG9yLW1ldHJpY3MKICAgIHRlbXBsYXRlOgogICAgICBtZXRhZGF0YToKICAgICAgICBuYW1lOiA2ZnVzaW9uLXZtd2FyZWNvbGxlY3Rvci1tZXRyaWNzCiAgICAgICAgbGFiZWxzOgogICAgICAgICAgNmZ1c2lvbi1hcHA6IHZtd2FyZWNvbGxlY3Rvci1tZXRyaWNzCiAgICAgIHNwZWM6CiAgICAgICAgY29udGFpbmVyczoKICAgICAgICAtIG5hbWU6IHZtd2FyZS1jb2xsZWN0b3ItbWV0cmljcwogICAgICAgICAgaW1hZ2U6IDZmdXNpb24vdm13YXJlLWNvbGxlY3Rvci1tZXRyaWNzOmFscGhhCiAgICAgICAgICBpbWFnZVB1bGxQb2xpY3k6IElmTm90UHJlc2VudAogICAgICAgICAgdm9sdW1lTW91bnRzOgogICAgICAgICAgLSBuYW1lOiB2c3BoZXJlLXNlY3JldAogICAgICAgICAgICBtb3VudFBhdGg6IC92YXIvcnVuL3NlY3JldHMvdm13YXJlY29sbGVjdG9yL3ZzcGhlcmUKICAgICAgICAgIC0gbmFtZTogb24tcHJlbS1zZWNyZXQKICAgICAgICAgICAgbW91bnRQYXRoOiAvdmFyL3J1bi9zZWNyZXRzL3Ztd2FyZWNvbGxlY3Rvci9vbi1wcmVtCiAgICAgICAgdm9sdW1lczoKICAgICAgICAtIG5hbWU6IHZzcGhlcmUtc2VjcmV0CiAgICAgICAgICBzZWNyZXQ6CiAgICAgICAgICAgIHNlY3JldE5hbWU6IHZzcGhlcmUtc2VjcmV0CiAgICAgICAgLSBuYW1lOiBvbi1wcmVtLXNlY3JldAogICAgICAgICAgc2VjcmV0OgogICAgICAgICAgICBzZWNyZXROYW1lOiBvbi1wcmVtLXNlY3JldApwYXJhbWV0ZXJzOgojdlNwaGVyZSBxdWVzdGlvbnMKLSBkZXNjcmlwdGlvbjogIkhvc3QgYWRkcmVzcyBvZiB2U3BoZXJlIgogIG5hbWU6IGhvc3QKICBzZWN0aW9uOiB2U3BoZXJlCiAgZGlzcGxheU5hbWU6ICJ2U3BoZXJlIEhvc3QiCiAgdmFsaWRhdGlvbnM6CiAgICByZXF1aXJlZDogdHJ1ZQogIHR5cGU6IHN0cmluZwotIG5hbWU6IHVzZXIKICBzZWN0aW9uOiB2U3BoZXJlCiAgZGlzcGxheU5hbWU6ICJ2U3BoZXJlIFVzZXIiCiAgdmFsaWRhdGlvbnM6CiAgICByZXF1aXJlZDogdHJ1ZQogIHR5cGU6IHN0cmluZwogIGRlc2NyaXB0aW9uOiAiQWNjb3VudCB1c2VkIGZvciB2U3BoZXJlIGFjY2VzcyIKLSBuYW1lOiBwYXNzd29yZAogIHNlY3Rpb246IHZTcGhlcmUKICBkaXNwbGF5TmFtZTogInZTcGhlcmUgUGFzc3dvcmQiCiAgdmFsaWRhdGlvbnM6CiAgICByZXF1aXJlZDogdHJ1ZQogIHR5cGU6IHBhc3N3b3JkCiAgZGVzY3JpcHRpb246ICJ2U3BoZXJlIGFjY291bnQgcGFzc3dvcmQiCi0gbmFtZTogaWdub3JlLXNzbC1lcnJvcnMKICBzZWN0aW9uOiB2U3BoZXJlCiAgZGlzcGxheU5hbWU6ICJJZ25vcmUgU1NMIHZhbGlkYXRpb24gZXJyb3JzPyIKICB2YWxpZGF0aW9uczoKICAgIHJlcXVpcmVkOiB0cnVlCiAgdHlwZTogYm9vbGVhbgogIHZhbHVlOiAiZmFsc2UiCiAgZGVzY3JpcHRpb246ICJQZXJmb3JtIHN0cmljdCBTU0wgdmFsaWRhdGlvbi4gRG8gbm90IGVuYWJsZSBpZiB1c2luZyBzZWxmLXNpZ25lZCBTU0wgY2VydGlmaWNhdGVzIgotIG5hbWU6IHJlYWRpbmdzLWJhdGNoLXNpemUKICBzZWN0aW9uOiB2U3BoZXJlCiAgZGlzcGxheU5hbWU6ICJNYXggUXVlcnkgTWV0cmljcyIKICB0eXBlOiBpbnQKICB2YWx1ZTogIjY0IgogIGRlc2NyaXB0aW9uOiAiTGltaXQgdGhlIG51bWJlciBvZiBlbnRpdGllcyB0aGF0IGFyZSBpbmNsdWRlZCBpbiBhIGRhdGFiYXNlIHF1ZXJ5LiIKICBhZHZhbmNlZDogdHJ1ZQojIG9uIHByZW0gcXVlc3Rpb25zCi0gbmFtZTogYXBpLWhvc3QKICBzZWN0aW9uOiBPbi1QcmVtCiAgdHlwZTogc3RyaW5nCiAgZGlzcGxheU5hbWU6ICJNZXRlciBBUEkgSG9zdCIKICBkZXNjcmlwdGlvbjogIkhvc3QgYWRkcmVzcyBvZiA2ZnVzaW9uIE1ldGVyIgogIHZhbGlkYXRpb25zOgogICAgcmVxdWlyZWQ6IHRydWUKICBleHBhbmRFeHByZXNzaW9uOiAke01FVEVSX0FQSV9IT1NUfQotIG5hbWU6IGFwaS1lbmRwb2ludAogIHNlY3Rpb246IE9uLVByZW0KICB0eXBlOiBzdHJpbmcKICBkaXNwbGF5TmFtZTogIk1ldGVyIEFQSSBWZXJzaW9uIgogIGRlc2NyaXB0aW9uOiAiVmVyc2lvZW5kIGVuZHBvaW50IHRvIHVzZSBmb3IgTWV0ZXIgQVBJIgogIHZhbGlkYXRpb25zOgogICAgcmVxdWlyZWQ6IHRydWUKICB2YWx1ZTogImFwaS92MSIKLSBuYW1lOiBvcmdhbml6YXRpb24taWQKICBzZWN0aW9uOiBPbi1QcmVtCiAgdHlwZTogc3RyaW5nCiAgZGlzcGxheU5hbWU6ICJPcmdhbml6YXRpb24gSUQiCiAgZGVzY3JpcHRpb246ICJJRCBvZiBvcmdhbml6YXRpb24gb2JqZWN0IGluIHRoZSA2ZnVzaW9uIE1ldGVyIEFQSSIKICB2YWxpZGF0aW9uczoKICAgIHJlcXVpcmVkOiB0cnVlCiAgZXhwYW5kRXhwcmVzc2lvbjogJHtPUkdBTklaQVRJT05fSUR9Ci0gbmFtZTogbG9nLWxldmVsCiAgc2VjdGlvbjogdlNwaGVyZQogIGRpc3BsYXlOYW1lOiAiTG9nIExldmVsIgogIHZhbGlkYXRpb25zOgogICAgcmVxdWlyZWQ6IGZhbHNlCiAgdmFsdWU6IGluZm8KICB0eXBlOiBlbnVtCiAgb3B0aW9uczoKICAgIC0gZGVidWcKICAgIC0gaW5mbwogICAgLSB3YXJuCiAgICAtIGVycm9yCiAgICAtIGZhdGFsCi0gbmFtZTogcmVnaXN0cmF0aW9uLWRhdGUKICBzZWN0aW9uOiBPbi1QcmVtCiAgdHlwZTogc3RyaW5nCiAgZGlzcGxheU5hbWU6ICJSZWdpc3RyYXRpb24gRGF0ZSIKICBkZXNjcmlwdGlvbjogIlRpbWUgdG8gc3RhcnQgY29sbGVjdGlvbiBmcm9tLiIKICBoaWRkZW46IHRydWUKICB2YWxpZGF0aW9uczoKICAgIHJlcXVpcmVkOiB0cnVlCiAgZXhwYW5kRXhwcmVzc2lvbjogImBUaW1lLm5vd2AiCi0gbmFtZTogbWFjaGluZXMtYnktaW52LXRpbWVzdGFtcAogIHNlY3Rpb246IE9uLVByZW0KICB0eXBlOiBpbnQKICB2YWxpZGF0aW9uczoKICAgIGRpc3BsYXlOYW1lOiAiTWFjaGluZXMgcGVyIHJlcXVlc3QiCiAgICB2YWxpZGF0aW9uczoKICAgICAgZGVzY3JpcHRpb246ICJEZWZpbmUgdGhlIHRvdGFsIG9mIG1hY2hpbmVzIHRoYXQgYXJlIGluY2x1ZGVkIG9uIGVhY2ggcmVxdWVzdCB0byBvYnRhaW4gbWV0cmljcyBmcm9tIHZzcGhlcmUiCiAgcmVxdWlyZWQ6IHRydWUKICBhZHZhbmNlZDogdHJ1ZQogIHZhbHVlOiAiNTAwIiAgIyBUT0RPIGNvbmZpcm0gdGhpcyBkZWZhdWx0Ci0gbmFtZTogaW52ZW50b3JpZWQtbGltaXQKICBzZWN0aW9uOiBPbi1QcmVtCiAgdHlwZTogaW50CiAgZGlzcGxheU5hbWU6ICJJbnZlbnRvcnkgTGltaXQiCiAgZGVzY3JpcHRpb246ICJUaGUgbnVtYmVyIG9mIGludmVudG9yaWVkIHRpbWVzdGFtcHMgdGhhdCBlYWNoIHJlcGxpY2EgY29udHJvbGxlciB3aWxsIHRha2UgZWFjaCByb3VuZCIKICB2YWxpZGF0aW9uczoKICAgIHJlcXVpcmVkOiBmYWxzZQogIHZhbHVlOiAiNSIgICMgVE9ETyBjb25maXJtIHRoaXMgZGVmYXVsdAogIGFkdmFuY2VkOiB0cnVlCi0gbmFtZTogZGVmYXVsdC1kaXNrLWlvCiAgc2VjdGlvbjogT24tUHJlbQogIHR5cGU6IGludAogIGRpc3BsYXlOYW1lOiAiRGVmYXVsdCBEaXNrIEkvTyIKICBkZXNjcmlwdGlvbjogIlRoZSB2YWx1ZSB0byB1c2UgZm9yIERpc2sgSS9PIGlmIHRoZSBjb2xsZWN0b3IgY2Fubm90IGRldGVybWluZSB0aGUgYWN0dWFsIGRpc2sgSS9PIHNwZWVkIgogIHZhbGlkYXRpb25zOgogICAgcmVxdWlyZWQ6IGZhbHNlCiAgdmFsdWU6ICIxMDAwMDAwMDAwMCIKICBhZHZhbmNlZDogdHJ1ZQotIG5hbWU6IGRlZmF1bHQtbGFuLWlvCiAgc2VjdGlvbjogT24tUHJlbQogIHR5cGU6IGludAogIGRpc3BsYXlOYW1lOiAiRGVmYXVsdCBMQU4gSS9PIgogIGRlc2NyaXB0aW9uOiAiVGhlIHZhbHVlIHRvIHVzZSBmb3IgTEFOIEkvTyBpZiB0aGUgY29sbGVjdG9yIGNhbm5vdCBkZXRlcm1pbmUgdGhlIGFjdHVhbCBMQU4gSS9PIHNwZWVkIgogIHZhbGlkYXRpb25zOgogICAgcmVxdWlyZWQ6IGZhbHNlCiAgdmFsdWU6ICIxMDAwMDAwMDAwMCIKICBhZHZhbmNlZDogdHJ1ZQotIG5hbWU6IGRlZmF1bHQtd2FuLWlvCiAgc2VjdGlvbjogT24tUHJlbQogIHR5cGU6IGludAogIGRpc3BsYXlOYW1lOiAiRGVmYXVsdCBXQU4gSS9PIgogIGRlc2NyaXB0aW9uOiAiVGhlIHZhbHVlIHRvIHVzZSBmb3IgV0FOIEkvTyBpZiB0aGUgY29sbGVjdG9yIGNhbm5vdCBkZXRlcm1pbmUgdGhlIGFjdHVhbCBXQU4gSS9PIHNwZWVkIgogIHZhbGlkYXRpb25zOgogICAgcmVxdWlyZWQ6IGZhbHNlCiAgYWR2YW5jZWQ6IHRydWUKICB2YWx1ZTogIjEwMDAwMDAwMCIgCg==
+apiVersion: v1
+kind: Template
+metadata:
+  name: vmware-collector
+  annotations:
+    pluginVersion: 0.11
+    version: 0.11
+    displayName: "VMware Collector"
+    description: "VMware Collector for vSphere 5.0+"
+objects:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: 6fusion-vmware-collector
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: mongodb
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: mongodb
+  spec:
+    ports:
+    - port: 27017
+      protocol: TCP
+      name: mongodb-port
+    selector:
+      6fusion-app: mongodb
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: mongodb
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: mongodb
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: mongodb
+    template:
+      metadata:
+        name: mongodb
+        labels:
+          6fusion-app: mongodb
+      spec:
+        containers:
+        - name: mongodb
+          image: mongo:3.2
+          imagePullPolicy: IfNotPresent
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: 6fusion-vmwarecollector-master
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: vmwarecollector-master
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: vmwarecollector-master
+    template:
+      metadata:
+        name: 6fusion-vmwarecollector-master
+        labels:
+          6fusion-app: vmwarecollector-master
+      spec:
+        containers:
+        - name: vmware-collector-inventory
+          image: 6fusion/vmware-collector:alpha
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: DEFAULT_DISK_IO
+            valueFrom:
+              secretKeyRef:
+                key: default-disk-io
+                name: on-prem-secret
+          - name: DEFAULT_WAN_IO
+            valueFrom:
+              secretKeyRef:
+                key: default-wan-io
+                name: on-prem-secret
+          - name: DEFAULT_LAN_IO
+            valueFrom:
+              secretKeyRef:
+                key: default-lan-io
+                name: on-prem-secret
+          volumeMounts:
+          - name: vsphere-secret
+            mountPath: /var/run/secrets/vmwarecollector/vsphere
+          - name: on-prem-secret
+            mountPath: /var/run/secrets/vmwarecollector/on-prem
+        volumes:
+        - name: vsphere-secret
+          secret:
+            secretName: vsphere-secret
+        - name: on-prem-secret
+          secret:
+            secretName: on-prem-secret
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: 6fusion-vmwarecollector-metrics
+    namespace: 6fusion-vmware-collector
+    labels:
+      6fusion-app: vmwarecollector-metrics
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: vmwarecollector-metrics
+    template:
+      metadata:
+        name: 6fusion-vmwarecollector-metrics
+        labels:
+          6fusion-app: vmwarecollector-metrics
+      spec:
+        containers:
+        - name: vmware-collector-metrics
+          image: 6fusion/vmware-collector-metrics:alpha
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: vsphere-secret
+            mountPath: /var/run/secrets/vmwarecollector/vsphere
+          - name: on-prem-secret
+            mountPath: /var/run/secrets/vmwarecollector/on-prem
+        volumes:
+        - name: vsphere-secret
+          secret:
+            secretName: vsphere-secret
+        - name: on-prem-secret
+          secret:
+            secretName: on-prem-secret
+parameters:
+#vSphere questions
+- description: "Host address of vSphere"
+  name: host
+  section: vSphere
+  displayName: "vSphere Host"
+  validations:
+    required: true
+  type: string
+- name: user
+  section: vSphere
+  displayName: "vSphere User"
+  validations:
+    required: true
+  type: string
+  description: "Account used for vSphere access"
+- name: password
+  section: vSphere
+  displayName: "vSphere Password"
+  validations:
+    required: true
+  type: password
+  description: "vSphere account password"
+- name: ignore-ssl-errors
+  section: vSphere
+  displayName: "Ignore SSL validation errors?"
+  validations:
+    required: true
+  type: boolean
+  value: "false"
+  description: "Perform strict SSL validation. Do not enable if using self-signed SSL certificates"
+- name: readings-batch-size
+  section: vSphere
+  displayName: "Max Query Metrics"
+  type: int
+  value: "64"
+  description: "Limit the number of entities that are included in a database query."
+  advanced: true
+# on prem questions
+- name: api-host
+  section: On-Prem
+  type: string
+  displayName: "Meter API Host"
+  description: "Host address of 6fusion Meter"
+  validations:
+    required: true
+  expandExpression: ${METER_API_HOST}
+- name: api-endpoint
+  section: On-Prem
+  type: string
+  displayName: "Meter API Version"
+  description: "Versioend endpoint to use for Meter API"
+  validations:
+    required: true
+  value: "api/v1"
+- name: organization-id
+  section: On-Prem
+  type: string
+  displayName: "Organization ID"
+  description: "ID of organization object in the 6fusion Meter API"
+  validations:
+    required: true
+  expandExpression: ${ORGANIZATION_ID}
+- name: log-level
+  section: vSphere
+  displayName: "Log Level"
+  validations:
+    required: false
+  value: info
+  type: enum
+  options:
+    - debug
+    - info
+    - warn
+    - error
+    - fatal
+- name: registration-date
+  section: On-Prem
+  type: string
+  displayName: "Registration Date"
+  description: "Time to start collection from."
+  hidden: true
+  validations:
+    required: true
+  expandExpression: "`Time.now`"
+- name: machines-by-inv-timestamp
+  section: On-Prem
+  type: int
+  validations:
+    displayName: "Machines per request"
+    validations:
+      description: "Define the total of machines that are included on each request to obtain metrics from vsphere"
+  required: true
+  advanced: true
+  value: "500"  # TODO confirm this default
+- name: inventoried-limit
+  section: On-Prem
+  type: int
+  displayName: "Inventory Limit"
+  description: "The number of inventoried timestamps that each replica controller will take each round"
+  validations:
+    required: false
+  value: "5"  # TODO confirm this default
+  advanced: true
+- name: default-disk-io
+  section: On-Prem
+  type: int
+  displayName: "Default Disk I/O"
+  description: "The value to use for Disk I/O if the collector cannot determine the actual disk I/O speed"
+  validations:
+    required: false
+  value: "10000000000"
+  advanced: true
+- name: default-lan-io
+  section: On-Prem
+  type: int
+  displayName: "Default LAN I/O"
+  description: "The value to use for LAN I/O if the collector cannot determine the actual LAN I/O speed"
+  validations:
+    required: false
+  value: "10000000000"
+  advanced: true
+- name: default-wan-io
+  section: On-Prem
+  type: int
+  displayName: "Default WAN I/O"
+  description: "The value to use for WAN I/O if the collector cannot determine the actual WAN I/O speed"
+  validations:
+    required: false
+  advanced: true
+  value: "100000000" 
