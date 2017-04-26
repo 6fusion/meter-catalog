@@ -69,16 +69,18 @@ objects:
             mountPath: /usr/src/app/.ssl
             readOnly: true
           env:
+          - name: AWS_REGION
+            value: 'us-east-1'
           - name: AWS_ACCESS_KEY
             valueFrom:
               secretKeyRef:
                 name: aws-collector-secret
                 key: aws_access_key
-          - name: AWS_REGION
+          - name: BILLING_REGION
             valueFrom:
               secretKeyRef:
                 name: aws-collector-secret
-                key: aws_region
+                key: billing_region
           - name: AWS_SECRET_KEY
             valueFrom:
               secretKeyRef:
@@ -104,11 +106,6 @@ objects:
               secretKeyRef:
                 name: aws-collector-secret
                 key: detailed_report_bucket
-          - name: DETAILED_REPORT_PREFIX
-            valueFrom:
-              secretKeyRef:
-                name: aws-collector-secret
-                key: detailed_report_prefix
           - name: ORGANIZATION_ID
             valueFrom:
               secretKeyRef:
@@ -177,13 +174,14 @@ parameters:
   section: aws-collector-secret
   description: "The ARN of the role to use when accessing the billing S3 bucket"
   advanced: true
-- name: aws_region
+- name: billing_region
   displayName: "Billing S3 Region"
-  section: "AWS Collector"
-  description: "S3 Region where your detailed billing bucket resides"  
+  sectionDisplayName: "AWS Collector"
+  section: aws-collector-secret
+  description: "S3 Region where your billing bucket resides"
 - name: detailed_report_bucket
   displayName: "Billing Report Bucket"
-  description: "Amazon S3 bucket name where billing reports are stored"
+  description: "Name of S3 bucket where billing reports are stored"
   section: aws-collector-secret
   sectionDisplayName: "AWS Collector"
 - name: external_id
