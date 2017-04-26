@@ -3,9 +3,10 @@ kind: Template
 metadata:
   name: vmware-collector
   annotations:
-    pluginVersion: alpha
     displayName: "VMware Collector"
     description: "VMware Collector for vSphere 5.0+"
+    pluginVersion: alpha
+    meterVersion: ">=0.11"
 objects:
 - apiVersion: v1
   kind: Namespace
