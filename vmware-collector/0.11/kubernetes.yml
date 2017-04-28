@@ -46,7 +46,7 @@ objects:
         containers:
         - name: mongodb
           image: mongo:3.2
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -67,7 +67,7 @@ objects:
         containers:
         - name: vmware-collector-inventory
           image: 6fusion/vmware-collector:0.11
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
           - name: DEFAULT_DISK_IO
             valueFrom:
@@ -116,7 +116,7 @@ objects:
         containers:
         - name: vmware-collector-metrics
           image: 6fusion/vmware-collector-metrics:0.11
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           volumeMounts:
           - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
@@ -249,7 +249,7 @@ parameters:
 - name: default-disk-io
   section: on-prem-secret
   sectionDisplayName: Meter
-  type: int
+  type: string
   displayName: "Default Disk I/O"
   description: "The value to use for Disk I/O if the collector cannot determine the actual disk I/O speed"
   validations:
@@ -259,7 +259,7 @@ parameters:
 - name: default-lan-io
   section: on-prem-secret
   sectionDisplayName: Meter
-  type: int
+  type: string
   displayName: "Default LAN I/O"
   description: "The value to use for LAN I/O if the collector cannot determine the actual LAN I/O speed"
   validations:
@@ -269,7 +269,7 @@ parameters:
 - name: default-wan-io
   section: on-prem-secret
   sectionDisplayName: Meter
-  type: int
+  type: string
   displayName: "Default WAN I/O"
   description: "The value to use for WAN I/O if the collector cannot determine the actual WAN I/O speed"
   validations:
