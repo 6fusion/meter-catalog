@@ -13,12 +13,14 @@ spec:
   - name: api-http
     port: 80
     targetPort: 80
+    nodePort: 80
   - name: api-https
     port: 443
     targetPort: 443
+    nodePort: 443
   selector:
     6fusion-app: api
-  type: LoadBalancer
+  type: NodePort
 
 
 ---
@@ -32,9 +34,10 @@ spec:
   - name: dashboard-port
     port: 4443
     targetPort: 4443
+    nodePort: 4443
   selector:
     6fusion-app: dashboard
-  type: LoadBalancer
+  type: NodePort
 
 ---
 apiVersion: v1
@@ -324,12 +327,20 @@ spec:
     metadata:
       labels:
         6fusion-app: sql-database
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/postgres:9.5.5-alpine", "command": ["chown", "-R", "postgres:postgres", "/var/lib/postgresql"] } ]'
     spec:
       containers:
       - name: meter-sql-database
         image: docker.io/postgres:9.5.5-alpine
+        livenessProbe:
+          exec:
+            command:
+            - "/bin/bash"
+            - "-c"
+            - "[[ \"$(stat -c %U /var/lib/postgresql/data)\" == \"postgres\" ]] || chown -R postgres:postgres /var/lib/postgresql/data"
+          failureThreshold: 2
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
         resources:
           requests:
             cpu: "0.25"
@@ -490,7 +501,7 @@ spec:
         6fusion-app: api
         version: 0.11-beta
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-api:0.10.4-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.10.4-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
     spec:
       containers:
       - image: docker.io/6fusion/meter-api:0.10.4-beta
@@ -573,7 +584,7 @@ spec:
         6fusion-app: dashboard
         version: 0.11-beta
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-dashboard:0.11-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-dashboard:0.11-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
     spec:
       containers:
       - image: docker.io/6fusion/meter-dashboard:0.11-beta
@@ -583,7 +594,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 32312780de2a2490480e4201023615e29bbe516351b2375da9d6d6f52925b6a36ccb56a4ef9c632b7c6153b11db4553e630fe0dbe9ecf306df8116fef71338ee
+          value: af4f685bde1ba61cde1648bf2c9f7c5418759c5e1367b4d4398a790a1013300942bfff69051535c169351a8f2b08646a3b3f5cce32959eb2ded9e4ccad3ba440
         - name: METER_VERSION
           value: 0.11-beta
         - name: SSL_CERT_FILE
