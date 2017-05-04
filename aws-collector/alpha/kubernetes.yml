@@ -61,6 +61,8 @@ objects:
           6fusion-app: aws-collector
       spec:
         containers:
+        - name: LOG_LEVEL
+          value: debug
         - name: aws-collector
           image: 6fusion/aws-collector:alpha
           imagePullPolicy: Always
