@@ -4,15 +4,6 @@ metadata:
   name: 6fusion-meter
 ---
 apiVersion: v1
-data:
-  .dockercfg: eyAiaHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEvIjogeyAiYXV0aCI6ICJiV1YwWlhJNk9EMHVXazV6TDJzcFdqWlpUSEJoWmc9PSIsICJlbWFpbCI6ICJtZXRlckA2ZnVzaW9uLmNvbSIgfSB9
-kind: Secret
-metadata:
-  name: meter-registry
-  namespace: 6fusion-meter
-type: kubernetes.io/dockercfg
----
-apiVersion: v1
 kind: Service
 metadata:
   name: meter-api
@@ -163,7 +154,7 @@ spec:
         kubernetes.io/cluster-service: "true"
     spec:
       containers:
-      - image: gcr.io/google_containers/elasticsearch:v2.4.1
+      - image: gcr.io/google_containers/elasticsearch:<%= elasticsearch_tag %>
         name: elasticsearch-logging
         resources:
           # need more cpu upon initialization, therefore burstable class
@@ -210,7 +201,7 @@ spec:
     spec:
       containers:
       - name: kibana-logging
-        image: gcr.io/google_containers/kibana:v4.6.1
+        image: gcr.io/google_containers/kibana:<%= kibana_logging_tag %>
         resources:
           # keep request = limit to keep this container in guaranteed class
           limits:
@@ -246,7 +237,7 @@ spec:
     spec:
       containers:
       - name: fluentd-es
-        image: gcr.io/google_containers/fluentd-elasticsearch:1.20
+        image: gcr.io/google_containers/fluentd-elasticsearch:<%= fluentd_tag %>
         command:
           - '/bin/sh'
           - '-c'
@@ -310,6 +301,8 @@ spec:
         volumeMounts:
         - name: meter-database
           mountPath: /usr/local/var/lib/couchdb
+      imagePullSecrets:
+      - name: meter-registry
       volumes:
       - name: meter-database
         hostPath:
@@ -338,6 +331,16 @@ spec:
       containers:
       - name: meter-sql-database
         image: docker.io/postgres:9.5.5-alpine
+        livenessProbe:
+          exec:
+            command:
+            - "/bin/bash"
+            - "-c"
+            - "[[ \"$(stat -c %U /var/lib/postgresql/data)\" == \"postgres\" ]] || chown -R postgres:postgres /var/lib/postgresql/data"
+          failureThreshold: 2
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
         resources:
           requests:
             cpu: "0.25"
@@ -345,6 +348,8 @@ spec:
         volumeMounts:
           - name: meter-sql-database
             mountPath: /var/lib/postgresql/data
+      imagePullSecrets:
+      - name: meter-registry
       volumes:
       - name: meter-sql-database
         hostPath:
@@ -405,7 +410,7 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 30
           timeoutSeconds: 30
-      - image: docker.io/6fusion/capacity-calculator:0.8-beta
+      - image: docker.io/6fusion/capacity-calculator:0.8
         name: capacity-calculator
         resources:
           limits:
@@ -496,10 +501,10 @@ spec:
         6fusion-app: api
         version: 0.11-beta
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.10.3", "command": ["rake", "couch:migrate"] } ]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.10.4-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
     spec:
       containers:
-      - image: docker.io/6fusion/meter-api:0.10.3
+      - image: docker.io/6fusion/meter-api:0.10.4-beta
         name: meter-api
         imagePullPolicy: Always
         env:
@@ -579,7 +584,7 @@ spec:
         6fusion-app: dashboard
         version: 0.11-beta
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-dashboard:0.11-beta", "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-dashboard:0.11-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
     spec:
       containers:
       - image: docker.io/6fusion/meter-dashboard:0.11-beta
@@ -589,9 +594,11 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: b850963fe176a0b5d126e2f67ad56224a04a4cdbe615fe0cceb92ef1ad46883cd950bb408954e66b7881ec97661fa094b52caa987a3c33d93581c83d5a8b1271
+          value: af4f685bde1ba61cde1648bf2c9f7c5418759c5e1367b4d4398a790a1013300942bfff69051535c169351a8f2b08646a3b3f5cce32959eb2ded9e4ccad3ba440
         - name: METER_VERSION
           value: 0.11-beta
+        - name: SSL_CERT_FILE
+          value: /etc/ssl/certs/ca-certificates.crt
         resources:
           limits:
             memory: "300Mi"
@@ -610,6 +617,8 @@ spec:
           readOnly: true
         - name: kubernetes-ssl
           mountPath: /etc/kubernetes/ssl
+        - name: host-ca-certificate
+          mountPath: /etc/ssl/certs
       imagePullSecrets:
       - name: meter-registry
       volumes:
@@ -619,6 +628,9 @@ spec:
       - name: kubernetes-ssl
         hostPath:
           path: /etc/kubernetes/ssl
+      - name: host-ca-certificate
+        configMap:
+          name: internet-proxy
 ---
 apiVersion: v1
 kind: ReplicationController
@@ -649,6 +661,8 @@ spec:
           tcpSocket:
             port: 6379
           initialDelaySeconds: 10
+      imagePullSecrets:
+      - name: meter-registry
 ---
 apiVersion: v1
 kind: ReplicationController
