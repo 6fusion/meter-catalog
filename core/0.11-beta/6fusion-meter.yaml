@@ -282,7 +282,7 @@ spec:
     spec:
       containers:
       - name: meter-database
-        image: docker.io/klaemo/couchdb:1.6
+        image: docker.io/klaemo/couchdb:2.0
         imagePullPolicy: Always
         resources:
           limits:
@@ -594,7 +594,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: af4f685bde1ba61cde1648bf2c9f7c5418759c5e1367b4d4398a790a1013300942bfff69051535c169351a8f2b08646a3b3f5cce32959eb2ded9e4ccad3ba440
+          value: ac3771e50b45151a3b12e2ed9c230023feabf20a79e1092320a8cfe12950ab99886fd547108427c4f98a5873b80c7b1ab6000ab5c6d3b62e0146cf44eca91d4f
         - name: METER_VERSION
           value: 0.11-beta
         - name: SSL_CERT_FILE
