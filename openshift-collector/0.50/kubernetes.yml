@@ -1,0 +1,208 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: openshift-collector
+  annotations:
+    pluginVersion: 0.50
+    displayName: "OpenShift Collector"
+    description: "6fusion Meter Collector for OpenShift"
+    version: "0.50"
+    iconClass: "fa fa-plug"
+    tags: "6fusion, Meter, Collector"
+objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: 6fusion-openshift-collector
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: openshift-collector
+    labels:
+      6fusion-app: openshift-collector
+  spec:
+    ports:
+      - port: 27017
+        protocol: TCP
+        name: database
+    selector:
+      6fusion-app: openshift-collector
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: openshift-collector
+    labels:
+      6fusion-app: openshift-collector
+      version: "0.50"
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: openshift-collector
+      version: "0.50"
+    template:
+      metadata:
+        name: 6fusion-openshift-collector
+        labels:
+          6fusion-app: openshift-collector
+          version: "0.50"
+      spec:
+        serviceAccount: 6fusion-openshift-collector
+        containers:
+        - name: inventory-collector
+          image: docker.io/6fusion/openshift-collector-inventory:0.50
+          env:
+          - name: KUBERNETES_USE_SSL
+            value: ${openshift_use_ssl}
+          - name: KUBERNETES_VERIFY_SSL
+            value: ${openshift_verify_ssl} 
+          - name: KUBELET_SERVICE_PORT_KUBELET
+            value: ${openshift_kubelet_port}
+          - name: DOCKER_CGROUP_NAMESPACE
+            value: ${openshift_docker_cgroup_namespace}
+          - name: ONPREMISE_ORGANIZATION_ID
+            value: ${on_premise_organization_id}
+          - name: ONPREMISE_TOKEN
+            value: ${on_premise_token}
+          - name: ONPREMISE_SERVICE_HOST
+            value: ${on_premise_host}
+          - name: ONPREMISE_SERVICE_PORT_ONPREMISE
+            value: ${on_premise_port}
+          - name: ONPREMISE_USE_SSL
+            value: ${on_premise_use_ssl}
+          - name: ONPREMISE_VERIFY_SSL
+            value: ${on_premise_verify_ssl}
+        - name: onpremise-connector
+          image: docker.io/6fusion/openshift-collector-onpremise:0.50
+          env:
+          - name: ONPREMISE_ORGANIZATION_ID
+            value: ${on_premise_organization_id}
+          - name: ONPREMISE_TOKEN
+            value: ${on_premise_token}
+          - name: ONPREMISE_SERVICE_HOST
+            value: ${on_premise_host}
+          - name: ONPREMISE_SERVICE_PORT_ONPREMISE
+            value: ${on_premise_port}
+          - name: ONPREMISE_USE_SSL
+            value: ${on_premise_use_ssl}
+          - name: ONPREMISE_VERIFY_SSL
+            value: ${on_premise_verify_ssl}
+        - name: cleancache
+          image: docker.io/6fusion/openshift-collector-cleancache:0.50
+          env:
+          - name: CLEANCACHE_DATA_AGE_PERIOD
+            value: ${data_age_period}
+        - name: mongodb
+          image: mongo:3.2
+          volumeMounts:
+          - mountPath: /data/db
+            name: "openshift-collector-mongodb"
+        volumes:
+        - name: "openshift-collector-mongodb"
+          emptyDir:
+            medium: ""
+        imagePullSecrets:
+          - name: meter-registry
+- apiVersion: v1
+  kind: DaemonSet
+  metadata:
+    name: openshift-collector-metrics
+    labels:
+      6fusion-app: openshift-collector-metrics
+      version: "0.50"
+  spec:
+    selector:
+      6fusion-app: openshift-collector-metrics
+      version: "0.50"
+    template:
+      metadata:
+        name: openshift-collector-metrics
+        labels:
+          6fusion-app: openshift-collector-metrics
+          version: "0.50"
+      spec:
+        serviceAccount: 6fusion-openshift-collector
+        containers:
+        - name: metrics-collector
+          image: docker.io/6fusion/openshift-collector-metrics:0.50
+          env:
+          - name: KUBERNETES_USE_SSL
+            value: ${openshift_use_ssl}
+          - name: KUBERNETES_VERIFY_SSL
+            value: ${openshift_verify_ssl} 
+          - name: KUBELET_SERVICE_PORT_KUBELET
+            value: ${openshift_kubelet_port}
+          - name: DOCKER_CGROUP_NAMESPACE
+            value: ${openshift_docker_cgroup_namespace}
+        imagePullSecrets:
+          - name: meter-registry
+parameters:
+# Collector
+- name: on_premise_organization_id
+  displayName: "Organization ID"
+  description: "ID of the 6fusion Meter organization object to submit under."
+  section: on-premise
+  type: string
+  expandExpression: ${ORGANIZATION_ID}
+- name: on_premise_token
+  displayName: "On Premise API Token"
+  description: "OAuth Token for accessing the 6fusion Meter. Leave blank if not enabled."
+  section: on-premise
+  type: string
+  expandExpression: ${METER_API_TOKEN}
+- name: on_premise_host
+  displayName: "On Premise Host"
+  description: "Adress of the 6fusion Meter"
+  section: on-premise
+  type: string
+  expandExpression: ${METER_API_HOST}
+- name: on_premise_port
+  displayName: "On Premise Port"
+  description: "TCP Port of the 6fusion Meter"
+  section: on-premise
+  type: int
+  value: "443"
+- name: on_premise_use_ssl
+  displayName: "On Premise: Use SSL?"
+  description: "Access the 6fusion Meter over SSL"
+  section: on-premise
+  type: boolean
+  value: "true"
+- name: on_premise_verify_ssl
+  displayName: "On Premise: Verify SSL?"
+  description: "Verify Meter API SSL certifciate. Do not enable if using self-signed certificates."
+  section: on-premise
+  type: boolean
+  value: "false"
+- name: openshift_use_ssl
+  displayName: "Use SSL?"
+  description: "Access Kubernetes API over SSL"
+  section: openshift
+  type: boolean
+  value: "true"
+- name: openshift_verify_ssl
+  displayName: "Verify SSL?"
+  description: "Verify Kubernetes SSL certificate. Do not enable if using self-signed certificates."
+  section: openshift
+  type: boolean
+  value: "false"
+- name: openshift_kubelet_port
+  displayName: "Kubelet Port"
+  section: openshift
+  type: int
+  value: "10250"
+- name: openshift_docker_cgroup_namespace
+  displayName: "Docker Cgroup namespace"
+  section: openshift
+  type: int
+  value: "/system.slice/docker-"
+- name: metrics_replicas
+  displayName: "Number of Metrics Collectors"
+  section: collector
+  type: int
+  value: "1"
+- name: data_age_period
+  displayName: "Data Age Period"
+  description: "Age period of data for clean cache. Must be in minutes."
+  section: collector
+  type: int
+  value: "60"
