@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: openshift-collector
   annotations:
-    pluginVersion: 0.50
+    pluginVersion: "0.50"
     displayName: "OpenShift Collector"
     description: "6fusion Meter Collector for OpenShift"
     version: "0.50"
