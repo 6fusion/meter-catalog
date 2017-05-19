@@ -134,6 +134,8 @@ objects:
             value: ${openshift_kubelet_port}
           - name: DOCKER_CGROUP_NAMESPACE
             value: ${openshift_docker_cgroup_namespace}
+        nodeSelector:
+          type: compute
         imagePullSecrets:
           - name: meter-registry
 parameters:
