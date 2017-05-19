@@ -6,7 +6,7 @@ metadata:
     pluginVersion: alpha
     displayName: "OpenShift Collector"
     description: "6fusion Meter Collector for OpenShift"
-    version: "0.47"
+    version: ""
     iconClass: "fa fa-plug"
     tags: "6fusion, Meter, Collector"
 objects:
@@ -33,18 +33,18 @@ objects:
     name: openshift-collector
     labels:
       6fusion-app: openshift-collector
-      version: "0.47"
+      version: ""
   spec:
     replicas: 1
     selector:
       6fusion-app: openshift-collector
-      version: "0.47"
+      version: ""
     template:
       metadata:
         name: 6fusion-openshift-collector
         labels:
           6fusion-app: openshift-collector
-          version: "0.47"
+          version: ""
       spec:
         serviceAccount: 6fusion-openshift-collector
         containers:
@@ -108,17 +108,17 @@ objects:
     name: openshift-collector-metrics
     labels:
       6fusion-app: openshift-collector-metrics
-      version: "0.47"
+      version: ""
   spec:
     selector:
       6fusion-app: openshift-collector-metrics
-      version: "0.47"
+      version: ""
     template:
       metadata:
         name: openshift-collector-metrics
         labels:
           6fusion-app: openshift-collector-metrics
-          version: "0.47"
+          version: ""
       spec:
         serviceAccount: 6fusion-openshift-collector
         containers:
