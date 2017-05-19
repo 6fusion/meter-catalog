@@ -6,7 +6,7 @@ metadata:
     pluginVersion: alpha
     displayName: "OpenShift Collector"
     description: "6fusion Meter Collector for OpenShift"
-    version: "alpha"
+    version: ""
     iconClass: "fa fa-plug"
     tags: "6fusion, Meter, Collector"
 objects:
@@ -33,23 +33,24 @@ objects:
     name: openshift-collector
     labels:
       6fusion-app: openshift-collector
-      version: "alpha"
+      version: ""
   spec:
     replicas: 1
     selector:
       6fusion-app: openshift-collector
-      version: "alpha"
+      version: ""
     template:
       metadata:
         name: 6fusion-openshift-collector
         labels:
           6fusion-app: openshift-collector
-          version: "alpha"
+          version: ""
       spec:
         serviceAccount: 6fusion-openshift-collector
         containers:
         - name: inventory-collector
-          image: docker.io/6fusion/openshift-collector-inventory:0.47
+          image: docker.io/6fusion/openshift-collector:
+          args: ["inventory/run.rb"]
           env:
           - name: KUBERNETES_USE_SSL
             value: ${openshift_use_ssl}
@@ -72,7 +73,8 @@ objects:
           - name: ONPREMISE_VERIFY_SSL
             value: ${on_premise_verify_ssl}
         - name: onpremise-connector
-          image: docker.io/6fusion/openshift-collector-onpremise:0.47
+          image: docker.io/6fusion/openshift-collector:
+          args: ["on_premise/run.rb"]
           env:
           - name: ONPREMISE_ORGANIZATION_ID
             value: ${on_premise_organization_id}
@@ -87,7 +89,8 @@ objects:
           - name: ONPREMISE_VERIFY_SSL
             value: ${on_premise_verify_ssl}
         - name: cleancache
-          image: docker.io/6fusion/openshift-collector-cleancache:0.47
+          image: docker.io/6fusion/openshift-collector:
+          args: ["clean_cache/run.rb"]
           env:
           - name: CLEANCACHE_DATA_AGE_PERIOD
             value: ${data_age_period}
@@ -108,22 +111,23 @@ objects:
     name: openshift-collector-metrics
     labels:
       6fusion-app: openshift-collector-metrics
-      version: "alpha"
+      version: ""
   spec:
     selector:
       6fusion-app: openshift-collector-metrics
-      version: "alpha"
+      version: ""
     template:
       metadata:
         name: openshift-collector-metrics
         labels:
           6fusion-app: openshift-collector-metrics
-          version: "alpha"
+          version: ""
       spec:
         serviceAccount: 6fusion-openshift-collector
         containers:
         - name: metrics-collector
-          image: docker.io/6fusion/openshift-collector-metrics:0.47
+          image: docker.io/6fusion/openshift-collector-metrics:
+          args: ["metrics/run.rb"]
           env:
           - name: KUBERNETES_USE_SSL
             value: ${openshift_use_ssl}
