@@ -155,7 +155,7 @@ parameters:
   expandExpression: ${METER_API_TOKEN}
 - name: on_premise_host
   displayName: "On Premise Host"
-  description: "Adress of the 6fusion Meter"
+  description: "Address of the 6fusion Meter"
   section: on-premise
   type: string
   expandExpression: ${METER_API_HOST}
