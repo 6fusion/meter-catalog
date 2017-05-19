@@ -300,7 +300,7 @@ spec:
           name: meter-db-port
         volumeMounts:
         - name: meter-database
-          mountPath: /usr/local/var/lib/couchdb
+          mountPath: /opt/couchdb/data
       imagePullSecrets:
       - name: meter-registry
       volumes:
@@ -501,7 +501,7 @@ spec:
         6fusion-app: api
         version: 0.11-beta
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.10.4-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.10.4-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:initialize", "couch:migrate"] } ]'
     spec:
       containers:
       - image: docker.io/6fusion/meter-api:0.10.4-beta
@@ -594,7 +594,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 615314b793286059274f531011baf53e9f52ee79e65ef979bc11d6fad65759b569a3b40e608025f3473baba512d456c47e9bc9ab81f79efbc848c25fd91f7074
+          value: d5f22165421e9c95961791fa04544fe21dea4619755552caec7aa9d500e7b5535f4908a19987f9a0c6c0d63c47369da16b0722ab71eb7af9134f39b89a414b20
         - name: METER_VERSION
           value: 0.11-beta
         - name: SSL_CERT_FILE
