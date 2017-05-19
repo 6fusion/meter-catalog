@@ -49,7 +49,8 @@ objects:
         serviceAccount: 6fusion-openshift-collector
         containers:
         - name: inventory-collector
-          image: docker.io/6fusion/openshift-collector-inventory:0.50
+          image: docker.io/6fusion/openshift-collector:0.50
+          args: ["inventory/run.rb"]
           env:
           - name: KUBERNETES_USE_SSL
             value: ${openshift_use_ssl}
@@ -72,7 +73,8 @@ objects:
           - name: ONPREMISE_VERIFY_SSL
             value: ${on_premise_verify_ssl}
         - name: onpremise-connector
-          image: docker.io/6fusion/openshift-collector-onpremise:0.50
+          image: docker.io/6fusion/openshift-collector:0.50
+          args: ["on_premise/run.rb"]
           env:
           - name: ONPREMISE_ORGANIZATION_ID
             value: ${on_premise_organization_id}
@@ -87,7 +89,8 @@ objects:
           - name: ONPREMISE_VERIFY_SSL
             value: ${on_premise_verify_ssl}
         - name: cleancache
-          image: docker.io/6fusion/openshift-collector-cleancache:0.50
+          image: docker.io/6fusion/openshift-collector:0.50
+          args: ["clean_cache/run.rb"]
           env:
           - name: CLEANCACHE_DATA_AGE_PERIOD
             value: ${data_age_period}
@@ -124,6 +127,7 @@ objects:
         containers:
         - name: metrics-collector
           image: docker.io/6fusion/openshift-collector-metrics:0.50
+          args: ["metrics/run.rb"]
           env:
           - name: KUBERNETES_USE_SSL
             value: ${openshift_use_ssl}
