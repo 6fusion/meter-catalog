@@ -113,9 +113,6 @@ objects:
       6fusion-app: openshift-collector-metrics
       version: "alpha"
   spec:
-    selector:
-      6fusion-app: openshift-collector-metrics
-      version: "alpha"
     template:
       metadata:
         name: openshift-collector-metrics
