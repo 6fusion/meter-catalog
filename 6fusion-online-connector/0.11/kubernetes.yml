@@ -145,7 +145,7 @@ parameters:
   advanced: "true"
 - name: auth.ca
   sectionDisplayName: "6fusion Meter"
-  section: 6fusion-online-connector-config
+  section: 6fusion-online-connector-secrets
   displayName: "Meter License CA"
   expandExpression: ${METER_LICENSE_CA}
   type: multiline
@@ -154,7 +154,7 @@ parameters:
     required: true
 - name: auth.cert
   sectionDisplayName: "6fusion Meter"
-  section: 6fusion-online-connector-config
+  section: 6fusion-online-connector-secrets
   displayName: "Meter License Certificate"
   expandExpression: ${METER_LICENSE_CERTIFICATE}
   type: multiline
@@ -163,7 +163,7 @@ parameters:
     required: true
 - name: auth.key
   sectionDisplayName: "6fusion Meter"
-  section: 6fusion-online-connector-config
+  section: 6fusion-online-connector-secrets
   displayName: "Meter License Key"
   expandExpression: ${METER_LICENSE_KEY}
   type: multiline
