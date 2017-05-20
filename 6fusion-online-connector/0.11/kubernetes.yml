@@ -107,11 +107,11 @@ parameters:
   section: 6fusion-online-connector-config
   sectionDisplayName: Connector
   type: enum
-  value: "receiver.prod.aws.6fusion.com"
+  value: https://receiver.prod.aws.6fusion.com/api/v1/
   options:
     - https://receiver.dev.aws.6fusion.com/api/v1/
-    - https://receiver.staging.aws.6fusion.com/api/v1/
     - https://receiver.prod.aws.6fusion.com/api/v1/
+    - https://receiver.staging.aws.6fusion.com/api/v1/
   advanced: "true"
 - name: log.level
   displayName: "Log Level"
