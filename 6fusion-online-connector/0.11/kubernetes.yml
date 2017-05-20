@@ -109,9 +109,9 @@ parameters:
   type: enum
   value: https://receiver.prod.aws.6fusion.com/api/v1/
   options:
-    - https://receiver.dev.aws.6fusion.com/api/v1/
     - https://receiver.prod.aws.6fusion.com/api/v1/
     - https://receiver.staging.aws.6fusion.com/api/v1/
+    - https://receiver.dev.aws.6fusion.com/api/v1/
   advanced: "true"
 - name: log.level
   displayName: "Log Level"
