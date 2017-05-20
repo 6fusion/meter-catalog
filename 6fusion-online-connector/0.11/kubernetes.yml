@@ -109,11 +109,10 @@ parameters:
   section: 6fusion-online-connector-config
   sectionDisplayName: Connector
   type: enum
-  value: "receiver.dev.aws.6fusion.com"
+  value: "receiver.prod.aws.6fusion.com"
   options:
     - receiver.dev.aws.6fusion.com
     - receiver.staging.aws.6fusion.com
-    - receiver.demo.aws.6fusion.com
     - receiver.prod.aws.6fusion.com
   advanced: "true"
 - name: log.level
@@ -121,7 +120,7 @@ parameters:
   section: 6fusion-online-connector-config
   sectionDisplayName: Connector
   type: enum
-  value: debug
+  value: info
   options:
     - debug
     - info
@@ -134,7 +133,7 @@ parameters:
   sectionDisplayName: "6fusion Meter"
   displayName: "API Host"
   description: "Address of the 6fusion Meter"
-  expandExpression: ${METER_API_HOST}
+  expandExpression: ${METER_API_URL}
   advanced: "true"
 - name: meter.read-batch-size
   displayName: "Request Batch Size"
