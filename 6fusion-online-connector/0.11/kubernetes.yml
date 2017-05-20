@@ -2,6 +2,7 @@ kind: Template
 metadata:
   name: 6fusion-online-connector
   annotations:
+    pluginVersion: "0.11"
     displayName: "6fusion Online Connector"
     description: "Connector for exporting 6fuion Meter data to 6fusion Online"
     meterVersion: ">=0.11"
@@ -37,19 +38,22 @@ objects:
       spec:
         containers:
         - name: 6fusion-online-connector
-          image: 6fusion/online-connector:latest
+          image: 6fusion/online-connector:master
+          volumeMounts:
+            - name: secrets
+              mountPath: /etc/secrets
+              readOnly: true
           env:
             - name: CONNECTOR_INTERVAL
               valueFrom:
                 configMapKeyRef:
                   name: 6fusion-online-connector-config
                   key: interval
-
-            - name: CONNECTOR_METER_HOST
+            - name: CONNECTOR_METER_BASE_URL
               valueFrom:
                 configMapKeyRef:
                   name: 6fusion-online-connector-config
-                  key: meter.host
+                  key: meter.base_url
             - name: CONNECTOR_METER_READ_BATCH_SIZE
               valueFrom:
                 configMapKeyRef:
@@ -60,34 +64,28 @@ objects:
                 configMapKeyRef:
                   name: 6fusion-online-connector-config
                   key: meter.read-timeout
-
-            - name: CONNECTOR_RECEIVER_HOST
+            - name: RECEIVER_BASE_URL
               valueFrom:
                 configMapKeyRef:
                   name: 6fusion-online-connector-config
-                  key: receiver.host
-
-            - name: CONNECTOR_CERTIFICATE_PEM
-              valueFrom:
-                secretKeyRef:
-                  name: 6fusion-online-connector-secrets
-                  key: auth.cert
-            - name: CONNECTOR_KEY_PEM
-              valueFrom:
-                secretKeyRef:
-                  name: 6fusion-online-connector-secrets
-                  key: auth.key
-            - name: CONNECTOR_INTERMEDIATE_CA_PEM
-              valueFrom:
-                secretKeyRef:
-                  name: 6fusion-online-connector-secrets
-                  key: auth.ca
-
+                  key: receiver.base_url
+            - name: RECEIVER_CLIENT_CERTIFICATE_PATH
+              value: "/etc/secrets/auth.cert"
+            - name: RECEIVER_CLIENT_KEY_PATH
+              value: "/etc/secrets/auth.key"
+            - name: RECEIVER_CLIENT_INTERMEDIATE_CA_PATH
+              value: "/etc/secrets/auth.ca"
+                  
             - name: LOG_LEVEL
               valueFrom:
                 configMapKeyRef:
                   name: 6fusion-online-connector-config
                   key: log.level
+
+        volumes:
+          - name: secrets
+            secret:
+              secretName: 6fusion-online-connector-secrets
         imagePullSecrets:
           - name: docker-credentials
 parameters:
@@ -104,16 +102,16 @@ parameters:
   sectionDisplayName: Connector
   value: "45"
   advanced: "true"
-- name: receiver.host
+- name: receiver.base_url
   displayName: "6fusion Online API Host"
   section: 6fusion-online-connector-config
   sectionDisplayName: Connector
   type: enum
   value: "receiver.prod.aws.6fusion.com"
   options:
-    - receiver.dev.aws.6fusion.com
-    - receiver.staging.aws.6fusion.com
-    - receiver.prod.aws.6fusion.com
+    - https://receiver.dev.aws.6fusion.com/api/v1/
+    - https://receiver.staging.aws.6fusion.com/api/v1/
+    - https://receiver.prod.aws.6fusion.com/api/v1/
   advanced: "true"
 - name: log.level
   displayName: "Log Level"
@@ -128,12 +126,12 @@ parameters:
     - error
     - fatal
     - panic
-- name: meter.host
+- name: meter.base_url
   section: 6fusion-online-connector-config
   sectionDisplayName: "6fusion Meter"
   displayName: "API Host"
   description: "Address of the 6fusion Meter"
-  expandExpression: ${METER_API_HOST}
+  expandExpression: ${METER_API_URL}
   advanced: "true"
 - name: meter.read-batch-size
   displayName: "Request Batch Size"
