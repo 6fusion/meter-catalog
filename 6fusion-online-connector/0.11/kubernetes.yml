@@ -133,7 +133,7 @@ parameters:
   sectionDisplayName: "6fusion Meter"
   displayName: "API Host"
   description: "Address of the 6fusion Meter"
-  expandExpression: ${METER_API_URL}
+  expandExpression: ${METER_API_HOST}
   advanced: "true"
 - name: meter.read-batch-size
   displayName: "Request Batch Size"
