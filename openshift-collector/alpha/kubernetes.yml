@@ -3,13 +3,16 @@ kind: Template
 metadata:
   name: openshift-collector
   annotations:
-    pluginVersion: "alpha"
     displayName: "OpenShift Collector"
     description: "6fusion Meter Collector for OpenShift"
-    version: "alpha"
+    version: ""
     iconClass: "fa fa-plug"
     tags: "6fusion, Meter, Collector"
 objects:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: 6fusion-openshift-collector
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
@@ -33,18 +36,18 @@ objects:
     name: openshift-collector
     labels:
       6fusion-app: openshift-collector
-      version: "alpha"
+      version: ""
   spec:
     replicas: 1
     selector:
       6fusion-app: openshift-collector
-      version: "alpha"
+      version: ""
     template:
       metadata:
         name: 6fusion-openshift-collector
         labels:
           6fusion-app: openshift-collector
-          version: "alpha"
+          version: ""
       spec:
         serviceAccount: 6fusion-openshift-collector
         containers:
@@ -52,6 +55,10 @@ objects:
           image: docker.io/6fusion/openshift-collector:alpha
           args: ["inventory/run.rb"]
           env:
+          - name: INFRASTRUCTURE_NAME
+            value: ${infrastructure_name}
+          - name: OPENSHIFT_DOMAIN
+            value: ${openshift_domain}
           - name: KUBERNETES_USE_SSL
             value: ${openshift_use_ssl}
           - name: KUBERNETES_VERIFY_SSL
@@ -111,14 +118,14 @@ objects:
     name: openshift-collector-metrics
     labels:
       6fusion-app: openshift-collector-metrics
-      version: "alpha"
+      version: ""
   spec:
     template:
       metadata:
         name: openshift-collector-metrics
         labels:
           6fusion-app: openshift-collector-metrics
-          version: "alpha"
+          version: ""
       spec:
         serviceAccount: 6fusion-openshift-collector
         containers:
@@ -139,73 +146,94 @@ objects:
         imagePullSecrets:
           - name: meter-registry
 parameters:
-# Collector
-- name: on_premise_organization_id
-  displayName: "Organization ID"
-  description: "ID of the 6fusion Meter organization object to submit under."
-  section: on-premise
-  type: string
-  expandExpression: ${ORGANIZATION_ID}
-- name: on_premise_token
-  displayName: "On Premise API Token"
-  description: "OAuth Token for accessing the 6fusion Meter. Leave blank if not enabled."
-  section: on-premise
-  type: string
-  expandExpression: ${METER_API_TOKEN}
-- name: on_premise_host
-  displayName: "On Premise Host"
-  description: "Address of the 6fusion Meter"
-  section: on-premise
-  type: string
-  expandExpression: ${METER_API_HOST}
-- name: on_premise_port
-  displayName: "On Premise Port"
-  description: "TCP Port of the 6fusion Meter"
-  section: on-premise
-  type: int
-  value: "443"
-- name: on_premise_use_ssl
-  displayName: "On Premise: Use SSL?"
-  description: "Access the 6fusion Meter over SSL"
-  section: on-premise
-  type: boolean
-  value: "true"
-- name: on_premise_verify_ssl
-  displayName: "On Premise: Verify SSL?"
-  description: "Verify Meter API SSL certifciate. Do not enable if using self-signed certificates."
-  section: on-premise
-  type: boolean
-  value: "false"
+# OpenShift
+- name: infrastructure_name
+  displayName: "Infrastructure Name"
+  description: "A unique name to be applied to the OpenShift infrastructure."
+  section: openshift
+  validations:
+    required: true
+- name: openshift_domain
+  displayName: "OpenShift Domain"
+  description: "The domain of your OpenShift Cluster."
+  section: openshift
+  validations:
+    required: true
 - name: openshift_use_ssl
   displayName: "Use SSL?"
   description: "Access Kubernetes API over SSL"
   section: openshift
   type: boolean
   value: "true"
+  advanced: true
 - name: openshift_verify_ssl
   displayName: "Verify SSL?"
   description: "Verify Kubernetes SSL certificate. Do not enable if using self-signed certificates."
   section: openshift
   type: boolean
   value: "false"
+  advanced: true
 - name: openshift_kubelet_port
   displayName: "Kubelet Port"
   section: openshift
   type: int
   value: "10250"
+  advanced: true
 - name: openshift_docker_cgroup_namespace
   displayName: "Docker Cgroup namespace"
   section: openshift
-  type: int
+  type: string
   value: "/system.slice/docker-"
-- name: metrics_replicas
-  displayName: "Number of Metrics Collectors"
-  section: collector
-  type: int
-  value: "1"
+  advanced: true
 - name: data_age_period
   displayName: "Data Age Period"
   description: "Age period of data for clean cache. Must be in minutes."
-  section: collector
+  section: openshift
   type: int
   value: "60"
+  suffix: "minutes"
+  advanced: true
+
+# Meter API
+- name: on_premise_organization_id
+  displayName: "Organization ID"
+  description: "ID of the 6fusion Meter organization object to submit under."
+  section: on-premise
+  type: string
+  expandExpression: ${ORGANIZATION_ID}
+  advanced: true
+- name: on_premise_token
+  displayName: "On Premise API Token"
+  description: "OAuth Token for accessing the 6fusion Meter. Leave blank if not enabled."
+  section: on-premise
+  type: string
+  expandExpression: ${METER_API_TOKEN}
+  advanced: true
+- name: on_premise_host
+  displayName: "On Premise Host"
+  description: "Address of the 6fusion Meter"
+  section: on-premise
+  type: string
+  expandExpression: ${METER_API_HOST}
+  advanced: true
+- name: on_premise_port
+  displayName: "On Premise Port"
+  description: "TCP Port of the 6fusion Meter"
+  section: on-premise
+  type: int
+  value: "443"
+  advanced: true
+- name: on_premise_use_ssl
+  displayName: "On Premise: Use SSL?"
+  description: "Access the 6fusion Meter over SSL"
+  section: on-premise
+  type: boolean
+  value: "true"
+  advanced: true
+- name: on_premise_verify_ssl
+  displayName: "On Premise: Verify SSL?"
+  description: "Verify Meter API SSL certifciate. Do not enable if using self-signed certificates."
+  section: on-premise
+  type: boolean
+  value: "false"
+  advanced: true
