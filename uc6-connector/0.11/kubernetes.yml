@@ -5,7 +5,7 @@ metadata:
     pluginVersion: 0.11
     meterVersion: ">=0.11"
     displayName: "UC6 Connector"
-    description: "Connector for dumping 6fuion Meter data to a UC6 dedicated environment"
+    description: "Connector for exporting 6fusion Meter data to a UC6 dedicated environment"
 objects:
 - apiVersion: v1
   kind: Namespace
@@ -183,6 +183,6 @@ parameters:
   advanced: true
 - name: on-prem-token
   displayName: "API Oauth Token"
-  section: "6fusion Meter"
+  section: 6fusion-meter
   description: "OAuth Token to use for accessing the 6fusion Meter API"
   advanced: true
