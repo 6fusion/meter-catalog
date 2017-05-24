@@ -2,8 +2,9 @@ kind: Template
 metadata:
   name: uc6-connector
   annotations:
+    meterVersion: ">=0.11"
     displayName: "UC6 Connector"
-    description: "Connector for dumping 6fuion Meter data to a UC6 dedicated environment"
+    description: "Connector for exporting 6fusion Meter data to a UC6 dedicated environment"
 objects:
 - apiVersion: v1
   kind: Namespace
