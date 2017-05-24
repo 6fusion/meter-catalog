@@ -2,8 +2,6 @@ kind: Template
 metadata:
   name: uc6-connector
   annotations:
-    pluginVersion: alpha
-    meterVersion: ">=0.11"
     displayName: "UC6 Connector"
     description: "Connector for dumping 6fuion Meter data to a UC6 dedicated environment"
 objects:
@@ -183,6 +181,6 @@ parameters:
   advanced: true
 - name: on-prem-token
   displayName: "API Oauth Token"
-  section: "6fusion Meter"
+  section: 6fusion-meter
   description: "OAuth Token to use for accessing the 6fusion Meter API"
   advanced: true
