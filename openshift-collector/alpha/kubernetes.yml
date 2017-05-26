@@ -11,47 +11,26 @@ metadata:
     tags: "6fusion, Meter, Collector"
 objects:
 - apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: 6fusion-openshift-collector
+- apiVersion: v1
   kind: ServiceAccount
   metadata:
     name: 6fusion-openshift-collector
 - apiVersion: v1
   kind: Service
   metadata:
-    name: mongodb
+    name: openshift-collector
     labels:
-      6fusion-app: mongodb
+      6fusion-app: openshift-collector
   spec:
     ports:
       - port: 27017
         protocol: TCP
         name: database
     selector:
-      6fusion-app: mongodb
-- apiVersion: v1
-  kind: ReplicationController
-  metadata:
-    name: mongodb
-    labels:
-      6fusion-app: mongodb
-  spec:
-    replicas: 1
-    selector:
-      6fusion-app: mongodb
-    template:
-      metadata:
-        name: mongodb
-        labels: mongodb
-      spec:
-        containers:
-        - name: mongodb
-          image: mongo:3.2
-          volumeMounts:
-          - mountPath: /data/db
-            name: "openshift-collector-mongodb"
-        volumes:
-        - name: "openshift-collector-mongodb"
-          emptyDir:
-            medium: ""
+      6fusion-app: openshift-collector
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -77,8 +56,6 @@ objects:
           image: docker.io/6fusion/openshift-collector:alpha
           args: ["inventory/run.rb"]
           env:
-          - name: LOG_LEVEL
-            value: debug
           - name: INFRASTRUCTURE_NAME
             value: ${infrastructure_name}
           - name: OPENSHIFT_DOMAIN
@@ -107,8 +84,6 @@ objects:
           image: docker.io/6fusion/openshift-collector:alpha
           args: ["on_premise/run.rb"]
           env:
-          - name: LOG_LEVEL
-            value: debug
           - name: ONPREMISE_ORGANIZATION_ID
             value: ${on_premise_organization_id}
           - name: ONPREMISE_TOKEN
@@ -125,10 +100,17 @@ objects:
           image: docker.io/6fusion/openshift-collector:alpha
           args: ["clean_cache/run.rb"]
           env:
-          - name: LOG_LEVEL
-            value: debug
           - name: CLEANCACHE_DATA_AGE_PERIOD
             value: ${data_age_period}
+        - name: mongodb
+          image: mongo:3.2
+          volumeMounts:
+          - mountPath: /data/db
+            name: "openshift-collector-mongodb"
+        volumes:
+        - name: "openshift-collector-mongodb"
+          emptyDir:
+            medium: ""
         imagePullSecrets:
           - name: meter-registry
 - apiVersion: v1
@@ -156,8 +138,6 @@ objects:
           image: docker.io/6fusion/openshift-collector-metrics:alpha
           args: ["metrics/run.rb"]
           env:
-          - name: LOG_LEVEL
-            value: debug
           - name: KUBERNETES_USE_SSL
             value: ${openshift_use_ssl}
           - name: KUBERNETES_VERIFY_SSL
@@ -182,18 +162,6 @@ parameters:
   section: openshift
   validations:
     required: true
-- name: log_level
-  displayName: "Log Level"
-  section: openshift
-  advanced: true
-  value: info
-  type: enum
-  options:
-    - debug
-    - info
-    - warn
-    - error
-    - fatal
 - name: openshift_use_ssl
   displayName: "Use SSL?"
   description: "Access Kubernetes API over SSL"
@@ -233,42 +201,42 @@ parameters:
 - name: on_premise_organization_id
   displayName: "Organization ID"
   description: "ID of the 6fusion Meter organization object to submit under."
-  section: meter-api
+  section: on-premise
   type: string
   expandExpression: ${ORGANIZATION_ID}
   advanced: true
 - name: on_premise_token
-  displayName: "OAuth Token"
+  displayName: "On Premise API Token"
   description: "OAuth Token for accessing the 6fusion Meter. Leave blank if not enabled."
-  section: meter-api
+  section: on-premise
   type: string
   expandExpression: ${METER_API_TOKEN}
   advanced: true
 - name: on_premise_host
-  displayName: "Host"
+  displayName: "On Premise Host"
   description: "Address of the 6fusion Meter"
-  section: meter-api
+  section: on-premise
   type: string
   expandExpression: ${METER_API_HOST}
   advanced: true
 - name: on_premise_port
-  displayName: "Port"
-  description: "TCP Port of the 6fusion Meter API"
-  section: meter-api
+  displayName: "On Premise Port"
+  description: "TCP Port of the 6fusion Meter"
+  section: on-premise
   type: int
   value: "443"
   advanced: true
 - name: on_premise_use_ssl
-  displayName: "Use SSL?"
+  displayName: "On Premise: Use SSL?"
   description: "Access the 6fusion Meter over SSL"
-  section: meter-api
+  section: on-premise
   type: boolean
   value: "true"
   advanced: true
 - name: on_premise_verify_ssl
-  displayName: "Verify SSL?"
+  displayName: "On Premise: Verify SSL?"
   description: "Verify Meter API SSL certifciate. Do not enable if using self-signed certificates."
-  section: meter-api
+  section: on-premise
   type: boolean
   value: "false"
   advanced: true
