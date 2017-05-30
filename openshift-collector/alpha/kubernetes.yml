@@ -105,6 +105,8 @@ objects:
             value: ${on_premise_use_ssl}
           - name: ONPREMISE_VERIFY_SSL
             value: ${on_premise_verify_ssl}
+        imagePullSecrets:
+          - name: meter-registry
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -145,6 +147,8 @@ objects:
             value: ${on_premise_use_ssl}
           - name: ONPREMISE_VERIFY_SSL
             value: ${on_premise_verify_ssl}
+        imagePullSecrets:
+          - name: meter-registry
 - apiVersion: v1
   kind: ReplicationController
   metadata:
