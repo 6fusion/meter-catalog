@@ -202,7 +202,7 @@ objects:
         serviceAccount: 6fusion-openshift-collector
         containers:
         - name: metrics-collector
-          image: docker.io/6fusion/openshift-collector-metrics:alpha
+          image: docker.io/6fusion/openshift-collector:alpha
           imagePullPolicy: Always
           args: ["metrics/run.rb"]
           env:
