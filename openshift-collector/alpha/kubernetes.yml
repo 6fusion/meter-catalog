@@ -40,11 +40,12 @@ objects:
     template:
       metadata:
         name: mongodb
-        labels: mongodb
+        labels:
+          6fusion-app: mongodb
       spec:
         containers:
         - name: mongodb
-          image: mongo:3.2
+          image: mongo:3.4.0
           volumeMounts:
           - mountPath: /data/db
             name: openshift-collector-mongodb
