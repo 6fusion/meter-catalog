@@ -10,11 +10,10 @@ metadata:
     version: "0.50"
     iconClass: "fa fa-plug"
     tags: "6fusion, Meter, Collector"
+    template.openshift.io/provider-display-name: "6fusion, Inc."
+    template.openshift.io/support-url: https://6fusion.com/contact-us
+message: The 6fusion OpenShift Collector has been deployed to your project. Log into https://online.6fusion.com with your 6fusion Online account to view your OpenShift consumption and capacity data.
 objects:
-- apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: 6fusion-openshift-collector
 - apiVersion: v1
   kind: Service
   metadata:
