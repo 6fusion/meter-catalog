@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: aws-collector
   annotations:
-    pluginVersion: 0.11
+    pluginVersion: "0.11"
     displayName: "AWS Collector"
     description: "6fusion Meter Collector for metering AWS infrastructures"
     meterVersion: ">=0.11"
@@ -71,7 +71,10 @@ objects:
             readOnly: true
           env:
           - name: LOG_LEVEL
-            value: info
+            valueFrom:
+              secretKeyRef:
+                name: aws-collector-secret
+                key: log-level
           - name: AWS_REGION
             value: 'us-east-1'
           - name: AWS_ACCESS_KEY
@@ -109,6 +112,11 @@ objects:
               secretKeyRef:
                 name: aws-collector-secret
                 key: collectionInterval
+          - name: SAMPLE_GRANULARITY
+            valueFrom:
+              secretKeyRef:
+                name: aws-collector-secret
+                key: sampleGranularit
           - name: DETAILED_REPORT_BUCKET
             valueFrom:
               secretKeyRef:
@@ -216,6 +224,30 @@ parameters:
   advanced: true
   value: 60
   suffix: "minutes"
+- name: sampleGranularity
+  displayName: "Sample Granularity"
+  sectionDisplayName: "AWS Collector"
+  section: aws-collector-secret
+  description: "The range of time a single sample covers. Smaller times yield higher resolution, at the cost of greater processing requirements for the meter."
+  advanced: true
+  value: 15
+  suffix: "minutes"
+  validations:
+    min: 1
+    max: 60
+- name: log-level
+  displayName: "Log Level"
+  section: aws-collector-secret
+  sectionDisplayName: "AWS Collector"
+  advanced: true
+  value: info
+  type: enum
+  options:
+    - debug
+    - info
+    - warn
+    - error
+    - fatal
 
 # meter config
 - name: organizationID
