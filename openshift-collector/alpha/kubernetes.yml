@@ -5,6 +5,8 @@ metadata:
   annotations:
     pluginVersion: "alpha"
     meterVersion: ">=0.11"
+    supportedEnvironments: 
+      - OpenShift
     displayName: "OpenShift Collector"
     description: "6fusion Meter Collector for OpenShift"
     version: "alpha"
