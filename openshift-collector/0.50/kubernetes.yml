@@ -5,6 +5,8 @@ metadata:
   annotations:
     pluginVersion: "0.50"
     meterVersion: ">=0.11"
+    supportedEnvironments:
+      - OpenShift
     displayName: "OpenShift Collector"
     description: "6fusion Meter Collector for OpenShift"
     version: "0.50"
@@ -12,7 +14,7 @@ metadata:
     tags: "6fusion, Meter, Collector"
     template.openshift.io/provider-display-name: "6fusion, Inc."
     template.openshift.io/support-url: https://6fusion.com/contact-us
-message: The 6fusion OpenShift Collector has been deployed to your project. Log into https://online.6fusion.com with your 6fusion Online account to view your OpenShift consumption and capacity data.
+message: The 6fusion OpenShift Collector has been deployed to your project. Log in to https://online.6fusion.com with your 6fusion Online account to view your OpenShift consumption and capacity data.
 objects:
 - apiVersion: v1
   kind: Service
@@ -93,6 +95,12 @@ objects:
             value: ${openshift_kubelet_port}
           - name: DOCKER_CGROUP_NAMESPACE
             value: ${openshift_docker_cgroup_namespace}
+          - name: DEFAULT_LAN_IO
+            value: ${default_lan_io}
+          - name: DEFAUL_WAN_IO
+            value: ${default_wan_io}
+          - name: DEFAULT_DISK_IO
+            value: ${default_disk_io}
           - name: ONPREMISE_ORGANIZATION_ID
             value: ${on_premise_organization_id}
           - name: ONPREMISE_TOKEN
@@ -277,6 +285,30 @@ parameters:
   type: int
   value: "60"
   suffix: "minutes"
+  advanced: true
+- name: default_lan_io
+  displayName: "Default LAN I/O"
+  description: "A fallback value for LAN I/O speed per node, if the collector cannot determine the actual LAN speed."
+  section: openshift
+  type: int
+  value: "10"
+  suffix: "Gbps"
+  advanced: true
+- name: default_wan_io
+  displayName: "Default WAN I/O"
+  description: "A fallback value for WAN I/O speed per node, if the collector cannot determine the actual WAN speed."
+  section: openshift
+  type: int
+  value: "1"
+  suffix: "Gbps"
+  advanced: true
+- name: default_disk_io
+  displayName: "Default Disk I/O"
+  description: "A fallback value for disk I/O speed per node, if the collector cannot determine the actual disk speed."
+  section: openshift
+  type: int
+  value: "10"
+  suffix: "Gbps"
   advanced: true
 
 # Meter API
