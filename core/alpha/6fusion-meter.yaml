@@ -282,7 +282,7 @@ spec:
     spec:
       containers:
       - name: meter-database
-        image: docker.io/klaemo/couchdb:2.0
+        image: docker.io/6fusion/couchdb:0.11
         imagePullPolicy: Always
         resources:
           limits:
@@ -594,7 +594,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 948f643a2299de63b77d94466088105c340e95df5a1f80b7a57151a3bc7dfc80feea74f6cd5d38dffcfb0e352289f6064ca05aea60e53bba66d5e5a57d0028a9
+          value: 35db229948a0cb2733f816b1a52a12e5e3acea85923f332bc1db4f6117bcca957a3fb7a58b028ab5a152a0e6595a3f79839a4b9523d3f650dc53f3074cc6e9d2
         - name: METER_VERSION
           value: alpha
         - name: SSL_CERT_FILE
@@ -608,7 +608,7 @@ spec:
           httpGet:
             path: /health
             port: 4443
-            scheme: HTTP
+            scheme: HTTPS
           initialDelaySeconds: 60
           timeoutSeconds: 60
         volumeMounts:
