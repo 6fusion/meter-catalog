@@ -594,7 +594,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: f97bdbd3258aaa9ac55ea4bcc0b6869cce6e14feb31bd01619bf41bb74501d682278fc245042f29f48c633f5e44f81a7e0b5a3cdc919fffe2da117b94f29e889
+          value: 35633aaec65c412af8a7795bf957e431ea9c542f0f61e9c5227ba948cffeb4fe2c88faf8ace561cfada6f1021fb300dfcf8409c98b41e281a1095ad1cc52d5dd
         - name: METER_VERSION
           value: 0.11-beta
         - name: SSL_CERT_FILE
@@ -608,7 +608,7 @@ spec:
           httpGet:
             path: /health
             port: 4443
-            scheme: HTTP
+            scheme: HTTPS
           initialDelaySeconds: 60
           timeoutSeconds: 60
         volumeMounts:
