@@ -148,9 +148,6 @@ objects:
         - name: ssl
           secret:
             secretName: collector-ssl-secret
-        - name: host-ca-certificate
-          configMap:
-            name: internet-proxy
 parameters:
 # aws config
 - name: aws_access_key
