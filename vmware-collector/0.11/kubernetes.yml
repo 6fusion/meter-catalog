@@ -202,19 +202,6 @@ parameters:
     required: true
   expandExpression: ${ORGANIZATION_ID}
   advanced: true
-- name: log-level
-  section: on-prem-secret
-  sectionDisplayName: vSphere
-  displayName: "Log Level"
-  advanced: true
-  value: info
-  type: enum
-  options:
-    - debug
-    - info
-    - warn
-    - error
-    - fatal
 - name: registration-date
   section: on-prem-secret
   sectionDisplayName: Meter
