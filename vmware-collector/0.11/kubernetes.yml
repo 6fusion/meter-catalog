@@ -187,7 +187,7 @@ parameters:
   sectionDisplayName: Meter
   type: string
   displayName: "Meter API Version"
-  description: "Versioend endpoint to use for Meter API"
+  description: "Versioned endpoint to use for Meter API access"
   validations:
     required: true
   value: "api/v1"
