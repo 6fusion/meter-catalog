@@ -60,7 +60,7 @@ objects:
       spec:
         containers:
         - name: aws-collector
-          image: 6fusion/aws-collector:alpha
+          image: 6fusion/aws-collector:0.11-beta
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: ssl
