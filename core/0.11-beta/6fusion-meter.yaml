@@ -474,7 +474,7 @@ spec:
           httpGet:
             path: "/health"
             port: 8083
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           timeoutSeconds: 30
       imagePullSecrets:
       - name: meter-registry
@@ -594,14 +594,14 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: b967c2216526e9b18f7aa95922415fbb224a5f72b9a2e9f903a0182ddb964ea17a54f9ebf7a9c1c588e3edad333c6175ac9ae4d3b972ca6d8eaff3038b79de11
+          value: e12a8fc317c6927eeff2eb2a72df69f479bb06fbfd6caed41a31f806e7e3b5910089684977ec086666748db7cdd4220966fbd2e453b01c73a27f54705cbb4263
         - name: METER_VERSION
           value: 0.11-beta
         - name: SSL_CERT_FILE
           value: /etc/ssl/certs/ca-certificates.crt
         resources:
           limits:
-            memory: "300Mi"
+            memory: "500Mi"
           requests:
             memory: "300Mi"
         livenessProbe:
