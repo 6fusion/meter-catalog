@@ -59,6 +59,11 @@ objects:
                 configMapKeyRef:
                   name: 6fusion-online-connector-config
                   key: meter.read-batch-size
+            - name: CONNECTOR_ACCESS_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: 6fusion-online-connector-config
+                  key: meter.token                  
             - name: CONNECTOR_METER_READ_TIMEOUT
               valueFrom:
                 configMapKeyRef:
@@ -137,6 +142,13 @@ parameters:
   displayName: "Request Batch Size"
   description: "Number of items to retrieve per request"
   value: "1000"
+  section: 6fusion-online-connector-config
+  sectionDisplayName: "6fusion Meter"
+  advanced: "true"
+- name: meter.token
+  displayName: "API Oauth Token"
+  description: "OAuth Token for accessing the 6fusion Meter. Leave blank if not enabled."
+  expandExpression: ${METER_API_TOKEN}
   section: 6fusion-online-connector-config
   sectionDisplayName: "6fusion Meter"
   advanced: "true"
