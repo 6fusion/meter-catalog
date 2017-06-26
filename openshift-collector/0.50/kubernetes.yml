@@ -331,7 +331,7 @@ parameters:
   description: "Address of the 6fusion Meter"
   section: meter-api
   type: string
-  expandExpression: ${METER_API_HOST}
+  expandExpression: ${METER_PUBLIC_HOST}
   advanced: true
 - name: on_premise_port
   displayName: "Port"
