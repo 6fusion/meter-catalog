@@ -584,17 +584,17 @@ spec:
         6fusion-app: dashboard
         version: 0.11
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-dashboard:0.10.6","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-dashboard:0.11","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
     spec:
       containers:
-      - image: docker.io/6fusion/meter-dashboard:0.10.6
+      - image: docker.io/6fusion/meter-dashboard:0.11
         name: meter-dashboard
         imagePullPolicy: IfNotPresent
         env:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: dd4bf0e77a1f3e90aa941746ea61c825022a82e95258b04428427edf1626e4dc4c06b0278b0a81fc33c6ff0dfc8fbfc9dd743d468dd62cab17a0d279bd7eca7f
+          value: 665eaa034ae2f8b077ee5d6d348300e173c3f15f77336a899633410a50aabec4cf275924dd9574616b0afc82dcef57a8520d4ddc48032923c098945418b32c0a
         - name: METER_VERSION
           value: 0.11
         - name: SSL_CERT_FILE
