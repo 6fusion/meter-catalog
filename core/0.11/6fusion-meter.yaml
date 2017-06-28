@@ -315,7 +315,6 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: sql-database
-    version: 0.11
   annotations:
     componentType: Meter
     componentLabel: "Configuration Datastore"
@@ -331,16 +330,6 @@ spec:
       containers:
       - name: meter-sql-database
         image: docker.io/postgres:9.5.5-alpine
-        livenessProbe:
-          exec:
-            command:
-            - "/bin/bash"
-            - "-c"
-            - "[[ \"$(stat -c %U /var/lib/postgresql/data)\" == \"postgres\" ]] || chown -R postgres:postgres /var/lib/postgresql/data"
-          failureThreshold: 2
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 5
         resources:
           requests:
             cpu: "0.25"
@@ -360,7 +349,7 @@ kind: ReplicationController
 metadata:
   labels:
     6fusion-app: capacity
-    version: 0.11
+    version: "0.11"
   annotations:
     componentType: Meter
     componentLabel: "Capacity Calculator"
@@ -370,12 +359,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: capacity
-    version: 0.11
+    version: "0.11"
   template:
     metadata:
       labels:
         6fusion-app: capacity
-        version: 0.11
+        version: "0.11"
     spec:
       containers:
       - image: docker.io/6fusion/utilization-tracker:0.8
@@ -448,7 +437,7 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: cost
-    version: 0.11
+    version: "0.11"
   annotations:
     componentType: Meter
     componentLabel: "Cost Calculator"
@@ -456,12 +445,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: cost
-    version: 0.11
+    version: "0.11"
   template:
     metadata:
       labels:
         6fusion-app: cost
-        version: 0.11
+        version: "0.11"
     spec:
       containers:
       - image: docker.io/6fusion/cost-calculator:0.6
@@ -484,7 +473,7 @@ kind: ReplicationController
 metadata:
   labels:
     6fusion-app: api
-    version: 0.11
+    version: "0.11"
   annotations:
     componentType: Meter
     componentLabel: "API"
@@ -494,12 +483,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: api
-    version: 0.11
+    version: "0.11"
   template:
     metadata:
       labels:
         6fusion-app: api
-        version: 0.11
+        version: "0.11"
       annotations:
         pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-api:0.10.4","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:initialize", "couch:migrate"] } ]'
     spec:
@@ -569,7 +558,7 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: dashboard
-    version: 0.11
+    version: "0.11"
   annotations:
     componentType: Meter
     componentLabel: "Dashboard"
@@ -577,12 +566,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: dashboard
-    version: 0.11
+    version: "0.11"
   template:
     metadata:
       labels:
         6fusion-app: dashboard
-        version: 0.11
+        version: "0.11"
       annotations:
         pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-dashboard:0.11","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
     spec:
@@ -594,9 +583,9 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 665eaa034ae2f8b077ee5d6d348300e173c3f15f77336a899633410a50aabec4cf275924dd9574616b0afc82dcef57a8520d4ddc48032923c098945418b32c0a
+          value: bde485e4f6309313ef3363650756289420ce1c9b56a47de6cadbd65190f68fd4ac53d67a24b5dc05275c31c085e16c29f647a4f90b4d9ff8a038c617f4ce8465
         - name: METER_VERSION
-          value: 0.11
+          value: "0.11"
         - name: SSL_CERT_FILE
           value: /etc/ssl/certs/ca-certificates.crt
         resources:
@@ -639,7 +628,7 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: cache
-    version: 0.11
+    version: "0.11"
   annotations:
     componentType: Meter
     componentLabel: "Cache"
@@ -647,12 +636,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: cache
-    version: 0.11
+    version: "0.11"
   template:
     metadata:
       labels:
         6fusion-app: cache
-        version: 0.11
+        version: "0.11"
     spec:
       containers:
       - image: docker.io/redis:3.0.7-alpine
@@ -671,7 +660,7 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: retention-manager
-    version: 0.11
+    version: "0.11"
   annotations:
     componentType: Meter
     componentLabel: "Data Retention Manager"
@@ -679,12 +668,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: retention-manager
-    version: 0.11
+    version: "0.11"
   template:
     metadata:
       labels:
         6fusion-app: retention-manager
-        version: 0.11
+        version: "0.11"
     spec:
       containers:
       - image: docker.io/6fusion/data-retention-manager:0.5
