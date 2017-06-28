@@ -1,0 +1,181 @@
+kind: Template
+metadata:
+  name: 6fusion-online-connector
+  annotations:
+    pluginVersion: "0.11"
+    displayName: "6fusion Online Connector"
+    description: "Connector for exporting 6fuion Meter data to 6fusion Online"
+    meterVersion: ">=0.11"
+objects:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: 6fusion-online-connector
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: docker-credentials
+    namespace: 6fusion-online-connector
+  data:
+    .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7CgkJCSJhdXRoIjogIk5tWjFjMmx2Ym5ObGNuWnBZMlU2TnlNak0wdGVOeVlqWnpKbU4wTW1VM05QZG5Jd2MzWlNhZz09IgoJCX0KCX0KfQ==
+  type: kubernetes.io/dockerconfigjson
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: 6fusion-online-connector
+    namespace: 6fusion-online-connector
+    labels:
+      6fusion-app: 6fusion-online-connector
+  spec:
+    replicas: 1
+    selector:
+      6fusion-app: 6fusion-online-connector
+    template:
+      metadata:
+        name: 6fusion-online-connector
+        labels:
+          6fusion-app: 6fusion-online-connector
+      spec:
+        containers:
+        - name: 6fusion-online-connector
+          image: 6fusion/online-connector:master
+          volumeMounts:
+            - name: secrets
+              mountPath: /etc/secrets
+              readOnly: true
+          env:
+            - name: CONNECTOR_INTERVAL
+              valueFrom:
+                configMapKeyRef:
+                  name: 6fusion-online-connector-config
+                  key: interval
+            - name: CONNECTOR_METER_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: 6fusion-online-connector-config
+                  key: meter.base_url
+            - name: CONNECTOR_METER_READ_BATCH_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: 6fusion-online-connector-config
+                  key: meter.read-batch-size
+            - name: CONNECTOR_ACCESS_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: 6fusion-online-connector-config
+                  key: meter.token                  
+            - name: CONNECTOR_METER_READ_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: 6fusion-online-connector-config
+                  key: meter.read-timeout
+            - name: RECEIVER_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: 6fusion-online-connector-config
+                  key: receiver.base_url
+            - name: RECEIVER_CLIENT_CERTIFICATE_PATH
+              value: "/etc/secrets/auth.cert"
+            - name: RECEIVER_CLIENT_KEY_PATH
+              value: "/etc/secrets/auth.key"
+            - name: RECEIVER_CLIENT_INTERMEDIATE_CA_PATH
+              value: "/etc/secrets/auth.ca"
+                  
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: 6fusion-online-connector-config
+                  key: log.level
+
+        volumes:
+          - name: secrets
+            secret:
+              secretName: 6fusion-online-connector-secrets
+        imagePullSecrets:
+          - name: docker-credentials
+parameters:
+- name: interval
+  displayName: Interval
+  description: "6fusion Meter polling interval"
+  section: 6fusion-online-connector-config
+  sectionDisplayName: Connector
+  value: "30"
+  advanced: "true"
+- name: meter.read-timeout
+  displayName: "Read Timeout"
+  section: 6fusion-online-connector-config
+  sectionDisplayName: Connector
+  value: "45"
+  advanced: "true"
+- name: receiver.base_url
+  displayName: "6fusion Online API Host"
+  section: 6fusion-online-connector-config
+  sectionDisplayName: Connector
+  type: enum
+  value: https://receiver.prod.aws.6fusion.com/api/v1/
+  options:
+    - https://receiver.prod.aws.6fusion.com/api/v1/
+    - https://receiver.staging.aws.6fusion.com/api/v1/
+    - https://receiver.dev.aws.6fusion.com/api/v1/
+  advanced: "true"
+- name: log.level
+  displayName: "Log Level"
+  section: 6fusion-online-connector-config
+  sectionDisplayName: Connector
+  type: enum
+  value: info
+  options:
+    - debug
+    - info
+    - warn
+    - error
+    - fatal
+    - panic
+- name: meter.base_url
+  section: 6fusion-online-connector-config
+  sectionDisplayName: "6fusion Meter"
+  displayName: "API Host"
+  description: "Address of the 6fusion Meter"
+  expandExpression: ${METER_API_URL}
+  advanced: "true"
+- name: meter.read-batch-size
+  displayName: "Request Batch Size"
+  description: "Number of items to retrieve per request"
+  value: "1000"
+  section: 6fusion-online-connector-config
+  sectionDisplayName: "6fusion Meter"
+  advanced: "true"
+- name: meter.token
+  displayName: "API Oauth Token"
+  description: "OAuth Token for accessing the 6fusion Meter. Leave blank if not enabled."
+  expandExpression: ${METER_API_TOKEN}
+  section: 6fusion-online-connector-config
+  sectionDisplayName: "6fusion Meter"
+  advanced: "true"
+- name: auth.ca
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-online-connector-secrets
+  displayName: "Meter License CA"
+  expandExpression: ${METER_LICENSE_CA}
+  type: multiline
+  advanced: "true"
+  validations:
+    required: true
+- name: auth.cert
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-online-connector-secrets
+  displayName: "Meter License Certificate"
+  expandExpression: ${METER_LICENSE_CERTIFICATE}
+  type: multiline
+  advanced: "true"
+  validations:
+    required: true
+- name: auth.key
+  sectionDisplayName: "6fusion Meter"
+  section: 6fusion-online-connector-secrets
+  displayName: "Meter License Key"
+  expandExpression: ${METER_LICENSE_KEY}
+  type: multiline
+  advanced: "true"
+  validations:
+    required: true
