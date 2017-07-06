@@ -78,11 +78,11 @@ objects:
         containers:
         - name: inventory-collector
           image: docker.io/6fusion/openshift-collector:0.50
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           args: ["inventory/run.rb"]
           env:
           - name: LOG_LEVEL
-            value: debug
+            value: ${log_level}
           - name: INFRASTRUCTURE_NAME
             value: ${infrastructure_name}
           - name: OPENSHIFT_DOMAIN
@@ -138,11 +138,11 @@ objects:
         containers:
         - name: onpremise-connector
           image: docker.io/6fusion/openshift-collector:0.50
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           args: ["on_premise/run.rb"]
           env:
           - name: LOG_LEVEL
-            value: debug
+            value: ${log_level}
           - name: ONPREMISE_ORGANIZATION_ID
             value: ${on_premise_organization_id}
           - name: ONPREMISE_TOKEN
@@ -179,11 +179,11 @@ objects:
         containers:
         - name: cleancache
           image: docker.io/6fusion/openshift-collector:0.50
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           args: ["clean_cache/run.rb"]
           env:
           - name: LOG_LEVEL
-            value: debug
+            value: ${log_level}
           - name: CLEANCACHE_DATA_AGE_PERIOD
             value: ${data_age_period}
         imagePullSecrets:
@@ -211,11 +211,11 @@ objects:
         containers:
         - name: metrics-collector
           image: docker.io/6fusion/openshift-collector:0.50
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           args: ["metrics/run.rb"]
           env:
           - name: LOG_LEVEL
-            value: debug
+            value: ${log_level}
           - name: KUBERNETES_USE_SSL
             value: ${openshift_use_ssl}
           - name: KUBERNETES_VERIFY_SSL
