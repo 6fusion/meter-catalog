@@ -69,14 +69,32 @@ objects:
         name: 6fusion-vmwarecollector-master
         labels:
           6fusion-app: vmwarecollector-master
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "mongo-init", "imagePullPolicy": "IfNotPresent", "image": "6fusion/vmware-collector:alpha", "command": ["rake", "db:mongoid:create_indexes"] } ]'
       spec:
         containers:
         - name: vmware-collector-inventory
           image: 6fusion/vmware-collector:alpha
           imagePullPolicy: Always
           env:
+          - name: VSPHERE_HOST
+            valueFrom:
+              secretKeyRef:
+                key: host
+                name: vsphere-secret
+          - name: VSPHERE_USER
+            valueFrom:
+              secretKeyRef:
+                key: user
+                name: vsphere-secret
+          - name: VSPHERE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: vsphere-secret
+          - name: VSPHERE_IGNORE_SSL_ERRORS
+            valueFrom:
+              secretKeyRef:
+                key: ignore-ssl-errors
+                name: vsphere-secret
           - name: DEFAULT_DISK_IO
             valueFrom:
               secretKeyRef:
@@ -125,6 +143,27 @@ objects:
         - name: vmware-collector-metrics
           image: 6fusion/vmware-collector-metrics:alpha
           imagePullPolicy: Always
+          env:
+          - name: METER_API_PROTOCOL
+            valueFrom:
+              secretKeyRef:
+                key: api-protocol
+                name: on-prem-secret
+          - name: ON_PREM_API_HOST
+            valueFrom:
+              secretKeyRef:
+                key: api-host
+                name: on-prem-secret
+          - name: ON_PREM_API_PORT
+            valueFrom:
+              secretKeyRef:
+                key: api-port
+                name: on-prem-secret
+          - name: ONGANIZATION_ID
+            valueFrom:
+              secretKeyRef:
+                key: organization-id
+                name: on-prem-secret
           volumeMounts:
           - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
@@ -190,6 +229,30 @@ parameters:
     required: true
   expandExpression: ${METER_API_HOST}
   advanced: true
+- name: api-port
+  section: on-prem-secret
+  sectionDisplayName: Meter
+  type: int
+  displayName: "Meter API Port"
+  description: "Host port of 6fusion Meter API"
+  validations:
+    required: true
+  expandExpression: ${METER_API_PORT}
+  advanced: true
+- name: api-protocol
+  section: on-prem-secret
+  sectionDisplayName: Meter
+  type: enum
+  options:
+    - http
+    - https
+  value: http
+- name: oauth-token
+  section: on-prem-secret
+  sectionDisplayName: Meter
+  type: string
+  displayName: "API Token"
+  description: "OAuth authorization token for Meter API access"
 - name: organization-id
   section: on-prem-secret
   sectionDisplayName: Meter
