@@ -69,6 +69,8 @@ objects:
         name: 6fusion-vmwarecollector-master
         labels:
           6fusion-app: vmwarecollector-master
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "mongo-init", "imagePullPolicy": "IfNotPresent", "image": "6fusion/vmware-collector:alpha", "command": ["rake", "db:mongoid:create_indexes"] } ]'
       spec:
         containers:
         - name: vmware-collector-inventory
