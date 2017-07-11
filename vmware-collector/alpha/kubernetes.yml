@@ -305,16 +305,6 @@ parameters:
     required: true
   advanced: true
   value: "500"  # TODO confirm this default
-- name: inventoried-limit
-  section: on-prem-secret
-  sectionDisplayName: Meter
-  type: int
-  displayName: "Inventory Limit"
-  description: "The number of inventoried timestamps that each replica controller will take each round"
-  validations:
-    required: true
-  value: "5"  # TODO confirm this default
-  advanced: true
 - name: default-disk-io
   section: on-prem-secret
   sectionDisplayName: Meter
