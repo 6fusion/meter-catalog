@@ -95,6 +95,26 @@ objects:
               secretKeyRef:
                 key: ignore-ssl-errors
                 name: vsphere-secret
+          - name: METER_API_PROTOCOL
+            valueFrom:
+              secretKeyRef:
+                key: api-protocol
+                name: on-prem-secret
+          - name: ON_PREM_API_HOST
+            valueFrom:
+              secretKeyRef:
+                key: api-host
+                name: on-prem-secret
+          - name: ON_PREM_API_PORT
+            valueFrom:
+              secretKeyRef:
+                key: api-port
+                name: on-prem-secret
+          - name: ONGANIZATION_ID
+            valueFrom:
+              secretKeyRef:
+                key: organization-id
+                name: on-prem-secret
           - name: DEFAULT_DISK_IO
             valueFrom:
               secretKeyRef:
@@ -144,26 +164,26 @@ objects:
           image: 6fusion/vmware-collector-metrics:alpha
           imagePullPolicy: Always
           env:
-          - name: METER_API_PROTOCOL
+          - name: VSPHERE_HOST
             valueFrom:
               secretKeyRef:
-                key: api-protocol
-                name: on-prem-secret
-          - name: ON_PREM_API_HOST
+                key: host
+                name: vsphere-secret
+          - name: VSPHERE_USER
             valueFrom:
               secretKeyRef:
-                key: api-host
-                name: on-prem-secret
-          - name: ON_PREM_API_PORT
+                key: user
+                name: vsphere-secret
+          - name: VSPHERE_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: api-port
-                name: on-prem-secret
-          - name: ONGANIZATION_ID
+                key: password
+                name: vsphere-secret
+          - name: VSPHERE_IGNORE_SSL_ERRORS
             valueFrom:
               secretKeyRef:
-                key: organization-id
-                name: on-prem-secret
+                key: ignore-ssl-errors
+                name: vsphere-secret
           volumeMounts:
           - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
@@ -247,6 +267,7 @@ parameters:
     - http
     - https
   value: http
+  advanced: true
 - name: oauth-token
   section: on-prem-secret
   sectionDisplayName: Meter
