@@ -232,7 +232,7 @@ parameters:
   section: vsphere-secret
   sectionDisplayName: vSphere
   type: string
-  description: "A descriptive name for the vCenter. Datacenters within will be tagged with this prefix."
+  description: "A short, descriptive name for the vCenter. Datacenters will be tagged with this prefix in the 6fusion Meter."
 - name: ignore-ssl-errors
   section: vsphere-secret
   sectionDisplayName: vSphere
