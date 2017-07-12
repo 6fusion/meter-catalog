@@ -4,7 +4,7 @@ metadata:
   name: vmware-collector
   annotations:
     displayName: "VMware Collector"
-    description: "VMware Collector for vCenter 5.5+"
+    description: "VMware Collector for vSphere 5.0+"
     pluginVersion: "alpha"
     meterVersion: ">=0.11"
 objects:
@@ -79,27 +79,22 @@ objects:
             valueFrom:
               secretKeyRef:
                 key: host
-                name: vcenter-secret
+                name: vsphere-secret
           - name: VSPHERE_USER
             valueFrom:
               secretKeyRef:
                 key: user
-                name: vcenter-secret
+                name: vsphere-secret
           - name: VSPHERE_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: password
-                name: vcenter-secret
-          - name: VCENTER_DESCRIPTOR
-            valueFrom:
-              secretKeyRef:
-                key: vcenter-descriptor
-                name: vcenter-secret
+                name: vsphere-secret
           - name: VSPHERE_IGNORE_SSL_ERRORS
             valueFrom:
               secretKeyRef:
                 key: ignore-ssl-errors
-                name: vcenter-secret
+                name: vsphere-secret
           - name: METER_API_PROTOCOL
             valueFrom:
               secretKeyRef:
@@ -136,14 +131,14 @@ objects:
                 key: default-lan-io
                 name: on-prem-secret
           volumeMounts:
-          - name: vcenter-secret
+          - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
         volumes:
-        - name: vcenter-secret
+        - name: vsphere-secret
           secret:
-            secretName: vcenter-secret
+            secretName: vsphere-secret
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
@@ -173,69 +168,63 @@ objects:
             valueFrom:
               secretKeyRef:
                 key: host
-                name: vcenter-secret
+                name: vsphere-secret
           - name: VSPHERE_USER
             valueFrom:
               secretKeyRef:
                 key: user
-                name: vcenter-secret
+                name: vsphere-secret
           - name: VSPHERE_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: password
-                name: vcenter-secret
+                name: vsphere-secret
           - name: VSPHERE_IGNORE_SSL_ERRORS
             valueFrom:
               secretKeyRef:
                 key: ignore-ssl-errors
-                name: vcenter-secret
+                name: vsphere-secret
           volumeMounts:
-          - name: vcenter-secret
+          - name: vsphere-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
         volumes:
-        - name: vcenter-secret
+        - name: vsphere-secret
           secret:
-            secretName: vcenter-secret
+            secretName: vsphere-secret
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
 parameters:
 #vSphere questions
-- description: "Host address of vCenter"
+- description: "Host address of vSphere"
   name: host
-  displayName: "vCenter Host"
-  section: vcenter-secret
-  sectionDisplayName: vCenter
+  displayName: "vSphere Host"
+  section: vsphere-secret
+  sectionDisplayName: vSphere
   validations:
     required: true
   type: string
 - name: user
-  displayName: "vCenter User"
-  section: vcenter-secret
-  sectionDisplayName: vCenter
+  displayName: "vSphere User"
+  section: vsphere-secret
+  sectionDisplayName: vSphere
   validations:
     required: true
   type: string
-  description: "Account used for vCenter access"
+  description: "Account used for vSphere access"
 - name: password
-  section: vcenter-secret
-  sectionDisplayName: vCenter
-  displayName: "vCenter Password"
+  section: vsphere-secret
+  sectionDisplayName: vSphere
+  displayName: "vSphere Password"
   validations:
     required: true
   type: password
-  description: "vCenter account password"
-- name: vcenter-descriptor
-  displayName: "vCenter Descriptor"
-  section: vcenter-secret
-  sectionDisplayName: vCenter
-  type: string
-  description: "A short, descriptive name for the vCenter. Datacenters will be tagged with this prefix in the 6fusion Meter."
+  description: "vSphere account password"
 - name: ignore-ssl-errors
-  section: vcenter-secret
-  sectionDisplayName: vCenter
+  section: vsphere-secret
+  sectionDisplayName: vSphere
   displayName: "Ignore SSL validation errors?"
   validations:
     required: true
@@ -243,8 +232,8 @@ parameters:
   value: "true"
   description: "Do not perform strict SSL validation. Disable if using self-signed SSL certificates"
 - name: readings-batch-size
-  section: vcenter-secret
-  sectionDisplayName: vCenter
+  section: vsphere-secret
+  sectionDisplayName: vSphere
   displayName: "Max Query Metrics"
   type: int
   value: "64"
