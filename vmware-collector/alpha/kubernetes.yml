@@ -90,6 +90,11 @@ objects:
               secretKeyRef:
                 key: password
                 name: vsphere-secret
+          - name: VCENTER_DESCRIPTOR
+            valueFrom:
+              secretKeyRef:
+                key: vcenter-descriptor
+                name: vsphere-secret
           - name: VSPHERE_IGNORE_SSL_ERRORS
             valueFrom:
               secretKeyRef:
@@ -222,6 +227,12 @@ parameters:
     required: true
   type: password
   description: "vSphere account password"
+- name: vcenter-descriptor
+  displayName: "vCenter Descriptor"
+  section: vsphere-secret
+  sectionDisplayName: vSphere
+  type: string
+  description: "A descriptive name for the vCenter. Datacenters within will be tagged with this prefix."
 - name: ignore-ssl-errors
   section: vsphere-secret
   sectionDisplayName: vSphere
