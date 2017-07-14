@@ -1,3 +1,5 @@
+ENV SECRETS_PATH /var/run/secrets/vmwarecollector
+
 apiVersion: v1
 kind: Template
 metadata:
