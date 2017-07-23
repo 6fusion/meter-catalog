@@ -315,7 +315,6 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: sql-database
-    version: alpha
   annotations:
     componentType: Meter
     componentLabel: "Configuration Datastore"
@@ -331,16 +330,6 @@ spec:
       containers:
       - name: meter-sql-database
         image: docker.io/postgres:9.5.5-alpine
-        livenessProbe:
-          exec:
-            command:
-            - "/bin/bash"
-            - "-c"
-            - "[[ \"$(stat -c %U /var/lib/postgresql/data)\" == \"postgres\" ]] || chown -R postgres:postgres /var/lib/postgresql/data"
-          failureThreshold: 2
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 5
         resources:
           requests:
             cpu: "0.25"
@@ -360,7 +349,7 @@ kind: ReplicationController
 metadata:
   labels:
     6fusion-app: capacity
-    version: alpha
+    version: "alpha"
   annotations:
     componentType: Meter
     componentLabel: "Capacity Calculator"
@@ -370,12 +359,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: capacity
-    version: alpha
+    version: "alpha"
   template:
     metadata:
       labels:
         6fusion-app: capacity
-        version: alpha
+        version: "alpha"
     spec:
       containers:
       - image: docker.io/6fusion/utilization-tracker:alpha
@@ -448,7 +437,7 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: cost
-    version: alpha
+    version: "alpha"
   annotations:
     componentType: Meter
     componentLabel: "Cost Calculator"
@@ -456,12 +445,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: cost
-    version: alpha
+    version: "alpha"
   template:
     metadata:
       labels:
         6fusion-app: cost
-        version: alpha
+        version: "alpha"
     spec:
       containers:
       - image: docker.io/6fusion/cost-calculator:alpha
@@ -474,7 +463,7 @@ spec:
           httpGet:
             path: "/health"
             port: 8083
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           timeoutSeconds: 30
       imagePullSecrets:
       - name: meter-registry
@@ -484,7 +473,7 @@ kind: ReplicationController
 metadata:
   labels:
     6fusion-app: api
-    version: alpha
+    version: "alpha"
   annotations:
     componentType: Meter
     componentLabel: "API"
@@ -494,12 +483,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: api
-    version: alpha
+    version: "alpha"
   template:
     metadata:
       labels:
         6fusion-app: api
-        version: alpha
+        version: "alpha"
       annotations:
         pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:alpha","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:initialize", "couch:migrate"] } ]'
     spec:
@@ -569,7 +558,7 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: dashboard
-    version: alpha
+    version: "alpha"
   annotations:
     componentType: Meter
     componentLabel: "Dashboard"
@@ -577,12 +566,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: dashboard
-    version: alpha
+    version: "alpha"
   template:
     metadata:
       labels:
         6fusion-app: dashboard
-        version: alpha
+        version: "alpha"
       annotations:
         pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-dashboard:alpha","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
     spec:
@@ -594,14 +583,14 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 2c17965ae391a5634031e27de832d9b4201762b9d140c0d64e29d1d493fcc0d7f86a6514cb83adbc991eb414f987aed9a67c91c331611e32d40d7452cf689bdc
+          value: e206833788cba67d1bf2b0db125b7e0cb214242efda728d017c2189c31ff21043858a1027efa90f937f009b97a5ea9ac70a9ed73699c9e1c69ab9471f41189c7
         - name: METER_VERSION
-          value: alpha
+          value: "alpha"
         - name: SSL_CERT_FILE
           value: /etc/ssl/certs/ca-certificates.crt
         resources:
           limits:
-            memory: "300Mi"
+            memory: "500Mi"
           requests:
             memory: "300Mi"
         livenessProbe:
@@ -639,7 +628,7 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: cache
-    version: alpha
+    version: "alpha"
   annotations:
     componentType: Meter
     componentLabel: "Cache"
@@ -647,12 +636,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: cache
-    version: alpha
+    version: "alpha"
   template:
     metadata:
       labels:
         6fusion-app: cache
-        version: alpha
+        version: "alpha"
     spec:
       containers:
       - image: docker.io/redis:3.0.7-alpine
@@ -671,7 +660,7 @@ metadata:
   namespace: 6fusion-meter
   labels:
     6fusion-app: retention-manager
-    version: alpha
+    version: "alpha"
   annotations:
     componentType: Meter
     componentLabel: "Data Retention Manager"
@@ -679,12 +668,12 @@ spec:
   replicas: 1
   selector:
     6fusion-app: retention-manager
-    version: alpha
+    version: "alpha"
   template:
     metadata:
       labels:
         6fusion-app: retention-manager
-        version: alpha
+        version: "alpha"
     spec:
       containers:
       - image: docker.io/6fusion/data-retention-manager:alpha
