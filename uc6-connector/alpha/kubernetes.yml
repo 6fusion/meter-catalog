@@ -102,7 +102,7 @@ objects:
           - name: ON_PREM_TOKEN
             valueFrom:
               secretKeyRef:
-                key: on{remToken
+                key: onPremToken
                 name: "6fusion-meter"
           - name: UC6_TOKEN
             valueFrom:
@@ -171,7 +171,7 @@ parameters:
     required:
       true
   advanced: true
-- name: on-prem-protocol
+- name: onPremProtocol
   displayName: Protocol
   section: 6fusion-meter
   type: enum
@@ -181,7 +181,7 @@ parameters:
   value: http
   description: "Access protocol for 6fusion Meter"
   advanced: true
-- name: on-prem-token
+- name: onPremToken
   displayName: "API Oauth Token"
   section: 6fusion-meter
   description: "OAuth Token to use for accessing the 6fusion Meter API"
