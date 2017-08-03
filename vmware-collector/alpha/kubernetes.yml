@@ -4,8 +4,8 @@ metadata:
   name: vmware-collector
   annotations:
     displayName: "VMware Collector"
-    description: "VMware Collector for vSphere 5.0+"
-    pluginVersion: alpha
+    description: "VMware Collector for vCenter 5.5+"
+    pluginVersion: "alpha"
     meterVersion: ">=0.11"
 objects:
 - apiVersion: v1
@@ -45,8 +45,14 @@ objects:
       spec:
         containers:
         - name: mongodb
-          image: mongo:3.2
-          imagePullPolicy: IfNotPresent
+          image: mongo:3.4.6
+          imagePullPolicy: Always
+          volumeMounts:
+          - mountPath: /data/db
+            name: mongodb
+        volumes:
+        - name: mongodb
+          emptyDir: {}
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -67,8 +73,53 @@ objects:
         containers:
         - name: vmware-collector-inventory
           image: 6fusion/vmware-collector:alpha
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
+          - name: VSPHERE_HOST
+            valueFrom:
+              secretKeyRef:
+                key: host
+                name: vcenter-secret
+          - name: VSPHERE_USER
+            valueFrom:
+              secretKeyRef:
+                key: user
+                name: vcenter-secret
+          - name: VSPHERE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: vcenter-secret
+          - name: VCENTER_DESCRIPTOR
+            valueFrom:
+              secretKeyRef:
+                key: vcenter-descriptor
+                name: vcenter-secret
+          - name: VSPHERE_IGNORE_SSL_ERRORS
+            valueFrom:
+              secretKeyRef:
+                key: ignore-ssl-errors
+                name: vcenter-secret
+          - name: METER_API_PROTOCOL
+            valueFrom:
+              secretKeyRef:
+                key: api-protocol
+                name: on-prem-secret
+          - name: ON_PREM_API_HOST
+            valueFrom:
+              secretKeyRef:
+                key: api-host
+                name: on-prem-secret
+          - name: ON_PREM_API_PORT
+            valueFrom:
+              secretKeyRef:
+                key: api-port
+                name: on-prem-secret
+          - name: ORGANIZATION_ID
+            valueFrom:
+              secretKeyRef:
+                key: organization-id
+                name: on-prem-secret
           - name: DEFAULT_DISK_IO
             valueFrom:
               secretKeyRef:
@@ -85,14 +136,14 @@ objects:
                 key: default-lan-io
                 name: on-prem-secret
           volumeMounts:
-          - name: vsphere-secret
+          - name: vcenter-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
         volumes:
-        - name: vsphere-secret
+        - name: vcenter-secret
           secret:
-            secretName: vsphere-secret
+            secretName: vcenter-secret
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
@@ -116,97 +167,139 @@ objects:
         containers:
         - name: vmware-collector-metrics
           image: 6fusion/vmware-collector-metrics:alpha
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          env:
+          - name: VSPHERE_HOST
+            valueFrom:
+              secretKeyRef:
+                key: host
+                name: vcenter-secret
+          - name: VSPHERE_USER
+            valueFrom:
+              secretKeyRef:
+                key: user
+                name: vcenter-secret
+          - name: VSPHERE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: vcenter-secret
+          - name: VSPHERE_IGNORE_SSL_ERRORS
+            valueFrom:
+              secretKeyRef:
+                key: ignore-ssl-errors
+                name: vcenter-secret
           volumeMounts:
-          - name: vsphere-secret
+          - name: vcenter-secret
             mountPath: /var/run/secrets/vmwarecollector/vsphere
           - name: on-prem-secret
             mountPath: /var/run/secrets/vmwarecollector/on-prem
         volumes:
-        - name: vsphere-secret
+        - name: vcenter-secret
           secret:
-            secretName: vsphere-secret
+            secretName: vcenter-secret
         - name: on-prem-secret
           secret:
             secretName: on-prem-secret
 parameters:
 #vSphere questions
-- description: "Host address of vSphere"
+- description: "Host address of vCenter"
   name: host
-  section: vSphere
-  displayName: "vSphere Host"
+  displayName: "vCenter Host"
+  section: vcenter-secret
+  sectionDisplayName: vCenter
   validations:
     required: true
   type: string
 - name: user
-  section: vSphere
-  displayName: "vSphere User"
+  displayName: "vCenter User"
+  section: vcenter-secret
+  sectionDisplayName: vCenter
   validations:
     required: true
   type: string
-  description: "Account used for vSphere access"
+  description: "Account used for vCenter access"
 - name: password
-  section: vSphere
-  displayName: "vSphere Password"
+  section: vcenter-secret
+  sectionDisplayName: vCenter
+  displayName: "vCenter Password"
   validations:
     required: true
   type: password
-  description: "vSphere account password"
+  description: "vCenter account password"
+- name: vcenter-descriptor
+  displayName: "vCenter Tag"
+  section: vcenter-secret
+  sectionDisplayName: vCenter
+  type: string
+  description: "A short, distinguishing tag for the vCenter"
 - name: ignore-ssl-errors
-  section: vSphere
+  section: vcenter-secret
+  sectionDisplayName: vCenter
   displayName: "Ignore SSL validation errors?"
   validations:
     required: true
   type: boolean
-  value: "false"
-  description: "Perform strict SSL validation. Do not enable if using self-signed SSL certificates"
+  value: "true"
+  description: "Do not perform strict SSL validation. Disable if using self-signed SSL certificates"
 - name: readings-batch-size
-  section: vSphere
+  section: vcenter-secret
+  sectionDisplayName: vCenter
   displayName: "Max Query Metrics"
   type: int
   value: "64"
-  description: "Limit the number of entities that are included in a database query."
-  advanced: true
+  description: "Limit the number of machines per performance metrics query. Should match the vpxd.stats.maxquerymetrics vCenter setting"
 # on prem questions
 - name: api-host
-  section: On-Prem
+  section: on-prem-secret
+  sectionDisplayName: Meter
   type: string
   displayName: "Meter API Host"
   description: "Host address of 6fusion Meter"
   validations:
     required: true
   expandExpression: ${METER_API_HOST}
-- name: api-endpoint
-  section: On-Prem
-  type: string
-  displayName: "Meter API Version"
-  description: "Versioend endpoint to use for Meter API"
+  advanced: true
+- name: api-port
+  section: on-prem-secret
+  sectionDisplayName: Meter
+  type: int
+  displayName: "Meter API Port"
+  description: "Host port of 6fusion Meter API"
   validations:
     required: true
-  value: "api/v1"
+  expandExpression: ${METER_API_PORT}
+  advanced: true
+- name: api-protocol
+  displayName: "Meter API Protocol"
+  description: "Access the meter unencrypted, or through SSL"
+  section: on-prem-secret
+  sectionDisplayName: Meter
+  type: enum
+  options:
+    - http
+    - https
+  value: http
+  advanced: true
+- name: oauth-token
+  section: on-prem-secret
+  sectionDisplayName: Meter
+  type: string
+  displayName: "API Token"
+  description: "OAuth authorization token for Meter API access"
 - name: organization-id
-  section: On-Prem
+  section: on-prem-secret
+  sectionDisplayName: Meter
   type: string
   displayName: "Organization ID"
   description: "ID of organization object in the 6fusion Meter API"
   validations:
     required: true
   expandExpression: ${ORGANIZATION_ID}
-- name: log-level
-  section: vSphere
-  displayName: "Log Level"
-  validations:
-    required: false
-  value: info
-  type: enum
-  options:
-    - debug
-    - info
-    - warn
-    - error
-    - fatal
+  advanced: true
 - name: registration-date
-  section: On-Prem
+  section: on-prem-secret
+  sectionDisplayName: Meter
   type: string
   displayName: "Registration Date"
   description: "Time to start collection from."
@@ -214,8 +307,10 @@ parameters:
   validations:
     required: true
   expandExpression: "`Time.now`"
+  advanced: true
 - name: machines-by-inv-timestamp
-  section: On-Prem
+  section: on-prem-secret
+  sectionDisplayName: Meter
   type: int
   displayName: "Machines per request"
   description: "Define the total of machines that are included on each request to obtain metrics from vsphere"
@@ -223,39 +318,33 @@ parameters:
     required: true
   advanced: true
   value: "500"  # TODO confirm this default
-- name: inventoried-limit
-  section: On-Prem
-  type: int
-  displayName: "Inventory Limit"
-  description: "The number of inventoried timestamps that each replica controller will take each round"
-  validations:
-    required: false
-  value: "5"  # TODO confirm this default
-  advanced: true
 - name: default-disk-io
-  section: On-Prem
-  type: int
+  section: on-prem-secret
+  sectionDisplayName: Meter
+  type: string
   displayName: "Default Disk I/O"
   description: "The value to use for Disk I/O if the collector cannot determine the actual disk I/O speed"
   validations:
-    required: false
-  value: "10000000000"
-  advanced: true
+    required: true
+  value: "10"
+  suffix: "Gbps"
 - name: default-lan-io
-  section: On-Prem
-  type: int
+  section: on-prem-secret
+  sectionDisplayName: Meter
+  type: string
   displayName: "Default LAN I/O"
   description: "The value to use for LAN I/O if the collector cannot determine the actual LAN I/O speed"
   validations:
-    required: false
-  value: "10000000000"
-  advanced: true
+    required: true
+  value: "10"
+  suffix: "Gbps"
 - name: default-wan-io
-  section: On-Prem
-  type: int
+  section: on-prem-secret
+  sectionDisplayName: Meter
+  type: string
   displayName: "Default WAN I/O"
   description: "The value to use for WAN I/O if the collector cannot determine the actual WAN I/O speed"
   validations:
-    required: false
-  advanced: true
-  value: "100000000" 
+    required: true
+  value: "1"
+  suffix: "Gbps"
