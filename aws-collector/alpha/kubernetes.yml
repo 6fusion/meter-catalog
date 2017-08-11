@@ -329,7 +329,7 @@ parameters:
   description: "A fallback value for LAN I/O speed, if the collector cannot determine the actual LAN speed"
   section: 6fusion-meter-secret
   sectionDisplayName: "6fusion Meter"
-  value: "20"
+  value: "10"
   suffix: "Gbps"
   type: string
   advanced: true
@@ -338,7 +338,7 @@ parameters:
   description: "A fallback value for WAN I/O speed, if the collector cannot determine the actual WAN speed"
   section: 6fusion-meter-secret
   sectionDisplayName: "6fusion Meter"
-  value: "1"
+  value: "0.4"
   suffix: "Gbps"
   type: string
   advanced: true
