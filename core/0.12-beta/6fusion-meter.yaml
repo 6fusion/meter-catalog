@@ -367,7 +367,7 @@ spec:
         version: "0.12-beta"
     spec:
       containers:
-      - image: docker.io/6fusion/utilization-tracker:0.8
+      - image: docker.io/6fusion/utilization-tracker:alpha
         name: utilization-tracker
         imagePullPolicy: Always
         env:
@@ -385,7 +385,7 @@ spec:
             - ruby
           initialDelaySeconds: 60
           timeoutSeconds: 10
-      - image: docker.io/6fusion/wac-calculator:0.6
+      - image: docker.io/6fusion/wac-calculator:alpha
         name: wac-calculator
         resources:
           limits:
@@ -516,7 +516,7 @@ spec:
         - name: secrets
           mountPath: /etc/secrets
           readOnly: true
-      - image: docker.io/6fusion/wac-calculator:0.6
+      - image: docker.io/6fusion/wac-calculator:alpha
         name: wac-calculator
         resources:
           limits:
@@ -583,7 +583,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 291129087cdb767551c26597a1f4112041ed13c81514de29cc1dff2e536ad36a57ceb073e5207ab4c239cce3394d11b744dfd382cd6e3b2c2a4b9b60ed435ad0
+          value: f5d044c2cda5a7099c658cf39fa450a277ce70397177d87817993f2bd0110eca37b34ecbde133fc7bcb3bfe8490e9ca984a432ef85bd4341801b68ab39e64fb0
         - name: METER_VERSION
           value: "0.12-beta"
         - name: SSL_CERT_FILE
