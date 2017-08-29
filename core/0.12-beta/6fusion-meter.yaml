@@ -367,7 +367,7 @@ spec:
         version: "0.12-beta"
     spec:
       containers:
-      - image: docker.io/6fusion/utilization-tracker:alpha
+      - image: docker.io/6fusion/utilization-tracker:0.8
         name: utilization-tracker
         imagePullPolicy: IfNotPresent
         env:
@@ -385,7 +385,7 @@ spec:
             - ruby
           initialDelaySeconds: 60
           timeoutSeconds: 10
-      - image: docker.io/6fusion/wac-calculator:alpha
+      - image: docker.io/6fusion/wac-calculator:0.6
         name: wac-calculator
         resources:
           limits:
@@ -399,7 +399,7 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 30
           timeoutSeconds: 30
-      - image: docker.io/6fusion/capacity-calculator:alpha
+      - image: docker.io/6fusion/capacity-calculator:0.8
         name: capacity-calculator
         resources:
           limits:
@@ -413,7 +413,7 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 30
           timeoutSeconds: 30
-      - image: docker.io/6fusion/consumption-patterns:alpha
+      - image: docker.io/6fusion/consumption-patterns:0.7
         name: consumption-patterns
         resources:
           limits:
@@ -453,7 +453,7 @@ spec:
         version: "0.12-beta"
     spec:
       containers:
-      - image: docker.io/6fusion/cost-calculator:alpha
+      - image: docker.io/6fusion/cost-calculator:0.6
         name: cost-calculator
         imagePullPolicy: IfNotPresent
         env:
@@ -490,10 +490,10 @@ spec:
         6fusion-app: api
         version: "0.12-beta"
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:alpha","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:initialize", "couch:migrate"] } ]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.10.4","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:initialize", "couch:migrate"] } ]'
     spec:
       containers:
-      - image: docker.io/6fusion/meter-api:alpha
+      - image: docker.io/6fusion/meter-api:0.10.4
         name: meter-api
         imagePullPolicy: IfNotPresent
         env:
@@ -516,7 +516,7 @@ spec:
         - name: secrets
           mountPath: /etc/secrets
           readOnly: true
-      - image: docker.io/6fusion/wac-calculator:alpha
+      - image: docker.io/6fusion/wac-calculator:0.6
         name: wac-calculator
         resources:
           limits:
@@ -530,7 +530,7 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 30
           timeoutSeconds: 30
-      - image: docker.io/6fusion/consumption-patterns:alpha
+      - image: docker.io/6fusion/consumption-patterns:0.7
         name: consumption-patterns
         resources:
           limits:
@@ -583,7 +583,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 004e21c25440de020492e23a44d9801083f381ba00579006a773541559f5f5db5c1d4fc6568ca4a94d24934710dd23d6c4e199a528c2a1dc4b0f56da55e58f90
+          value: 7194be258c8884dada48ebdc1f5735a4c57c1553ee45788b843accdf1058ebcf8476de6a711d12e2a094bd2f8d5b0e8364ba343b518d6070f3d495c4d51650d3
         - name: METER_VERSION
           value: "0.12-beta"
         - name: SSL_CERT_FILE
@@ -676,7 +676,7 @@ spec:
         version: "0.12-beta"
     spec:
       containers:
-      - image: docker.io/6fusion/data-retention-manager:alpha
+      - image: docker.io/6fusion/data-retention-manager:0.5
         imagePullPolicy: IfNotPresent
         name: retention-manager
         env:
