@@ -367,7 +367,7 @@ spec:
         version: "0.12-beta"
     spec:
       containers:
-      - image: docker.io/6fusion/utilization-tracker:alpha
+      - image: docker.io/6fusion/utilization-tracker:0.8
         name: utilization-tracker
         imagePullPolicy: Always
         env:
@@ -385,7 +385,7 @@ spec:
             - ruby
           initialDelaySeconds: 60
           timeoutSeconds: 10
-      - image: docker.io/6fusion/wac-calculator:alpha
+      - image: docker.io/6fusion/wac-calculator:0.6
         name: wac-calculator
         resources:
           limits:
@@ -516,7 +516,7 @@ spec:
         - name: secrets
           mountPath: /etc/secrets
           readOnly: true
-      - image: docker.io/6fusion/wac-calculator:alpha
+      - image: docker.io/6fusion/wac-calculator:0.6
         name: wac-calculator
         resources:
           limits:
@@ -573,17 +573,17 @@ spec:
         6fusion-app: dashboard
         version: "0.12-beta"
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-dashboard:alpha","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-dashboard:0.12-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
     spec:
       containers:
-      - image: docker.io/6fusion/meter-dashboard:alpha
+      - image: docker.io/6fusion/meter-dashboard:0.12-beta
         name: meter-dashboard
         imagePullPolicy: Always
         env:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 33fab5e8c5e0cbe09f0dd622b6c3f425abb4e1ea278134c254624ce52ffded4f654c5067d4fdb888e66ac643199a39a4d00e3a9554a4399a48c99938a957e44a
+          value: 81ef9bc8c8646946bd1590a2a2c49369cac0215829ea248421916b2269b39a4df792d8cf400ba956272ceb0a974e68b0e147292cd7382b09902af6732f340e99
         - name: METER_VERSION
           value: "0.12-beta"
         - name: SSL_CERT_FILE
