@@ -43,19 +43,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: meter-database
-  namespace: 6fusion-meter
-spec:
-  ports:
-  - name: meter-db-port
-    port: 5984
-    targetPort: 5984
-  selector:
-    6fusion-app: database
----
-apiVersion: v1
-kind: Service
-metadata:
   name: meter-cache
   namespace: 6fusion-meter
 spec:
@@ -94,7 +81,33 @@ spec:
     6fusion-app: retention-manager
 ---
 apiVersion: v1
-kind: ReplicationController
+kind: Service
+metadata:
+  name: meter-database
+  namespace: 6fusion-meter
+spec:
+  ports:
+  - name: meter-db-port
+    port: 5984
+    targetPort: 5984
+  selector:
+    6fusion-app: database
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: couchdb-internal
+  namespace: 6fusion-meter
+spec:
+  ports:
+  - name: couchdb-port
+    port: 5984
+  selector:
+    6fusion-app: database
+  clusterIP: None
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   name: meter-database
   namespace: 6fusion-meter
@@ -104,39 +117,63 @@ metadata:
     componentType: Meter
     componentLabel: "Datastore"
 spec:
-  replicas: 1
+  serviceName: couchdb-internal
+  replicas: $COUCH_CLUSTER_SIZE
   template:
     metadata:
       labels:
         6fusion-app: database
     spec:
       containers:
-      - name: meter-database
-        image: docker.io/6fusion/couchdb:0.11
+      - name: cluster-sidecar
+        image: docker.io/6fusion/couchdb-sidecar:alpha
         imagePullPolicy: Always
+        env:
+        - name: LOG_LEVEL
+          value: debug
+      - name: meter-database
+        image: docker.io/6fusion/couchdb:alpha
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5984
+          name: couchdb-port
+        - containerPort: 4369
+          name: epmd-port
+        - containerPort: 9100
         resources:
           limits:
             memory: "10Gi"
           requests:
-            cpu: "2"
             memory: "100Mi"
         env:
-        - name: POD_IP
+        - name: POD_NAME
           valueFrom:
             fieldRef:
-              fieldPath: status.podIP
+              fieldPath: metadata.name
+        - name: COUCHDB_USER
+          value: admin
+        - name: COUCHDB_PASSWORD
+          value: password
         ports:
         - containerPort: 5984
           name: meter-db-port
+        ports:
+        - containerPort: 5984
+          name: couchdb-port
+        - containerPort: 4369
+          name: epmd-port
+        - containerPort: 9100
         volumeMounts:
         - name: meter-database
           mountPath: /opt/couchdb/data
-      imagePullSecrets:
-      - name: meter-registry
-      volumes:
-      - name: meter-database
-        hostPath:
-          path: /opt/data/couchdb
+  volumeClaimTemplates:
+  - metadata:
+      name: meter-database
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: $slice_size
 ---
 apiVersion: v1
 kind: ReplicationController
@@ -320,7 +357,7 @@ spec:
         6fusion-app: api
         version: "alpha"
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:alpha","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:initialize", "couch:migrate"] } ]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "env": [{"name": "METER_DATABASE_USER", "value": "admin"}, {"name":"METER_DATABASE_PASSWORD", "value": "password"}],   "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:alpha","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
     spec:
       containers:
       - image: docker.io/6fusion/meter-api:alpha
@@ -329,6 +366,10 @@ spec:
         env:
         - name: RAILS_ENV
           value: production
+        - name: METER_DATABASE_USER
+          value: admin
+        - name: METER_DATABASE_PASSWORD
+          value: password
         resources:
           limits:
             memory: "1Gi"
@@ -413,7 +454,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: b6c38ccad47c6e95028733183a8f9447709102d294cd2704441439dcffb4c7c35a5e62c217bef17b8e1f540eaa4304556ee3fbbed8d5d044a95bd9b1ddcc1e0c
+          value: b44552b887279fcb05166fe258e15e00af436952f1294bae2627269220f918f1d0440d4830110e87f696aac1e0e3bc3ab5cf5dbb0e48e5de4c27113f90ba18f2
         - name: METER_VERSION
           value: "alpha"
         - name: SSL_CERT_FILE
