@@ -109,7 +109,7 @@ objects:
               secretKeyRef:
                 key: uc6-token
                 name: uc6-dedicated
-          image: docker.io/6fusion/uc6-connector:alpha
+          image: docker.io/6fusion/uc6-connector:0.11
           imagePullPolicy: IfNotPresent
           name: uc6-connector
         imagePullSecrets:
