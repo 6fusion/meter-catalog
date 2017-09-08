@@ -3,7 +3,7 @@ metadata:
   name: uc6-connector
   annotations:
     pluginVersion: 0.12
-    meterVersion: ">=0.11"
+    meterVersion: ">=0.12"
     displayName: "UC6 Connector"
     description: "Connector for exporting 6fusion Meter data to a UC6 dedicated environment"
 objects:
