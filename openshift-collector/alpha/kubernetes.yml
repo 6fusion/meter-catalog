@@ -240,6 +240,32 @@ parameters:
   section: openshift
   validations:
     required: true
+
+# Meter API # mixing some API fields to near the top, so that the only fields a user might configure - on OpenShift - are near the top
+#   (This is not needed for the dashboard, since it has more advanced sectioning)
+- name: on_premise_organization_id
+  displayName: "Organization ID"
+  description: "ID of the 6fusion Meter organization object to submit under."
+  section: meter-api
+  type: string
+  expandExpression: ${ORGANIZATION_ID}
+  advanced: true
+- name: on_premise_token
+  displayName: "OAuth Token"
+  description: "OAuth Token for accessing the 6fusion Meter. Leave blank if not enabled."
+  section: meter-api
+  type: string
+  expandExpression: ${METER_API_TOKEN}
+  advanced: true
+- name: on_premise_host
+  displayName: "Host"
+  description: "Address of the 6fusion Meter"
+  section: meter-api
+  type: string
+  expandExpression: ${METER_API_PUBLIC_HOST}
+  advanced: true
+
+# OpenShift
 - name: log_level
   displayName: "Log Level"
   section: openshift
@@ -312,27 +338,6 @@ parameters:
   advanced: true
 
 # Meter API
-- name: on_premise_organization_id
-  displayName: "Organization ID"
-  description: "ID of the 6fusion Meter organization object to submit under."
-  section: meter-api
-  type: string
-  expandExpression: ${ORGANIZATION_ID}
-  advanced: true
-- name: on_premise_token
-  displayName: "OAuth Token"
-  description: "OAuth Token for accessing the 6fusion Meter. Leave blank if not enabled."
-  section: meter-api
-  type: string
-  expandExpression: ${METER_API_TOKEN}
-  advanced: true
-- name: on_premise_host
-  displayName: "Host"
-  description: "Address of the 6fusion Meter"
-  section: meter-api
-  type: string
-  expandExpression: ${METER_API_PUBLIC_HOST}
-  advanced: true
 - name: on_premise_port
   displayName: "Port"
   description: "TCP Port of the 6fusion Meter API"
