@@ -43,19 +43,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: meter-database
-  namespace: 6fusion-meter
-spec:
-  ports:
-  - name: meter-db-port
-    port: 5984
-    targetPort: 5984
-  selector:
-    6fusion-app: database
----
-apiVersion: v1
-kind: Service
-metadata:
   name: meter-cache
   namespace: 6fusion-meter
 spec:
@@ -96,175 +83,31 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: elasticsearch-logging
-  namespace: kube-system
-  labels:
-    k8s-app: elasticsearch-logging
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "Elasticsearch"
+  name: meter-database
+  namespace: 6fusion-meter
 spec:
   ports:
-  - port: 9200
-    protocol: TCP
-    targetPort: 9200
-    name: db
-  - port: 9300
-    protocol: TCP
-    targetPort: 9300
-    name: transport
+  - name: meter-db-port
+    port: 5984
+    targetPort: 5984
   selector:
-    k8s-app: elasticsearch-logging
+    6fusion-app: database
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kibana-logging
-  namespace: kube-system
-  labels:
-    k8s-app: kibana-logging
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "Kibana"
+  name: couchdb-internal
+  namespace: 6fusion-meter
 spec:
   ports:
-  - port: 5601
-    protocol: TCP
-    targetPort: ui
+  - name: couchdb-port
+    port: 5984
   selector:
-    k8s-app: kibana-logging
+    6fusion-app: database
+  clusterIP: None
 ---
-apiVersion: v1
-kind: ReplicationController
-metadata:
-  name: elasticsearch-logging-v1
-  namespace: kube-system
-  labels:
-    k8s-app: elasticsearch-logging
-    version: v1
-    kubernetes.io/cluster-service: "true"
-spec:
-  replicas: 2
-  selector:
-    k8s-app: elasticsearch-logging
-    version: v1
-  template:
-    metadata:
-      labels:
-        k8s-app: elasticsearch-logging
-        version: v1
-        kubernetes.io/cluster-service: "true"
-    spec:
-      containers:
-      - image: gcr.io/google_containers/elasticsearch:<%= elasticsearch_tag %>
-        name: elasticsearch-logging
-        resources:
-          # need more cpu upon initialization, therefore burstable class
-          limits:
-            cpu: 1000m
-          requests:
-            cpu: 100m
-        ports:
-        - containerPort: 9200
-          name: db
-          protocol: TCP
-        - containerPort: 9300
-          name: transport
-          protocol: TCP
-        volumeMounts:
-        - name: es-persistent-storage
-          mountPath: /data
-        env:
-        - name: "NAMESPACE"
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-      volumes:
-      - name: es-persistent-storage
-        emptyDir: {}
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: kibana-logging
-  namespace: kube-system
-  labels:
-    k8s-app: kibana-logging
-    kubernetes.io/cluster-service: "true"
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      k8s-app: kibana-logging
-  template:
-    metadata:
-      labels:
-        k8s-app: kibana-logging
-    spec:
-      containers:
-      - name: kibana-logging
-        image: gcr.io/google_containers/kibana:<%= kibana_logging_tag %>
-        resources:
-          # keep request = limit to keep this container in guaranteed class
-          limits:
-            cpu: 100m
-          requests:
-            cpu: 100m
-        env:
-          - name: "ELASTICSEARCH_URL"
-            value: "http://elasticsearch-logging:9200"
-          - name: "KIBANA_BASE_URL"
-            value: "/api/v1/proxy/namespaces/kube-system/services/kibana-logging"
-        ports:
-        - containerPort: 5601
-          name: ui
-          protocol: TCP
----
-apiVersion: extensions/v1beta1
-kind: DaemonSet
-metadata:
-  name: fluentd-es-v1.20
-  namespace: kube-system
-  labels:
-    k8s-app: fluentd-es
-    kubernetes.io/cluster-service: "true"
-    version: v1.20
-spec:
-  template:
-    metadata:
-      labels:
-        k8s-app: fluentd-es
-        kubernetes.io/cluster-service: "true"
-        version: v1.20
-    spec:
-      containers:
-      - name: fluentd-es
-        image: gcr.io/google_containers/fluentd-elasticsearch:<%= fluentd_tag %>
-        command:
-          - '/bin/sh'
-          - '-c'
-          - '/usr/sbin/td-agent 2>&1 >> /var/log/fluentd.log'
-        resources:
-          limits:
-            memory: 200Mi
-          requests:
-            cpu: 100m
-            memory: 200Mi
-        volumeMounts:
-        - name: varlog
-          mountPath: /var/log
-        - name: varlibdockercontainers
-          mountPath: /var/lib/docker/containers
-          readOnly: true
-      terminationGracePeriodSeconds: 30
-      volumes:
-      - name: varlog
-        hostPath:
-          path: /var/log
-      - name: varlibdockercontainers
-        hostPath:
-          path: /var/lib/docker/containers
----
-apiVersion: v1
-kind: ReplicationController
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   name: meter-database
   namespace: 6fusion-meter
@@ -274,39 +117,63 @@ metadata:
     componentType: Meter
     componentLabel: "Datastore"
 spec:
-  replicas: 1
+  serviceName: couchdb-internal
+  replicas: $COUCH_CLUSTER_SIZE
   template:
     metadata:
       labels:
         6fusion-app: database
     spec:
       containers:
-      - name: meter-database
-        image: docker.io/6fusion/couchdb:0.11
+      - name: cluster-sidecar
+        image: docker.io/6fusion/couchdb-sidecar:alpha
         imagePullPolicy: Always
+        env:
+        - name: LOG_LEVEL
+          value: debug
+      - name: meter-database
+        image: docker.io/6fusion/couchdb:alpha
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5984
+          name: couchdb-port
+        - containerPort: 4369
+          name: epmd-port
+        - containerPort: 9100
         resources:
           limits:
             memory: "10Gi"
           requests:
-            cpu: "2"
             memory: "100Mi"
         env:
-        - name: POD_IP
+        - name: POD_NAME
           valueFrom:
             fieldRef:
-              fieldPath: status.podIP
+              fieldPath: metadata.name
+        - name: COUCHDB_USER
+          value: admin
+        - name: COUCHDB_PASSWORD
+          value: password
         ports:
         - containerPort: 5984
           name: meter-db-port
+        ports:
+        - containerPort: 5984
+          name: couchdb-port
+        - containerPort: 4369
+          name: epmd-port
+        - containerPort: 9100
         volumeMounts:
         - name: meter-database
           mountPath: /opt/couchdb/data
-      imagePullSecrets:
-      - name: meter-registry
-      volumes:
-      - name: meter-database
-        hostPath:
-          path: /opt/data/couchdb
+  volumeClaimTemplates:
+  - metadata:
+      name: meter-database
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: $slice_size
 ---
 apiVersion: v1
 kind: ReplicationController
@@ -490,7 +357,7 @@ spec:
         6fusion-app: api
         version: "0.12-beta"
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.11-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:initialize", "couch:migrate"] } ]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "env": [{"name": "METER_DATABASE_USER", "value": "admin"}, {"name":"METER_DATABASE_PASSWORD", "value": "password"}],   "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.11-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
     spec:
       containers:
       - image: docker.io/6fusion/meter-api:0.11-beta
@@ -499,6 +366,10 @@ spec:
         env:
         - name: RAILS_ENV
           value: production
+        - name: METER_DATABASE_USER
+          value: admin
+        - name: METER_DATABASE_PASSWORD
+          value: password
         resources:
           limits:
             memory: "1Gi"
@@ -573,17 +444,17 @@ spec:
         6fusion-app: dashboard
         version: "0.12-beta"
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-dashboard:0.12-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-dashboard:0.11.1-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
     spec:
       containers:
-      - image: docker.io/6fusion/meter-dashboard:0.12-beta
+      - image: docker.io/6fusion/meter-dashboard:0.11.1-beta
         name: meter-dashboard
         imagePullPolicy: Always
         env:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 0a85ba0799f5e93cb21ddb65f4388315962165355225a8e6e023565acab3f3c2dcf0352e82ee2f8691d5129348fd1f5f3a5e2cf16d881bdd2e3eb0c02b31b818
+          value: 58d4b860520172c9a4f6544826ed168946422115a9a7dfb6afbffa7451d1c775751ab94655fbc7fc0eb6be24be7203485e4fc54c0d6d3821610a1df10323437d
         - name: METER_VERSION
           value: "0.12-beta"
         - name: SSL_CERT_FILE
