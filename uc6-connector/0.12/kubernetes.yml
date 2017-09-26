@@ -72,7 +72,7 @@ objects:
           - name: UC6_HOST
             valueFrom:
               secretKeyRef:
-                key: uc6-host
+                key: uc6Host
                 name: uc6-dedicated
           - name: UC6_PORT
             valueFrom:
@@ -107,7 +107,7 @@ objects:
           - name: UC6_TOKEN
             valueFrom:
               secretKeyRef:
-                key: uc6-token
+                key: uc6Token
                 name: uc6-dedicated
           image: docker.io/6fusion/uc6-connector:0.12
           imagePullPolicy: IfNotPresent
@@ -122,7 +122,7 @@ parameters:
   description: "The ID of the Organizaton, in the UC6 Console, to create inventory and readings under"
   validations:
     required: true
-- name: uc6-host
+- name: uc6Host
   displayName: "UC6 API Host"
   section: uc6-dedicated
   description: "Address of the UC6 Dedicated API Host"
@@ -147,7 +147,7 @@ parameters:
   - https
   value: https
   advanced: true
-- name: uc6-token
+- name: uc6Token
   displayName: "UC6 API Token"
   section: uc6-dedicated
   description: "OAuth Token to use for accessing the UC6 Dedicated API"
