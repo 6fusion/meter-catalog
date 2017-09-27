@@ -374,7 +374,7 @@ spec:
           limits:
             memory: "1Gi"
           requests:
-            cpu: "1"
+            cpu: "0.5"
             memory: "400Mi"
         livenessProbe:
           httpGet:
@@ -454,7 +454,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: b35a7dc7be29889c8ba43e2766d650bd9f7834986772833cd754a8c182f03163504258856f9449ebe18f6dc044f3461056a68ff76b11f92c08f6cc78e792e5ae
+          value: 6238d1e8505eccccf3c9a146ad45808192953fac57ba01f98d4722d8625e726183313a35d131beb92652bd34e20c7b6785aa4a98f4633324ce32d57892537729
         - name: METER_VERSION
           value: "0.12-beta"
         - name: SSL_CERT_FILE
