@@ -454,7 +454,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 48c12b2916c5d8dbd370ccc3578549967d762182e3b851abef25356cbe4d564b524a29dc6ff5ad4f82705602a75c6b0d125999414b385fa2fab518e9e9ca2b25
+          value: 71b78c8037fc74a4117894fa65ae9dc49d44baed0cd5713847b186b259f5c7b6ee9043d78d336bb1a64512e1675d08b1e39ce929a0166d0a925cd724d948069d
         - name: METER_VERSION
           value: "0.12-beta"
         - name: SSL_CERT_FILE
