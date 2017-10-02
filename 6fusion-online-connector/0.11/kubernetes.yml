@@ -124,6 +124,7 @@ parameters:
   sectionDisplayName: Connector
   type: enum
   value: info
+  advanced: "true"
   options:
     - debug
     - info
@@ -147,7 +148,7 @@ parameters:
   advanced: "true"
 - name: meter.token
   displayName: "API Oauth Token"
-  description: "OAuth Token for accessing the 6fusion Meter. Leave blank if not enabled."
+  description: "OAuth Token for accessing the 6fusion Meter."
   expandExpression: ${METER_API_TOKEN}
   section: 6fusion-online-connector-config
   sectionDisplayName: "6fusion Meter"
