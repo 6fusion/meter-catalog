@@ -114,6 +114,7 @@ parameters:
     - https://receiver.dev.aws.6fusion.com/api/v1/
   advanced: "true"
 - name: log.level
+  advanced: "true"
   displayName: "Log Level"
   section: 6fusion-online-connector-config
   sectionDisplayName: Connector
