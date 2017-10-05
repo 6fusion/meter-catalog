@@ -118,7 +118,7 @@ metadata:
     componentLabel: "Datastore"
 spec:
   serviceName: couchdb-internal
-  replicas: $COUCH_CLUSTER_SIZE
+  replicas: 1
   template:
     metadata:
       labels:
@@ -173,7 +173,7 @@ spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: $slice_size
+          storage: 100Gi
 ---
 apiVersion: v1
 kind: ReplicationController
