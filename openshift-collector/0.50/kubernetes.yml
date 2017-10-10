@@ -6,7 +6,7 @@ metadata:
     pluginVersion: "0.50"
     meterVersion: ">=0.11"
     supportedEnvironments:
-      - OpenShift
+    - OpenShift
     displayName: "OpenShift Collector"
     description: "6fusion Meter Collector for OpenShift"
     version: "0.50"
@@ -79,7 +79,8 @@ objects:
         - name: inventory-collector
           image: docker.io/6fusion/openshift-collector:0.50
           imagePullPolicy: IfNotPresent
-          args: ["inventory/run.rb"]
+          args:
+          - "inventory/run.rb"
           env:
           - name: LOG_LEVEL
             value: ${log_level}
@@ -139,7 +140,8 @@ objects:
         - name: onpremise-connector
           image: docker.io/6fusion/openshift-collector:0.50
           imagePullPolicy: IfNotPresent
-          args: ["on_premise/run.rb"]
+          args:
+          - "on_premise/run.rb"
           env:
           - name: LOG_LEVEL
             value: ${log_level}
@@ -180,7 +182,8 @@ objects:
         - name: cleancache
           image: docker.io/6fusion/openshift-collector:0.50
           imagePullPolicy: IfNotPresent
-          args: ["clean_cache/run.rb"]
+          args:
+          - "clean_cache/run.rb"
           env:
           - name: LOG_LEVEL
             value: ${log_level}
@@ -212,7 +215,8 @@ objects:
         - name: metrics-collector
           image: docker.io/6fusion/openshift-collector:0.50
           imagePullPolicy: IfNotPresent
-          args: ["metrics/run.rb"]
+          args:
+          - "metrics/run.rb"
           env:
           - name: LOG_LEVEL
             value: ${log_level}
