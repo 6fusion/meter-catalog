@@ -1,0 +1,557 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: 6fusion-meter
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meter-api
+  namespace: 6fusion-meter
+spec:
+  ports:
+  - name: api-http
+    port: 80
+    targetPort: 80
+    nodePort: 80
+  - name: api-https
+    port: 443
+    targetPort: 443
+    nodePort: 443
+  selector:
+    6fusion-app: api
+  type: NodePort
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meter-dashboard
+  namespace: 6fusion-meter
+spec:
+  ports:
+  - name: dashboard-port
+    port: 4443
+    targetPort: 4443
+    nodePort: 4443
+  selector:
+    6fusion-app: dashboard
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meter-cache
+  namespace: 6fusion-meter
+spec:
+  ports:
+  - name: cache-port
+    port: 6379
+    targetPort: 6379
+  selector:
+    6fusion-app: cache
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meter-sql-database
+  namespace: 6fusion-meter
+spec:
+  ports:
+    - name: sql-db-port
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    6fusion-app: sql-database
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: retention-manager
+  namespace: 6fusion-meter
+spec:
+  ports:
+  - name: drm-port
+    port: 80
+    targetPort: 80
+  selector:
+    6fusion-app: retention-manager
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: meter-database
+  namespace: 6fusion-meter
+spec:
+  ports:
+  - name: meter-db-port
+    port: 5984
+    targetPort: 5984
+  selector:
+    6fusion-app: database
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: couchdb-internal
+  namespace: 6fusion-meter
+spec:
+  ports:
+  - name: couchdb-port
+    port: 5984
+  selector:
+    6fusion-app: database
+  clusterIP: None
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: meter-database
+  namespace: 6fusion-meter
+  labels:
+    6fusion-app: database
+  annotations:
+    componentType: Meter
+    componentLabel: "Datastore"
+spec:
+  serviceName: couchdb-internal
+  replicas: $COUCH_CLUSTER_SIZE
+  template:
+    metadata:
+      labels:
+        6fusion-app: database
+    spec:
+      containers:
+      - name: cluster-sidecar
+        image: docker.io/6fusion/couchdb-sidecar:alpha
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_LEVEL
+          value: debug
+      - name: meter-database
+        image: docker.io/6fusion/couchdb:alpha
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5984
+          name: couchdb-port
+        - containerPort: 4369
+          name: epmd-port
+        - containerPort: 9100
+        resources:
+          limits:
+            memory: "10Gi"
+          requests:
+            memory: "100Mi"
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: COUCHDB_USER
+          value: admin
+        - name: COUCHDB_PASSWORD
+          value: password
+        ports:
+        - containerPort: 5984
+          name: meter-db-port
+        ports:
+        - containerPort: 5984
+          name: couchdb-port
+        - containerPort: 4369
+          name: epmd-port
+        - containerPort: 9100
+        volumeMounts:
+        - name: meter-database
+          mountPath: /opt/couchdb/data
+  volumeClaimTemplates:
+  - metadata:
+      name: meter-database
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: $slice_size
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: meter-sql-database
+  namespace: 6fusion-meter
+  labels:
+    6fusion-app: sql-database
+  annotations:
+    componentType: Meter
+    componentLabel: "Configuration Datastore"
+spec:
+  replicas: 1
+  selector:
+    6fusion-app: sql-database
+  template:
+    metadata:
+      labels:
+        6fusion-app: sql-database
+    spec:
+      containers:
+      - name: meter-sql-database
+        image: docker.io/postgres:9.5.5-alpine
+        resources:
+          requests:
+            cpu: "0.25"
+            memory: "100Mi"
+        volumeMounts:
+          - name: meter-sql-database
+            mountPath: /var/lib/postgresql/data
+      imagePullSecrets:
+      - name: meter-registry
+      volumes:
+      - name: meter-sql-database
+        hostPath:
+          path: /opt/data/postgresql
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    6fusion-app: capacity
+    version: "0.13"
+  annotations:
+    componentType: Meter
+    componentLabel: "Capacity Calculator"
+  name: 6fusion-capacity-calculator-0.13
+  namespace: 6fusion-meter
+spec:
+  replicas: 1
+  selector:
+    6fusion-app: capacity
+    version: "0.13"
+  template:
+    metadata:
+      labels:
+        6fusion-app: capacity
+        version: "0.13"
+    spec:
+      containers:
+      - image: docker.io/6fusion/utilization-tracker:0.8
+        name: utilization-tracker
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: RAILS_ENV
+          value: production
+        resources:
+          limits:
+            memory: "500Mi"
+          requests:
+            memory: "400Mi"
+        livenessProbe:
+          exec:
+            command:
+            - /usr/bin/pgrep
+            - ruby
+          initialDelaySeconds: 60
+          timeoutSeconds: 10
+      - image: docker.io/6fusion/wac-calculator:0.6
+        name: wac-calculator
+        resources:
+          limits:
+            memory: "15Mi"
+          requests:
+            memory: "10Mi"
+        livenessProbe:
+          httpGet:
+            path: "/health"
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+      - image: docker.io/6fusion/capacity-calculator:0.8
+        name: capacity-calculator
+        resources:
+          limits:
+            memory: "15Mi"
+          requests:
+            memory: "10Mi"
+        livenessProbe:
+          httpGet:
+            path: "/health"
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+      - image: docker.io/6fusion/consumption-patterns:0.7
+        name: consumption-patterns
+        resources:
+          limits:
+            memory: "15Mi"
+          requests:
+            memory: "10Mi"
+        livenessProbe:
+          httpGet:
+            path: "/health"
+            port: 8082
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+      imagePullSecrets:
+      - name: meter-registry
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: 6fusion-cost-calculator-0.13
+  namespace: 6fusion-meter
+  labels:
+    6fusion-app: cost
+    version: "0.13"
+  annotations:
+    componentType: Meter
+    componentLabel: "Cost Calculator"
+spec:
+  replicas: 1
+  selector:
+    6fusion-app: cost
+    version: "0.13"
+  template:
+    metadata:
+      labels:
+        6fusion-app: cost
+        version: "0.13"
+    spec:
+      containers:
+      - image: docker.io/6fusion/cost-calculator:0.6
+        name: cost-calculator
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: METER_ENV
+          value: production
+        livenessProbe:
+          httpGet:
+            path: "/health"
+            port: 8083
+          initialDelaySeconds: 60
+          timeoutSeconds: 30
+      imagePullSecrets:
+      - name: meter-registry
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    6fusion-app: api
+    version: "0.13"
+  annotations:
+    componentType: Meter
+    componentLabel: "API"
+  name: 6fusion-meter-api-0.13
+  namespace: 6fusion-meter
+spec:
+  replicas: 1
+  selector:
+    6fusion-app: api
+    version: "0.13"
+  template:
+    metadata:
+      labels:
+        6fusion-app: api
+        version: "0.13"
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "env": [{"name": "METER_DATABASE_USER", "value": "admin"}, {"name":"METER_DATABASE_PASSWORD", "value": "password"}],   "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-api:0.11","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
+    spec:
+      containers:
+      - image: docker.io/6fusion/meter-api:0.11
+        name: meter-api
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: RAILS_ENV
+          value: production
+        - name: METER_DATABASE_USER
+          value: admin
+        - name: METER_DATABASE_PASSWORD
+          value: password
+        resources:
+          limits:
+            memory: "1Gi"
+          requests:
+            cpu: "0.5"
+            memory: "400Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 60
+        volumeMounts:
+        - name: secrets
+          mountPath: /etc/secrets
+          readOnly: true
+      - image: docker.io/6fusion/wac-calculator:0.6
+        name: wac-calculator
+        resources:
+          limits:
+            memory: "15Mi"
+          requests:
+            memory: "15Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+      - image: docker.io/6fusion/consumption-patterns:0.7
+        name: consumption-patterns
+        resources:
+          limits:
+            memory: "15Mi"
+          requests:
+            memory: "10Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8082
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+      imagePullSecrets:
+      - name: meter-registry
+      volumes:
+      - name: secrets
+        secret:
+          secretName: meter-api-ssl-secret
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: 6fusion-meter-dashboard-0.13
+  namespace: 6fusion-meter
+  labels:
+    6fusion-app: dashboard
+    version: "0.13"
+  annotations:
+    componentType: Meter
+    componentLabel: "Dashboard"
+spec:
+  replicas: 1
+  selector:
+    6fusion-app: dashboard
+    version: "0.13"
+  template:
+    metadata:
+      labels:
+        6fusion-app: dashboard
+        version: "0.13"
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-dashboard:0.12-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
+    spec:
+      containers:
+      - image: docker.io/6fusion/meter-dashboard:0.12-beta
+        name: meter-dashboard
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: RAILS_ENV
+          value: production
+        - name: SECRET_KEY_BASE
+          value: 71f9fbd200b81f23b5b2678fff3a8bf604843cf71b93dc55c9667712a74bfd768b7dfee06c5b0e30c2344f1973d811911698e939c9526be7f6cf5a92da28569c
+        - name: METER_VERSION
+          value: "0.13"
+        - name: SSL_CERT_FILE
+          value: /etc/ssl/certs/ca-certificates.crt
+        resources:
+          limits:
+            memory: "500Mi"
+          requests:
+            memory: "300Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 4443
+            scheme: HTTPS
+          initialDelaySeconds: 60
+          timeoutSeconds: 60
+        volumeMounts:
+        - name: secrets
+          mountPath: /etc/secrets
+          readOnly: true
+        - name: kubernetes-ssl
+          mountPath: /etc/kubernetes/ssl
+        - name: host-ca-certificate
+          mountPath: /etc/ssl/certs
+      imagePullSecrets:
+      - name: meter-registry
+      volumes:
+      - name: secrets
+        secret:
+          secretName: meter-api-ssl-secret
+      - name: kubernetes-ssl
+        hostPath:
+          path: /etc/kubernetes/ssl
+      - name: host-ca-certificate
+        configMap:
+          name: internet-proxy
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: meter-cache-0.13
+  namespace: 6fusion-meter
+  labels:
+    6fusion-app: cache
+    version: "0.13"
+  annotations:
+    componentType: Meter
+    componentLabel: "Cache"
+spec:
+  replicas: 1
+  selector:
+    6fusion-app: cache
+    version: "0.13"
+  template:
+    metadata:
+      labels:
+        6fusion-app: cache
+        version: "0.13"
+    spec:
+      containers:
+      - image: docker.io/redis:3.0.7-alpine
+        name: meter-cache
+        livenessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 10
+      imagePullSecrets:
+      - name: meter-registry
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: 6fusion-retention-manager-0.13
+  namespace: 6fusion-meter
+  labels:
+    6fusion-app: retention-manager
+    version: "0.13"
+  annotations:
+    componentType: Meter
+    componentLabel: "Data Retention Manager"
+spec:
+  replicas: 1
+  selector:
+    6fusion-app: retention-manager
+    version: "0.13"
+  template:
+    metadata:
+      labels:
+        6fusion-app: retention-manager
+        version: "0.13"
+    spec:
+      containers:
+      - image: docker.io/6fusion/data-retention-manager:0.5
+        imagePullPolicy: IfNotPresent
+        name: retention-manager
+        env:
+        - name: METER_ENV
+          value: production
+      imagePullSecrets:
+      - name: meter-registry
