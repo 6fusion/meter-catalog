@@ -122,13 +122,13 @@ objects:
 parameters:
 # Kubernetes config
 - description: "Host or IP address Kubernetes API server"
-  section: kube
+  section: kube-secret
   sectionDisplayName: Kubernetes
   name: kube-host
   displayName: "Kubernetes Host"
   expandExpression: ${KUBERNETES_PRIVATE_HOST}
 - name: kube-port
-  section: kube
+  section: kube-secret
   sectionDisplayName: Kubernetes
   displayName: "Kubernetes Port"
   type: int
@@ -136,30 +136,30 @@ parameters:
   expandExpression: ${KUBERNETES_PRIVATE_PORT}
 - name: kube-token
   description: "Token of the Kubernetes API server (specify only for a remote Kube API Server)"
-  section: kube
+  section: kube-secret
   sectionDisplayName: Kubernetes
   displayName: "Kubernetes Token"
 - name: kube-use-ssl
-  section: kube
+  section: kube-secret
   sectionDisplayName: Kubernetes
   description: "Access the Kubernetes API via SSL"
   displayName: "Use SSL?"
   type: boolean
   value: "true"
 - name: kube-verify-ssl
-  section: kube
+  section: kube-secret
   sectionDisplayName: Kubernetes
   description: "Verify SSL certificate. Do not enable if using self-signed certificates"
   displayName: "Verify SSL certificate?"
   type: boolean
   value: "false"
 - name: cadvisor-host
-  section: kube
+  section: kube-secret
   sectionDisplayName: Kubernetes
   description: "Address of the cluster master cAdvisor host"
   displayName: "cAdvisor Host"
 - name: cadvisor-port
-  section: kube
+  section: kube-secret
   sectionDisplayName: Kubernetes
   type: int
   displayName: "cAdvisor Port"
@@ -167,24 +167,24 @@ parameters:
 # On-Prem config
 - name: host
   displayName: Host
-  section: on-premise
+  section: on-premise-secret
   sectionDisplayName: "Meter API"
   description: "Address of the 6fusion On-Prem Meter"
   expandExpression: ${METER_API_HOST}
 - name: port
   displayName: Port
-  section: on-premise 
+  section: on-premise-secret 
   sectionDisplayName: "Meter API"
   description: "Port of the 6fusion Meter. Typically 80 for unecrypted access; 443 for SSL"
   expandExpression: ${METER_API_SSL_PORT}
 - name: token
   displayName: "6fusion Meter API token"
-  section: on-premise
+  section: on-premise-secret
   sectionDisplayName: "Meter API"
   description: "OAuth token to use to access the 6fusion Meter. Not required if OAuth is not enabled on the meter."
 - name: use-ssl
   displayName: "Use SSL?"
-  section: on-premise
+  section: on-premise-secret
   sectionDisplayName: "Meter API"
   description: "Use SSL for all interaction with the 6fusion Meter"
   value: "true"
@@ -192,25 +192,25 @@ parameters:
 - name: verify-ssl
   displayName: "Verify SSL?"
   sectionDisplayName: "Meter API"
-  section: on-premise
+  section: on-premise-secret
   description: "Verify 6fusion Meter SSL certificate. Do not enable if using self-signed certificates."
   value: "false"
   type: boolean
 - name: data-age-period
   displayName: "Data Age Period"
   sectionDisplayName: "Meter API"
-  section: on-premise
+  section: on-premise-secret
   description: "Age period of data for clean cache. Must be in minutes."
   value: 60
 - name: organization-id
   displayName: "Organization ID"
   sectionDisplayName: "Meter API"
-  section: on-premise
+  section: on-premise-secret
   description: "ID of Organization object in the 6fusion Meter"
   expandExpression: ${ORGANIZATION_ID}
 - name: default-disk-io
   sectionDisplayName: "Meter API"
-  section: on-premise
+  section: on-premise-secret
   type: int
   displayName: "Default Disk I/O"
   description: "The value to use for Disk I/O if the collector cannot determine the actual disk I/O speed"
@@ -218,7 +218,7 @@ parameters:
   advanced: true
 - name: default-lan-io
   sectionDisplayName: "Meter API"
-  section: on-premise
+  section: on-premise-secret
   type: int
   displayName: "Default LAN I/O"
   description: "The value to use for LAN I/O if the collector cannot determine the actual LAN I/O speed"
@@ -226,7 +226,7 @@ parameters:
   advanced: true
 - name: default-wan-io
   sectionDisplayName: "Meter API"
-  section: on-premise
+  section: on-premise-secret
   type: int
   displayName: "Default WAN I/O"
   description: "The value to use for WAN I/O if the collector cannot determine the actual WAN I/O speed"
