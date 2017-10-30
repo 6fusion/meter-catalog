@@ -175,7 +175,7 @@ spec:
         requests:
           storage: $slice_size
 ---
-apiVersion: apps/beta1
+apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   name: meter-sql-database
@@ -459,7 +459,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 8ed7193398b0e95f5eb0738050b328942b2fefa0ae85cdc66008baff89f31a7e4babf829455a8ac493a22cdd2e0b3763361552197fa07c2119e0807596da5803
+          value: 24e9ba139620b9f532fe4043e30f3718b49236b1d13ad5a395d1792370f795e75f88cc20d2cf1519a291e8dbfc84f9dfe3bea5c025469cf984576b3eedb254d3
         - name: METER_VERSION
           value: "alpha"
         - name: SSL_CERT_FILE
