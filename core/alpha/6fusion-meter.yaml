@@ -175,8 +175,8 @@ spec:
         requests:
           storage: $slice_size
 ---
-apiVersion: v1
-kind: ReplicationController
+apiVersion: v1/beta1
+kind: StatefulSet
 metadata:
   name: meter-sql-database
   namespace: 6fusion-meter
@@ -188,7 +188,8 @@ metadata:
 spec:
   replicas: 1
   selector:
-    6fusion-app: sql-database
+    matchLabels:
+      6fusion-app: sql-database
   template:
     metadata:
       labels:
@@ -206,10 +207,14 @@ spec:
             mountPath: /var/lib/postgresql/data
       imagePullSecrets:
       - name: meter-registry
-      volumes:
-      - name: meter-sql-database
-        hostPath:
-          path: /opt/data/postgresql
+  volumeClaimTemplates:
+  - metadata:
+      name: meter-sql-database
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
 ---
 apiVersion: v1
 kind: ReplicationController
@@ -374,7 +379,7 @@ spec:
           limits:
             memory: "1Gi"
           requests:
-            cpu: "1"
+            cpu: "0.5"
             memory: "400Mi"
         livenessProbe:
           httpGet:
@@ -454,7 +459,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: ccb01931be9efde4667c042a23e6550341245554169f2de9aef4e8cf709441e895bd442dc784fd09ff33ebaef8798330e0d1b0c529027ee4b921ee3ca7a948ad
+          value: cecb621ebb6c1c09fac470287934a8f434246dba6d34e29d82129f54a18387bb3437f92d4cde6f9235ba0bcb45cf06a8e541887fab4b7c3d0543a0d8dba31d8c
         - name: METER_VERSION
           value: "alpha"
         - name: SSL_CERT_FILE
