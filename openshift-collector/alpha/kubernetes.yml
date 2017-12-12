@@ -4,9 +4,8 @@ metadata:
   name: openshift-collector
   annotations:
     pluginVersion: "alpha"
-    meterVersion: ">=0.11"
-    supportedEnvironments:
-      - OpenShift
+    meterVersion: ">=0.13"
+    supportedEnvironments: "OpenShift"
     displayName: "OpenShift Collector"
     description: "6fusion Meter Collector for OpenShift"
     version: "alpha"
@@ -14,7 +13,7 @@ metadata:
     tags: "6fusion, Meter, Collector"
     template.openshift.io/provider-display-name: "6fusion, Inc."
     template.openshift.io/support-url: https://6fusion.com/contact-us
-message: The 6fusion OpenShift Collector has been deployed to your project. Log in to the 6fusion platform to view your OpenShift consumption and capacity data.
+message: The 6fusion OpenShift Collector has been deployed to your project. Log in to the 6fusion analytics platform to view your OpenShift consumption and capacity data.
 objects:
 - apiVersion: v1
   kind: Service
