@@ -16,6 +16,13 @@ metadata:
 message: The 6fusion OpenShift Collector has been deployed to your project. Log in to the 6fusion analytics platform to view your OpenShift consumption and capacity data.
 objects:
 - apiVersion: v1
+  data:
+    .dockercfg: eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsidXNlcm5hbWUiOiJtZXRlciIsInBhc3N3b3JkIjoiOD0uWk5zL2spWjZZTHBhZiIsImVtYWlsIjoibWV0ZXJANmZ1c2lvbi5jb20iLCJhdXRoIjoiYldWMFpYSTZPRDB1V2s1ekwyc3BXalpaVEhCaFpnPT0ifX0=
+  kind: Secret
+  metadata:
+    name: meter-registry
+  type: kubernetes.io/dockercfg
+- apiVersion: v1
   kind: Service
   metadata:
     name: mongodb
