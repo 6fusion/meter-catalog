@@ -24,8 +24,8 @@ objects:
     - port: 27017
     selector:
       6fusion-app: mongo
-- apiVersion: apps/v1beta2
-  kind: Deployment
+- apiVersion: v1
+  kind: ReplicationController
   metadata:
     name: mongodb
     namespace: 6fusion-kubernetes-collector
@@ -45,8 +45,8 @@ objects:
         volumes:
         - name: mongodb-volume
           emptyDir: {}
-- apiVersion: apps/v1beta2
-  kind: Deployment
+- apiVersion: v1
+  kind: ReplicationController
   metadata:
     name: 6fusion-inventory-collector
     namespace: 6fusion-kubernetes-collector
@@ -103,8 +103,8 @@ objects:
               secretKeyRef:
                 key: kube-secret
                 name: infrastructure-name
-- apiVersion: apps/v1beta2
-  kind: Deployment
+- apiVersion: v1
+  kind: ReplicationController
   metadata:
     name: 6fusion-metrics-collector
     namespace: 6fusion-kubernetes-collector
@@ -161,8 +161,8 @@ objects:
               secretKeyRef:
                 key: kube-secret
                 name: infrastructure-name
-- apiVersion: apps/v1beta2
-  kind: Deployment
+- apiVersion: v1
+  kind: ReplicationController
   metadata:
     name: 6fusion-api-connector
     namespace: 6fusion-kubernetes-collector
