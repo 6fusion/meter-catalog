@@ -354,4 +354,3 @@ parameters:
   description: "The value to use for WAN I/O if the collector cannot determine the actual WAN I/O speed"
   advanced: true
   value: "100000000"
-i
