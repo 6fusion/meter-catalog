@@ -64,6 +64,7 @@ objects:
         containers:
         - name: inventory-collector
           image: 6fusion/kubernetes-collector:alpha
+          imagePullPolicy: Always
           command:
           - /app/bin/inventory-collector
           livenessProbe:
@@ -124,6 +125,7 @@ objects:
         containers:
         - name: metrics-collector
           image: 6fusion/kubernetes-collector:alpha
+          imagePullPolicy: Always
           command:
           - /app/bin/metrics-collector
           livenessProbe:
@@ -184,6 +186,7 @@ objects:
         containers:
         - name: api-connector
           image: 6fusion/kubernetes-collector:alpha
+          imagePullPolicy: Always
           command:
           - /app/bin/api-connector
           livenessProbe:
@@ -268,7 +271,7 @@ parameters:
   displayName: "kubelet Port"
   type: int
   description: "Port of kubelet"
-  expandExpression: 10250
+  value: 10250
   advanced: true
 - name: token
   description: "Token of the Kubernetes API server (specify only for a remote Kube API Server)"
