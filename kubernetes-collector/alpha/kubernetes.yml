@@ -103,6 +103,8 @@ objects:
               secretKeyRef:
                 key: kube-secret
                 name: infrastructure-name
+        imagePullSecrets:
+        - name: meter-registry
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -161,6 +163,8 @@ objects:
               secretKeyRef:
                 key: kube-secret
                 name: infrastructure-name
+        imagePullSecrets:
+        - name: meter-registry
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -188,6 +192,8 @@ objects:
                 - /app/bin/health-check
             initialDelaySeconds: 300
             periodSeconds: 300
+        imagePullSecrets:
+        - name: meter-registry
           env:
           - name: METER_API_HOST
             valueFrom:
