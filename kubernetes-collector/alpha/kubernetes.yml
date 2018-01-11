@@ -18,12 +18,12 @@ objects:
     name: mongo
     namespace: 6fusion-kubernetes-collector
     labels:
-      6fusion-app: mongo
+      app: mongodb
   spec:
     ports:
     - port: 27017
     selector:
-      6fusion-app: mongo
+      app: mongodb
 - apiVersion: v1
   kind: ReplicationController
   metadata:
@@ -195,8 +195,6 @@ objects:
                 - /app/bin/health-check
             initialDelaySeconds: 300
             periodSeconds: 300
-        imagePullSecrets:
-        - name: meter-registry
           env:
           - name: METER_API_HOST
             valueFrom:
@@ -243,6 +241,8 @@ objects:
               secretKeyRef:
                 key: default-disk-io
                 name:  meter-secret
+        imagePullSecrets:
+        - name: meter-registry
 parameters:
 # Kubernetes config
 - description: "A descriptive name for the kubernetes cluster"
