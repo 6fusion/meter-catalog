@@ -24,7 +24,7 @@ objects:
     - port: 27017
     selector:
       app: mongodb
-- apiVersion: v1
+- apiVersion: apps/v1beta2
   kind: ReplicationController
   metadata:
     name: mongodb
@@ -45,7 +45,7 @@ objects:
         volumes:
         - name: mongodb-volume
           emptyDir: {}
-- apiVersion: v1
+- apiVersion: apps/v1beta2
   kind: ReplicationController
   metadata:
     name: 6fusion-inventory-collector
@@ -64,7 +64,6 @@ objects:
         containers:
         - name: inventory-collector
           image: 6fusion/kubernetes-collector:alpha
-          imagePullPolicy: Always
           command:
           - /app/bin/inventory-collector
           livenessProbe:
@@ -106,7 +105,7 @@ objects:
                 name:  kube-secret
         imagePullSecrets:
         - name: meter-registry
-- apiVersion: v1
+- apiVersion: apps/v1beta2
   kind: ReplicationController
   metadata:
     name: 6fusion-metrics-collector
@@ -125,7 +124,6 @@ objects:
         containers:
         - name: metrics-collector
           image: 6fusion/kubernetes-collector:alpha
-          imagePullPolicy: Always
           command:
           - /app/bin/metrics-collector
           livenessProbe:
@@ -167,7 +165,7 @@ objects:
                 name:  kube-secret
         imagePullSecrets:
         - name: meter-registry
-- apiVersion: v1
+- apiVersion: apps/v1beta2
   kind: ReplicationController
   metadata:
     name: 6fusion-api-connector
@@ -186,7 +184,6 @@ objects:
         containers:
         - name: api-connector
           image: 6fusion/kubernetes-collector:alpha
-          imagePullPolicy: Always
           command:
           - /app/bin/api-connector
           livenessProbe:
@@ -196,53 +193,54 @@ objects:
             initialDelaySeconds: 300
             periodSeconds: 300
           env:
-          - name: METER_API_HOST
-            valueFrom:
-              secretKeyRef:
-                key: host
-                name:  meter-secret
-          - name: METER_API_PORT
-            valueFrom:
-              secretKeyRef:
-                key: port
-                name:  meter-secret
-          - name: METER_API_USE_SSL
-            valueFrom:
-              secretKeyRef:
-                key: use-ssl
-                name:  meter-secret
-          - name: METER_API_VERIFY_SSL
-            valueFrom:
-              secretKeyRef:
-                key: verify-ssl
-                name:  meter-secret
-          - name: METER_ORGANIZATION_ID
-            valueFrom:
-              secretKeyRef:
-                key: organization-id
-                name:  meter-secret
-          - name: METER_API_TOKEN
-            valueFrom:
-              secretKeyRef:
-                key: token
-                name:  meter-secret
-          - name: DEFAULT_WAN_IO
-            valueFrom:
-              secretKeyRef:
-                key: default-wan-io
-                name:  meter-secret
-          - name: DEFAULT_LAN_IO
-            valueFrom:
-              secretKeyRef:
-                key: default-lan-io
-                name:  meter-secret
-          - name: DEFAULT_DISK_IO
-            valueFrom:
-              secretKeyRef:
-                key: default-disk-io
-                name:  meter-secret
+        - name: METER_API_HOST
+          valueFrom:
+            secretKeyRef:
+              key: host
+              name:  meter-secret
+        - name: METER_API_PORT
+          valueFrom:
+            secretKeyRef:
+              key: port
+              name:  meter-secret
+        - name: METER_API_USE_SSL
+          valueFrom:
+            secretKeyRef:
+              key: use-ssl
+              name:  meter-secret
+        - name: METER_API_VERIFY_SSL
+          valueFrom:
+            secretKeyRef:
+              key: verify-ssl
+              name:  meter-secret
+        - name: METER_ORGANIZATION_ID
+          valueFrom:
+            secretKeyRef:
+              key: organization-id
+              name:  meter-secret
+        - name: METER_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name:  meter-secret
+        - name: DEFAULT_WAN_IO
+          valueFrom:
+            secretKeyRef:
+              key: default-wan-io
+              name:  meter-secret
+        - name: DEFAULT_LAN_IO
+          valueFrom:
+            secretKeyRef:
+              key: default-lan-io
+              name:  meter-secret
+        - name: DEFAULT_DISK_IO
+          valueFrom:
+            secretKeyRef:
+              key: default-disk-io
+              name:  meter-secret
         imagePullSecrets:
         - name: meter-registry
+                
 parameters:
 # Kubernetes config
 - description: "A descriptive name for the kubernetes cluster"
