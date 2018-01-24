@@ -208,7 +208,7 @@ spec:
             memory: "100Mi"
         volumeMounts:
           - name: meter-sql-database
-            mountPath: /var/lib/postgresql/data
+            mountPath: /var/lib/postgresql/data/pgdata
       imagePullSecrets:
       - name: meter-registry
   volumeClaimTemplates:
@@ -243,7 +243,7 @@ spec:
         version: "0.13-beta"
     spec:
       containers:
-      - image: docker.io/6fusion/utilization-tracker:0.8
+      - image: docker.io/6fusion/utilization-tracker:0.9-beta
         name: utilization-tracker
         imagePullPolicy: Always
         env:
@@ -366,10 +366,10 @@ spec:
         6fusion-app: api
         version: "0.13-beta"
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "env": [{"name": "METER_DATABASE_USER", "value": "admin"}, {"name":"METER_DATABASE_PASSWORD", "value": "password"}],   "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.11","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "env": [{"name": "METER_DATABASE_USER", "value": "admin"}, {"name":"METER_DATABASE_PASSWORD", "value": "password"}],   "imagePullPolicy": "Always", "image": "docker.io/6fusion/meter-api:0.11.1-beta","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
     spec:
       containers:
-      - image: docker.io/6fusion/meter-api:0.11
+      - image: docker.io/6fusion/meter-api:0.11.1-beta
         name: meter-api
         imagePullPolicy: Always
         env:
@@ -463,7 +463,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: f72b418302986db6d5ace5e55446e01e18e30c22898bae840c53de9ae779ee94e6807312369e82d7ba701bd0136d3bf30213bf88f3fea4b1b23af2f8c1776c43
+          value: a71bacfa172252398ecef1deaac744c30b7a8fe72ddd77b960f5ef26d9eb3431cb8f36f2be34608a6f6d411ea20101d8a331b2e72912217e22b6121ef2db9cde
         - name: METER_VERSION
           value: "0.13-beta"
         - name: SSL_CERT_FILE
