@@ -24,7 +24,7 @@ objects:
     - port: 27017
     selector:
       app: mongodb
-- apiVersion: v1
+- apiVersion: apps/v1beta2
   kind: ReplicationController
   metadata:
     name: mongodb
@@ -42,10 +42,17 @@ objects:
           volumeMounts:
           - mountPath: /data/db
             name: mongodb-volume
+          resources:
+            limits:
+              memory: 2Gi
+            requests:
+              memory: 500Mi
+          args:
+            - --wiredTigerCacheSizeGB=0.5
         volumes:
         - name: mongodb-volume
           emptyDir: {}
-- apiVersion: v1
+- apiVersion: apps/v1beta2
   kind: ReplicationController
   metadata:
     name: 6fusion-inventory-collector
@@ -64,7 +71,6 @@ objects:
         containers:
         - name: inventory-collector
           image: 6fusion/kubernetes-collector:alpha
-          imagePullPolicy: Always
           command:
           - /app/bin/inventory-collector
           livenessProbe:
@@ -106,7 +112,7 @@ objects:
                 name:  kube-secret
         imagePullSecrets:
         - name: meter-registry
-- apiVersion: v1
+- apiVersion: apps/v1beta2
   kind: ReplicationController
   metadata:
     name: 6fusion-metrics-collector
@@ -125,7 +131,6 @@ objects:
         containers:
         - name: metrics-collector
           image: 6fusion/kubernetes-collector:alpha
-          imagePullPolicy: Always
           command:
           - /app/bin/metrics-collector
           livenessProbe:
@@ -167,7 +172,7 @@ objects:
                 name:  kube-secret
         imagePullSecrets:
         - name: meter-registry
-- apiVersion: v1
+- apiVersion: apps/v1beta2
   kind: ReplicationController
   metadata:
     name: 6fusion-api-connector
@@ -186,7 +191,6 @@ objects:
         containers:
         - name: api-connector
           image: 6fusion/kubernetes-collector:alpha
-          imagePullPolicy: Always
           command:
           - /app/bin/api-connector
           livenessProbe:
@@ -200,7 +204,7 @@ objects:
             valueFrom:
               secretKeyRef:
                 key: host
-                name:  meter-secret
+                name: meter-secret
           - name: METER_API_PORT
             valueFrom:
               secretKeyRef:
@@ -243,6 +247,7 @@ objects:
                 name:  meter-secret
         imagePullSecrets:
         - name: meter-registry
+                
 parameters:
 # Kubernetes config
 - description: "A descriptive name for the kubernetes cluster"
