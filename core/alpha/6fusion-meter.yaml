@@ -376,7 +376,7 @@ spec:
         command: ["rake", "couch:migrate"]
       - name: migrations
         imagePullPolicy: Always
-        image: docker.io/6fusion/meter-dashboard:alpha
+        image: docker.io/6fusion/meter-api:alpha
         imagePullSecrets:
           name: meter-registry
         command: ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]
