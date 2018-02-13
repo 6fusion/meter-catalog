@@ -208,7 +208,7 @@ spec:
             memory: "100Mi"
         volumeMounts:
           - name: meter-sql-database
-            mountPath: /var/lib/postgresql/data/pgdata
+            mountPath: /var/lib/postgresql/data
       imagePullSecrets:
       - name: meter-registry
   volumeClaimTemplates:
