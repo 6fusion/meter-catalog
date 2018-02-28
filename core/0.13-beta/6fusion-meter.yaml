@@ -375,8 +375,6 @@ spec:
           value: password
         imagePullPolicy: Always
         image: docker.io/6fusion/meter-api:0.11.1-beta
-        imagePullSecrets:
-        - name: meter-registry
         command:
         - rake
         - couch:migrate
@@ -469,9 +467,7 @@ spec:
       - name: init
         imagePullPolicy: Always
         image: docker.io/6fusion/meter-dashboard:0.12-beta
-        imagePullSecrets:
-        - name: meter-registry
-          command:
+        command:
           - /usr/bin/bundle
           - exec
           - rake
@@ -487,7 +483,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: b84250afa77932c94f988510e3ee026365bd7f9b66519bb381d45c111d17212c52d8d296bad89b57f66c652a35303252256208c22355011f6e4fc389d376147a
+          value: 0eb336ecbb673d4b36a119152b1fa69d67319aca3deb38745364ea56fd7743fe5ac4b26f467e82bc0e943b35f8ecc382ba41a51008cb4d4349f913dcbe4ce4d3
         - name: METER_VERSION
           value: "0.13-beta"
         - name: SSL_CERT_FILE
