@@ -2,8 +2,8 @@ kind: Template
 metadata:
   name: uc6-connector
   annotations:
-    pluginVersion: alpha
-    meterVersion: ">=0.11"
+    pluginVersion: "alpha"
+    meterVersion: ">=0.12"
     displayName: "UC6 Connector"
     description: "Connector for exporting 6fusion Meter data to a UC6 dedicated environment"
 objects:
@@ -49,7 +49,7 @@ objects:
   metadata:
     labels:
       6fusion-connector: uc6
-    name: uc6-connector
+    name: 6fusion-uc6-connector
     namespace: 6fusion-uc6-connector
   spec:
     replicas: 1
@@ -110,7 +110,7 @@ objects:
                 key: uc6Token
                 name: uc6-dedicated
           image: 6fusion/uc6-connector:alpha
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: uc6-connector
         imagePullSecrets:
         - name: meter-registry
