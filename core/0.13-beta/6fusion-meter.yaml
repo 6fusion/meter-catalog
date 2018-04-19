@@ -468,7 +468,7 @@ spec:
         imagePullPolicy: Always
         image: docker.io/6fusion/meter-dashboard:0.12-beta
         command:
-          - /usr/bin/bundle
+          - bundle
           - exec
           - rake
           - db:create
@@ -483,7 +483,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 0eb336ecbb673d4b36a119152b1fa69d67319aca3deb38745364ea56fd7743fe5ac4b26f467e82bc0e943b35f8ecc382ba41a51008cb4d4349f913dcbe4ce4d3
+          value: d21cab11b2e0949ad929d615e9b86b1b2e75fa208c68db25f7195ba6a61d49369203d047caffcffffb19cf287b9dae6fd0596bc189e003c4acddfda5cc27305b
         - name: METER_VERSION
           value: "0.13-beta"
         - name: SSL_CERT_FILE
