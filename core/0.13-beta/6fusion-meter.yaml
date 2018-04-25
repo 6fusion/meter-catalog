@@ -365,6 +365,8 @@ spec:
       labels:
         6fusion-app: api
         version: "0.13-beta"
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "env": [{"name": "METER_DATABASE_USER", "value": "admin"}, {"name":"METER_DATABASE_PASSWORD", "value": "password"}],   "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-api:0.11","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
     spec:
       initContainers:
       - name: couch-init
@@ -462,6 +464,8 @@ spec:
       labels:
         6fusion-app: dashboard
         version: "0.13-beta"
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-dashboard:0.11.1","imagePullSecrets": [{"name": "meter-registry"}], "command": ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
     spec:
       initContainers:
       - name: init
@@ -483,7 +487,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: d21cab11b2e0949ad929d615e9b86b1b2e75fa208c68db25f7195ba6a61d49369203d047caffcffffb19cf287b9dae6fd0596bc189e003c4acddfda5cc27305b
+          value: 03623760090d2ff4bd2c91606498cf55db03323293756812e36fe0e1111071b48b6200eac9dc4f248cdb829651f6bc4483095555832e424d3045441b44d8bada
         - name: METER_VERSION
           value: "0.13-beta"
         - name: SSL_CERT_FILE
@@ -584,3 +588,61 @@ spec:
           value: production
       imagePullSecrets:
       - name: meter-registry
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cron-config
+  namespace: "6fusion-meter"
+data:
+  commands: |
+    curl -u admin:password -H "Content-Type: appliation/json" -X POST http://$METER_DATABASE_SERVICE_HOST:$METER_DATABASE_SERVICE_PORT/on_prem_api_samples/_compact/Reading
+  schedule: "0 1 * * * /usr/local/bin/cron-commands"
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: couch-compaction
+  namespace: 6fusion-meter
+  labels:
+    6fusion-app: couch-compaction
+    version: "0.13-beta"
+  annotations:
+    componentType: Meter
+    componentLabel: "Database Compactor"
+spec:
+  replicas: 1
+  selector:
+    app: couch-compaction
+    version: "0.13-beta"
+  template:
+    metadata:
+      labels:
+        app: couch-compaction
+        version: "0.13-beta"
+    spec:
+      containers:
+      - name: cron
+        image: alpine:3.5
+        command:
+        - crond
+        - "-f"
+        volumeMounts:
+        - name: commands
+          mountPath: /usr/local/bin
+        - name: schedule
+          mountPath: /etc/crontabs
+      volumes:
+      - name: command-script
+        configMap:
+          name: cron-config
+          defaultMode: 0755
+          items:
+          - keys: commands
+            path: cron-commands
+      - name: schedule
+        configMap:
+          name: cron-config
+          items:
+          - keys: schedule
+            path: root
