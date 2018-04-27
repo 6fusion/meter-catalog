@@ -487,7 +487,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: 099fd74596a0ba2a42da168fd226ce674cc1de9fb6e5383ebacb94bcd598f3c2bf88ae0754f574ec480031ef77d5db1fc88cfc32f08ccded640a2c4d726df5a1
+          value: 3f7d5c76e8adde5401ca5b636505edd18e4183663c530634e44a2a36a6512b3c3e8c74126027fd553f5e3a229bf8a83f16cc1a7510551aabbaf465b9b9275ac0
         - name: METER_VERSION
           value: "0.13-beta"
         - name: SSL_CERT_FILE
@@ -596,7 +596,7 @@ metadata:
   namespace: "6fusion-meter"
 data:
   commands: |
-    curl -u admin:password -H "Content-Type: appliation/json" -X POST http://$METER_DATABASE_SERVICE_HOST:$METER_DATABASE_SERVICE_PORT/on_prem_api_samples/_compact/Reading
+    curl -s -u admin:password -H "Content-Type: application/json" -X POST http://$METER_DATABASE_SERVICE_HOST:$METER_DATABASE_SERVICE_PORT/on_prem_api_samples/_compact/Reading
   schedule: "0 1 * * * /usr/local/bin/cron-commands"
 ---
 apiVersion: v1
@@ -613,12 +613,12 @@ metadata:
 spec:
   replicas: 1
   selector:
-    app: couch-compaction
+    6fusion-app: couch-compaction
     version: "0.13-beta"
   template:
     metadata:
       labels:
-        app: couch-compaction
+        6fusion-app: couch-compaction
         version: "0.13-beta"
     spec:
       containers:
