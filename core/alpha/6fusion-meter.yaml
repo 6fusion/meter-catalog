@@ -187,6 +187,7 @@ metadata:
     componentLabel: "Configuration Datastore"
 spec:
   replicas: 1
+  serviceName: meter-sql-database
   selector:
     matchLabels:
       6fusion-app: sql-database
@@ -198,6 +199,9 @@ spec:
       containers:
       - name: meter-sql-database
         image: docker.io/postgres:9.5.5-alpine
+        env:
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
         resources:
           requests:
             cpu: "0.25"
@@ -361,6 +365,8 @@ spec:
       labels:
         6fusion-app: api
         version: "alpha"
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "couch-init", "env": [{"name": "METER_DATABASE_USER", "value": "admin"}, {"name":"METER_DATABASE_PASSWORD", "value": "password"}],   "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-api:0.11","imagePullSecrets": [{"name": "meter-registry"}], "command": ["rake", "couch:migrate"] } ]'
     spec:
       initContainers:
       - name: couch-init
@@ -371,15 +377,9 @@ spec:
           value: password
         imagePullPolicy: Always
         image: docker.io/6fusion/meter-api:alpha
-        imagePullSecrets:
-          name: meter-registry
-        command: ["rake", "couch:migrate"]
-      - name: migrations
-        imagePullPolicy: Always
-        image: docker.io/6fusion/meter-api:alpha
-        imagePullSecrets:
-          name: meter-registry
-        command: ["/usr/bin/bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]
+        command:
+        - rake
+        - couch:migrate
       containers:
       - image: docker.io/6fusion/meter-api:alpha
         name: meter-api
@@ -464,7 +464,21 @@ spec:
       labels:
         6fusion-app: dashboard
         version: "alpha"
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[{ "name": "init", "imagePullPolicy": "IfNotPresent", "image": "docker.io/6fusion/meter-dashboard:0.11.1","imagePullSecrets": [{"name": "meter-registry"}], "command": ["bundle", "exec", "rake", "db:create", "db:migrate", "doorkeeper:create_application", "settings:initialize"]}]'
     spec:
+      initContainers:
+      - name: init
+        imagePullPolicy: Always
+        image: docker.io/6fusion/meter-dashboard:alpha
+        command:
+          - bundle
+          - exec
+          - rake
+          - db:create
+          - db:migrate
+          - doorkeeper:create_application
+          - settings:initialize
       containers:
       - image: docker.io/6fusion/meter-dashboard:alpha
         name: meter-dashboard
@@ -473,7 +487,7 @@ spec:
         - name: RAILS_ENV
           value: production
         - name: SECRET_KEY_BASE
-          value: f0923105fab6446c40853f57620c42e0fdf228fe280a6e468db5a3ad96bc209f1e345f6d7abc32b58df9f596e76ae92faee1b4b366cf1f00da480fde83f9f5da
+          value: 3d546bb008c91da5e1711bb7408bf52cdd48062c31e34d531fa922fb4cd8f1b3c5071e1e2f6bda2d145cfe114bbb30b86026e36d18555c8b7bfddac9a61d0de5
         - name: METER_VERSION
           value: "alpha"
         - name: SSL_CERT_FILE
@@ -574,3 +588,61 @@ spec:
           value: production
       imagePullSecrets:
       - name: meter-registry
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cron-config
+  namespace: "6fusion-meter"
+data:
+  commands: |
+    curl -s -u admin:password -H "Content-Type: application/json" -X POST http://$METER_DATABASE_SERVICE_HOST:$METER_DATABASE_SERVICE_PORT/on_prem_api_samples/_compact/Reading
+  schedule: "0 1 * * * /usr/local/bin/cron-commands"
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: couch-compaction
+  namespace: 6fusion-meter
+  labels:
+    6fusion-app: couch-compaction
+    version: "alpha"
+  annotations:
+    componentType: Meter
+    componentLabel: "Database Compactor"
+spec:
+  replicas: 1
+  selector:
+    6fusion-app: couch-compaction
+    version: "alpha"
+  template:
+    metadata:
+      labels:
+        6fusion-app: couch-compaction
+        version: "alpha"
+    spec:
+      containers:
+      - name: cron
+        image: alpine:3.5
+        command:
+        - crond
+        - "-f"
+        volumeMounts:
+        - name: command-script
+          mountPath: /usr/local/bin
+        - name: schedule
+          mountPath: /etc/crontabs
+      volumes:
+      - name: command-script
+        configMap:
+          name: cron-config
+          defaultMode: 0755
+          items:
+          - keys: commands
+            path: cron-commands
+      - name: schedule
+        configMap:
+          name: cron-config
+          items:
+          - keys: schedule
+            path: root
